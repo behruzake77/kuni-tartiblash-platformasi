@@ -8,7 +8,7 @@ const isDev = process.env.NODE_ENV !== "production";
 
 const securityHeaders = [
   { key: "X-DNS-Prefetch-Control", value: "on" },
-  { key: "X-Frame-Options", value: "SAMEORIGIN" },
+  // X-Frame-Options omitted — Replit preview uses an iframe
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   {
@@ -35,7 +35,8 @@ const securityHeaders = [
       "img-src 'self' data: blob: https:",
       "connect-src 'self' https: wss:",
       "worker-src 'self' blob:",
-      "frame-ancestors 'self'",
+      // Allow Replit's webview iframe in dev; restrict to self in production
+      isDev ? "frame-ancestors *" : "frame-ancestors 'self'",
       "base-uri 'self'",
       "form-action 'self'",
     ].join("; "),
@@ -45,6 +46,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
+  allowedDevOrigins: ["*"],
   // Enables smaller Docker images (see Dockerfile)
   output: "standalone",
   async headers() {
