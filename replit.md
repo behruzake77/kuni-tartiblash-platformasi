@@ -6,11 +6,20 @@ A local-first day-control app built with Next.js 16, React 19, TypeScript, and T
 
 ## How to run
 
+The app runs in **production mode** (more reliable on Replit than dev mode).
+
 ```bash
-cd ordo && npm run dev
+cd ordo && npm run build
+cd ordo && cp -r .next/static .next/standalone/.next/static && cp -r public .next/standalone/public
+PORT=5000 node ordo/.next/standalone/server.js
 ```
 
-The dev server starts on port 5000. The configured workflow (`Start application`) does this automatically.
+The configured workflow (`Start application`) does this automatically.
+
+> **After code changes:** run `cd ordo && npm run build` then restart the workflow.
+
+### Why production mode?
+Next.js 16 + Turbopack's HMR client was blocking React hydration in Replit's proxied environment, preventing forms from working. Production mode has no HMR and works correctly.
 
 ## Project structure
 
