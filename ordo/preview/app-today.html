@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Today · Ordo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="app.css" />
+</head>
+<body data-page="today" data-title="Today">
+  <div class="shell" id="app-shell"></div>
+  <template id="page-source">
+    <div class="page-head">
+      <div>
+        <p class="sub" id="greet">Good day · loading…</p>
+        <h2>Here's your day</h2>
+      </div>
+      <div class="page-actions">
+        <button class="btn btn-sec" type="button">✦ Plan my day</button>
+        <a class="btn btn-grad" href="app-focus.html">◎ Start focus</a>
+      </div>
+    </div>
+
+    <div class="metrics">
+      <div class="card metric-card"><div class="l">Tasks done</div><div class="v" id="m-tasks">5/11</div><div class="s" id="m-pct">46% complete</div></div>
+      <div class="card metric-card"><div class="l">Priorities</div><div class="v" id="m-pri">1/3</div><div class="s">must finish today</div></div>
+      <div class="card metric-card"><div class="l">Focus protected</div><div class="v">1h 20m</div><div class="s">of 3h planned</div></div>
+      <div class="card metric-card"><div class="l">Habits</div><div class="v" id="m-hab">2/4</div><div class="s">checked in</div></div>
+    </div>
+
+    <div class="layout-5">
+      <div class="stack">
+        <div class="card">
+          <div class="card-h">
+            <h3>Top priorities <span class="badge badge-primary" style="margin-left:8px">Max 3</span></h3>
+            <button class="btn btn-ghost btn-sm" type="button">+</button>
+          </div>
+          <div class="card-b" id="priorities"></div>
+        </div>
+        <div class="card">
+          <div class="card-h">
+            <h3>Rest of today</h3>
+            <span style="font-family:var(--mono);font-size:12px;color:var(--text-3)" id="open-count">5 open</span>
+          </div>
+          <div class="card-b" id="rest"></div>
+          <div style="padding:0 12px 16px">
+            <button class="add-dashed" type="button" id="add-task">+ Add task</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="card">
+          <div class="card-h"><h3>◷ Schedule</h3></div>
+          <div class="card-b">
+            <div class="block"><time>09:00–11:00</time><div><div style="font-size:14px">Deep work — Onboarding</div><span class="badge badge-primary" style="margin-top:6px">focus</span></div></div>
+            <div class="block"><time>11:30–12:00</time><div><div style="font-size:14px">Standup</div><span class="badge badge-sec" style="margin-top:6px">meet</span></div></div>
+            <div class="block"><time>13:00–14:30</time><div><div style="font-size:14px">Focus — Hiring plan</div><span class="badge badge-primary" style="margin-top:6px">focus</span></div></div>
+            <div class="block"><time>15:00–15:45</time><div><div style="font-size:14px">1:1 with Sam</div><span class="badge badge-sec" style="margin-top:6px">meet</span></div></div>
+            <div class="block"><time>17:00–17:15</time><div><div style="font-size:14px">Day close review</div><span class="badge badge-muted" style="margin-top:6px">review</span></div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-h">
+            <h3>Habits</h3>
+            <span style="font-family:var(--mono);font-size:12px;color:var(--text-3)" id="hab-count">2/4</span>
+          </div>
+          <div class="card-b" id="habits"></div>
+        </div>
+
+        <div class="cta-card">
+          <div class="l">Day close</div>
+          <p>When you're ready, run a two-minute review and set tomorrow's first priority.</p>
+          <a class="btn btn-sec btn-sm" href="app-review.html">Open day close</a>
+        </div>
+      </div>
+    </div>
+  </template>
+  <script src="_shell.js"></script>
+  <script>
+    const tasks = [
+      { id: "1", title: "Ship onboarding polish", tag: "Deep work", done: false, priority: true },
+      { id: "2", title: "Review Q3 hiring plan", tag: "Meeting prep", done: true, priority: true },
+      { id: "3", title: "Write weekly update", tag: "Communication", done: false, priority: true },
+      { id: "4", title: "Reply to design feedback", tag: "Admin", done: false, priority: false },
+      { id: "5", title: "Book dentist", tag: "Personal", done: true, priority: false },
+      { id: "6", title: "Prep demo script", tag: "Deep work", done: false, priority: false },
+      { id: "7", title: "Clear inbox to zero", tag: "Admin", done: true, priority: false },
+      { id: "8", title: "Outline blog draft", tag: "Creative", done: false, priority: false },
+    ];
+    const habits = [
+      { id: "h1", name: "Morning pages", done: true },
+      { id: "h2", name: "Workout", done: true },
+      { id: "h3", name: "No phone first hour", done: false },
+      { id: "h4", name: "Evening shutdown", done: false },
+    ];
+
+    function greet() {
+      const h = new Date().getHours();
+      const g = h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening";
+      const d = new Intl.DateTimeFormat("en", { weekday: "long", month: "long", day: "numeric" }).format(new Date());
+      document.getElementById("greet").textContent = g + " · " + d;
+    }
+
+    function row(t, idx) {
+      return `<button type="button" class="task-row${t.done ? " done" : ""}" data-id="${t.id}">
+        <span class="check"></span>
+        <span><span class="title">${idx != null ? `<span class="p-num">P${idx}</span>` : ""}${t.title}</span><div class="tag">${t.tag}</div></span>
+      </button>`;
+    }
+
+    function render() {
+      const pri = tasks.filter((t) => t.priority);
+      const rest = tasks.filter((t) => !t.priority);
+      document.getElementById("priorities").innerHTML = pri.map((t, i) => row(t, i + 1)).join("");
+      document.getElementById("rest").innerHTML = rest.map((t) => row(t)).join("");
+      document.getElementById("habits").innerHTML = habits
+        .map(
+          (h) =>
+            `<button type="button" class="task-row${h.done ? " done" : ""}" data-hid="${h.id}"><span class="check"></span><span class="title">${h.name}</span></button>`
+        )
+        .join("");
+
+      const done = tasks.filter((t) => t.done).length;
+      const pct = Math.round((done / tasks.length) * 100);
+      document.getElementById("m-tasks").textContent = `${done}/${tasks.length}`;
+      document.getElementById("m-pct").textContent = `${pct}% complete`;
+      document.getElementById("m-pri").textContent = `${pri.filter((t) => t.done).length}/${pri.length}`;
+      const hd = habits.filter((h) => h.done).length;
+      document.getElementById("m-hab").textContent = `${hd}/${habits.length}`;
+      document.getElementById("hab-count").textContent = `${hd}/${habits.length}`;
+      document.getElementById("open-count").textContent = `${rest.filter((t) => !t.done).length} open`;
+
+      document.querySelectorAll("[data-id]").forEach((el) => {
+        el.onclick = () => {
+          const t = tasks.find((x) => x.id === el.dataset.id);
+          if (t) { t.done = !t.done; render(); }
+        };
+      });
+      document.querySelectorAll("[data-hid]").forEach((el) => {
+        el.onclick = () => {
+          const h = habits.find((x) => x.id === el.dataset.hid);
+          if (h) { h.done = !h.done; render(); }
+        };
+      });
+    }
+
+    document.getElementById("add-task").onclick = () => {
+      const title = prompt("New task title");
+      if (!title) return;
+      tasks.push({ id: String(Date.now()), title, tag: "Inbox", done: false, priority: false });
+      render();
+    };
+
+    greet();
+    render();
+  </script>
+</body>
+</html>

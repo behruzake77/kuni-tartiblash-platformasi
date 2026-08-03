@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Focus · Ordo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="app.css" />
+</head>
+<body data-page="focus" data-title="Focus">
+  <div class="shell" id="app-shell"></div>
+  <template id="page-source">
+    <div class="page-head">
+      <div>
+        <p class="sub">Deep work sessions</p>
+        <h2>Focus session</h2>
+      </div>
+    </div>
+
+    <div class="card focus-card" style="max-width:720px;margin:0 auto">
+      <span class="badge badge-primary" id="status">Ready</span>
+      <div class="timer" id="timer" style="margin-top:20px" aria-live="polite">25:00</div>
+      <p style="color:var(--text-3);font-size:14px;margin-top:8px;position:relative" id="hint">Choose a length and begin.</p>
+      <div class="progress-line"><i id="bar"></i></div>
+      <div class="presets" id="presets">
+        <button type="button" class="preset on" data-s="1500">25m</button>
+        <button type="button" class="preset" data-s="2700">45m</button>
+        <button type="button" class="preset" data-s="3600">60m</button>
+        <button type="button" class="preset" data-s="5400">90m</button>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:center;position:relative;margin-top:8px">
+        <button class="btn btn-grad btn-lg" type="button" id="toggle">▶ Start</button>
+        <button class="btn btn-sec btn-lg" type="button" id="reset">↺ Reset</button>
+      </div>
+    </div>
+
+    <div class="metrics" style="max-width:720px;margin:16px auto 0">
+      <div class="card metric-card"><div class="l">Today</div><div class="v">1h 20m</div></div>
+      <div class="card metric-card"><div class="l">This week</div><div class="v">6h 45m</div></div>
+      <div class="card metric-card" style="grid-column:span 2"><div class="l">Streak</div><div class="v">4 days</div></div>
+    </div>
+  </template>
+  <script src="_shell.js"></script>
+  <script>
+    let duration = 1500, remaining = 1500, running = false, tick = null;
+
+    function fmt(t) {
+      const m = Math.floor(t / 60), s = t % 60;
+      return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+    }
+    function paint() {
+      document.getElementById("timer").textContent = fmt(remaining);
+      const pct = duration ? ((duration - remaining) / duration) * 100 : 0;
+      document.getElementById("bar").style.width = pct + "%";
+      const st = document.getElementById("status");
+      const hint = document.getElementById("hint");
+      const btn = document.getElementById("toggle");
+      if (running) {
+        st.textContent = "In session";
+        hint.textContent = "Stay with the work. Distractions can wait.";
+        btn.textContent = "⏸ Pause";
+      } else if (remaining === 0) {
+        st.textContent = "Complete";
+        hint.textContent = "Session complete. Take a breath.";
+        btn.textContent = "Finished";
+      } else {
+        st.textContent = "Ready";
+        hint.textContent = "Choose a length and begin.";
+        btn.textContent = "▶ Start";
+      }
+    }
+    function stop() { running = false; if (tick) clearInterval(tick); tick = null; paint(); }
+    function start() {
+      if (remaining <= 0) return;
+      running = true;
+      tick = setInterval(() => {
+        remaining = Math.max(0, remaining - 1);
+        if (remaining === 0) stop();
+        else paint();
+      }, 1000);
+      paint();
+    }
+
+    document.getElementById("presets").onclick = (e) => {
+      const b = e.target.closest("[data-s]");
+      if (!b) return;
+      stop();
+      duration = remaining = +b.dataset.s;
+      document.querySelectorAll(".preset").forEach((x) => x.classList.toggle("on", x === b));
+      paint();
+    };
+    document.getElementById("toggle").onclick = () => {
+      if (running) stop();
+      else start();
+    };
+    document.getElementById("reset").onclick = () => {
+      stop();
+      remaining = duration;
+      paint();
+    };
+    paint();
+  </script>
+</body>
+</html>

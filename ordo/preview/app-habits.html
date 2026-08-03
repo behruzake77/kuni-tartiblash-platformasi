@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Habits · Ordo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="app.css" />
+</head>
+<body data-page="habits" data-title="Habits">
+  <div class="shell" id="app-shell"></div>
+  <template id="page-source">
+    <div class="page-head">
+      <div>
+        <p class="sub" id="sub">Small daily votes · 0/0 today</p>
+        <h2>Habits</h2>
+      </div>
+      <div class="page-actions">
+        <button class="btn btn-grad" type="button" id="add">+ New habit</button>
+      </div>
+    </div>
+    <div id="list"></div>
+  </template>
+  <script src="_shell.js"></script>
+  <script>
+    const DAYS = ["M","T","W","T","F","S","S"];
+    let habits = [
+      { id: "1", name: "Morning pages", cadence: "Daily · morning", streak: 12, doneToday: true, week: [1,1,1,1,1,0,1] },
+      { id: "2", name: "Workout", cadence: "5× / week", streak: 6, doneToday: true, week: [1,0,1,1,1,1,1] },
+      { id: "3", name: "No phone first hour", cadence: "Daily · morning", streak: 4, doneToday: false, week: [1,1,0,1,1,0,0] },
+      { id: "4", name: "Evening shutdown", cadence: "Daily · evening", streak: 9, doneToday: false, week: [1,1,1,1,1,1,0] },
+      { id: "5", name: "Read 20 pages", cadence: "Daily · evening", streak: 3, doneToday: false, week: [0,1,1,0,1,0,0] },
+    ];
+
+    function render() {
+      const done = habits.filter((h) => h.doneToday).length;
+      document.getElementById("sub").textContent = `Small daily votes · ${done}/${habits.length} today`;
+      document.getElementById("list").innerHTML = habits
+        .map(
+          (h) => `<div class="card habit-card">
+          <button type="button" class="task-row${h.doneToday ? " done" : ""}" data-id="${h.id}" style="flex:1;min-width:200px">
+            <span class="check"></span>
+            <span><span class="title">${h.name}</span><div class="tag">${h.cadence}</div></span>
+          </button>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+            <div class="week">${h.week.map((d,i)=>`<span class="${d?"on":""}" title="${DAYS[i]}">${DAYS[i]}</span>`).join("")}</div>
+            <span class="badge badge-sec" style="text-transform:none;letter-spacing:0">🔥 ${h.streak} day streak</span>
+          </div>
+        </div>`
+        )
+        .join("");
+      document.querySelectorAll("[data-id]").forEach((el) => {
+        el.onclick = () => {
+          const h = habits.find((x) => x.id === el.dataset.id);
+          if (!h) return;
+          h.doneToday = !h.doneToday;
+          h.week[6] = h.doneToday ? 1 : 0;
+          h.streak = h.doneToday ? h.streak + 1 : Math.max(0, h.streak - 1);
+          render();
+        };
+      });
+    }
+    document.getElementById("add").onclick = () => {
+      const name = prompt("Habit name");
+      if (!name) return;
+      habits.push({ id: String(Date.now()), name, cadence: "Daily", streak: 0, doneToday: false, week: [0,0,0,0,0,0,0] });
+      render();
+    };
+    render();
+  </script>
+</body>
+</html>

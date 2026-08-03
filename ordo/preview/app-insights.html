@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Insights · Ordo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="app.css" />
+</head>
+<body data-page="insights" data-title="Insights">
+  <div class="shell" id="app-shell"></div>
+  <template id="page-source">
+    <div class="page-head">
+      <div>
+        <p class="sub">Patterns without anxiety</p>
+        <h2>Weekly insights</h2>
+      </div>
+    </div>
+
+    <div class="metrics">
+      <div class="card metric-card"><div class="l">Avg completion</div><div class="v">64%</div><div class="s">+8% vs last week</div></div>
+      <div class="card metric-card"><div class="l">Focus time</div><div class="v">6h 45m</div><div class="s">Best day: Thu</div></div>
+      <div class="card metric-card"><div class="l">Habit rate</div><div class="v">71%</div><div class="s">4 active habits</div></div>
+      <div class="card metric-card"><div class="l">Day closes</div><div class="v">5/7</div><div class="s">Missed Sat–Sun</div></div>
+    </div>
+
+    <div class="layout-5" style="grid-template-columns:1fr 1fr">
+      <div class="card" style="padding:20px">
+        <h3 style="font-size:15px;margin-bottom:12px">Focus minutes</h3>
+        <div class="bars" id="focus-bars"></div>
+      </div>
+      <div class="card" style="padding:20px">
+        <h3 style="font-size:15px;margin-bottom:12px">Task completion %</h3>
+        <div class="bars" id="comp-bars"></div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:20px;margin-top:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h3 style="font-size:15px">Observations</h3>
+        <span class="badge badge-primary">This week</span>
+      </div>
+      <div class="obs">Your deepest focus lands mid-morning (9–11). Protect it before meetings.</div>
+      <div class="obs">Thursday was your strongest completion day — reuse that plan shape.</div>
+      <div class="obs">Evening shutdown slipped on weekends. A lighter Saturday ritual may help.</div>
+    </div>
+  </template>
+  <script src="_shell.js"></script>
+  <script>
+    const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+    const focus = [40,55,35,70,90,60,80];
+    const comp = [62,70,48,85,91,40,55];
+    const maxF = Math.max(...focus);
+    document.getElementById("focus-bars").innerHTML = focus
+      .map((v, i) => `<div class="col"><b style="height:${(v / maxF) * 100}%"></b><em>${days[i]}</em></div>`)
+      .join("");
+    document.getElementById("comp-bars").innerHTML = comp
+      .map((v, i) => `<div class="col"><b class="alt" style="height:${v}%"></b><em>${days[i]}</em></div>`)
+      .join("");
+  </script>
+</body>
+</html>

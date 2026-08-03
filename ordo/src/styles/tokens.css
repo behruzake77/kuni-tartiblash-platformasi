@@ -1,0 +1,392 @@
+/* ============================================================
+   ORDO DESIGN TOKENS — v1.0
+   Production-Grade Design Token Specification
+   Source: Ordo Design Bible
+   Do not edit without design lead approval
+   ============================================================ */
+
+:root {
+  /* ──────────────────────────────────────────
+     TYPOGRAPHY
+  ────────────────────────────────────────── */
+  --font-sans: var(--font-inter), "Inter", "Geist", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", system-ui, sans-serif;
+  --font-display: var(--font-geist-sans), "Geist", "Inter", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), "JetBrains Mono", "SFMono-Regular", "SF Mono",
+    ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+
+  /* Type Scale */
+  --text-2xs: 10px;
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 30px;
+  --text-4xl: 36px;
+  --text-5xl: 48px;
+  --text-6xl: 60px;
+  --text-7xl: 72px;
+  --text-8xl: 96px;
+
+  /* Line Heights */
+  --leading-none: 1;
+  --leading-tightest: 1.05;
+  --leading-tight: 1.1;
+  --leading-snug: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.65;
+  --leading-loose: 1.8;
+
+  /* Letter Spacing */
+  --tracking-tightest: -0.05em;
+  --tracking-tighter: -0.04em;
+  --tracking-tight: -0.03em;
+  --tracking-snug: -0.02em;
+  --tracking-slight: -0.01em;
+  --tracking-normal: 0em;
+  --tracking-wide: 0.005em;
+  --tracking-wider: 0.01em;
+  --tracking-widest: 0.08em;
+
+  /* Font Weights */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-extrabold: 800;
+
+  /* ──────────────────────────────────────────
+     SPACING SCALE
+  ────────────────────────────────────────── */
+  --space-0: 0px;
+  --space-px: 1px;
+  --space-0-5: 2px;
+  --space-1: 4px;
+  --space-1-5: 6px;
+  --space-2: 8px;
+  --space-2-5: 10px;
+  --space-3: 12px;
+  --space-3-5: 14px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+  --space-9: 36px;
+  --space-10: 40px;
+  --space-11: 44px;
+  --space-12: 48px;
+  --space-14: 56px;
+  --space-16: 64px;
+  --space-18: 72px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-28: 112px;
+  --space-32: 128px;
+  --space-36: 144px;
+  --space-40: 160px;
+  --space-48: 192px;
+  --space-56: 224px;
+  --space-64: 256px;
+
+  /* ──────────────────────────────────────────
+     SIZING SCALE
+  ────────────────────────────────────────── */
+  --size-4: 16px;
+  --size-5: 20px;
+  --size-6: 24px;
+  --size-7: 28px;
+  --size-8: 32px;
+  --size-9: 36px;
+  --size-10: 40px;
+  --size-11: 44px; /* minimum touch target */
+  --size-12: 48px;
+  --size-14: 56px;
+  --size-16: 64px;
+
+  /* ──────────────────────────────────────────
+     BORDER RADIUS
+  ────────────────────────────────────────── */
+  --radius-none: 0px;
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-3xl: 32px;
+  --radius-full: 9999px;
+
+  /* ──────────────────────────────────────────
+     BORDERS
+  ────────────────────────────────────────── */
+  --border-width-thin: 1px;
+  --border-width-base: 1px;
+  --border-width-thick: 2px;
+  --border-width-heavy: 3px;
+
+  /* ──────────────────────────────────────────
+     BLUR
+  ────────────────────────────────────────── */
+  --blur-xs: 4px;
+  --blur-sm: 8px;
+  --blur-md: 16px;
+  --blur-lg: 24px;
+  --blur-xl: 40px;
+  --blur-2xl: 64px;
+
+  /* ──────────────────────────────────────────
+     OPACITY
+  ────────────────────────────────────────── */
+  --opacity-0: 0;
+  --opacity-5: 0.05;
+  --opacity-10: 0.1;
+  --opacity-15: 0.15;
+  --opacity-20: 0.2;
+  --opacity-30: 0.3;
+  --opacity-40: 0.4;
+  --opacity-50: 0.5;
+  --opacity-60: 0.6;
+  --opacity-70: 0.7;
+  --opacity-75: 0.75;
+  --opacity-80: 0.8;
+  --opacity-90: 0.9;
+  --opacity-95: 0.95;
+  --opacity-100: 1;
+
+  /* ──────────────────────────────────────────
+     Z-INDEX SCALE
+  ────────────────────────────────────────── */
+  --z-below: -1;
+  --z-base: 0;
+  --z-raised: 1;
+  --z-dropdown: 10;
+  --z-sticky: 20;
+  --z-overlay: 30;
+  --z-modal: 40;
+  --z-popover: 50;
+  --z-toast: 60;
+  --z-tooltip: 70;
+  --z-command: 80;
+  --z-spotlight: 90;
+  --z-max: 9999;
+
+  /* ──────────────────────────────────────────
+     MOTION — DURATION
+  ────────────────────────────────────────── */
+  --duration-instant: 80ms;
+  --duration-fast: 150ms;
+  --duration-base: 220ms;
+  --duration-medium: 320ms;
+  --duration-slow: 480ms;
+  --duration-deliberate: 640ms;
+  --duration-hero: 900ms;
+  --duration-cinematic: 1400ms;
+
+  /* ──────────────────────────────────────────
+     MOTION — EASING
+  ────────────────────────────────────────── */
+  --ease-linear: linear;
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-snappy: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in-out-premium: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-hero: cubic-bezier(0.12, 0.8, 0.08, 1);
+
+  /* ──────────────────────────────────────────
+     CONTAINERS
+  ────────────────────────────────────────── */
+  --container-xs: 480px;
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-2xl: 1440px;
+  --container-3xl: 1920px;
+
+  /* ──────────────────────────────────────────
+     BREAKPOINTS (reference)
+  ────────────────────────────────────────── */
+  --bp-sm: 640px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
+  --bp-2xl: 1536px;
+
+  /* ──────────────────────────────────────────
+     LIGHT MODE COLORS (default)
+  ────────────────────────────────────────── */
+
+  /* Backgrounds */
+  --color-bg: hsl(0, 0%, 100%);
+  --color-surface-1: hsl(0, 0%, 100%);
+  --color-surface-2: hsl(220, 14%, 96%);
+  --color-surface-3: hsl(220, 13%, 93%);
+  --color-surface-elevated: hsl(0, 0%, 100%);
+
+  /* Borders */
+  --color-border: hsl(220, 13%, 88%);
+  --color-border-strong: hsl(220, 14%, 80%);
+  --color-border-focus: hsl(221, 83%, 53%);
+
+  /* Text */
+  --color-text-primary: hsl(222, 47%, 11%);
+  --color-text-secondary: hsl(220, 9%, 38%);
+  --color-text-tertiary: hsl(220, 8%, 52%);
+  --color-text-placeholder: hsl(220, 8%, 64%);
+  --color-text-inverse: hsl(0, 0%, 100%);
+  --color-text-disabled: hsl(220, 8%, 70%);
+
+  /* Brand */
+  --color-primary: hsl(221, 83%, 53%);
+  --color-primary-hover: hsl(221, 83%, 48%);
+  --color-primary-active: hsl(221, 83%, 43%);
+  --color-primary-subtle: hsl(221, 83%, 97%);
+  --color-secondary: hsl(262, 83%, 58%);
+  --color-secondary-hover: hsl(262, 83%, 52%);
+  --color-accent: hsl(191, 96%, 42%);
+
+  /* Semantic */
+  --color-success: hsl(145, 63%, 42%);
+  --color-success-subtle: hsl(145, 63%, 96%);
+  --color-warning: hsl(38, 92%, 50%);
+  --color-warning-subtle: hsl(38, 92%, 96%);
+  --color-danger: hsl(0, 84%, 60%);
+  --color-danger-subtle: hsl(0, 84%, 97%);
+  --color-info: hsl(217, 91%, 60%);
+  --color-info-subtle: hsl(217, 91%, 96%);
+
+  /* Neutrals */
+  --color-neutral-50: hsl(220, 20%, 98%);
+  --color-neutral-100: hsl(220, 16%, 96%);
+  --color-neutral-200: hsl(220, 14%, 93%);
+  --color-neutral-300: hsl(220, 13%, 88%);
+  --color-neutral-400: hsl(220, 10%, 74%);
+  --color-neutral-500: hsl(220, 9%, 58%);
+  --color-neutral-600: hsl(220, 9%, 46%);
+  --color-neutral-700: hsl(220, 10%, 34%);
+  --color-neutral-800: hsl(222, 14%, 22%);
+  --color-neutral-900: hsl(222, 22%, 14%);
+  --color-neutral-950: hsl(224, 30%, 8%);
+
+  /* Data viz */
+  --color-dataviz-1: #3b82f6;
+  --color-dataviz-2: #8b5cf6;
+  --color-dataviz-3: #06b6d4;
+  --color-dataviz-4: #10b981;
+  --color-dataviz-5: #f59e0b;
+  --color-dataviz-6: #ef4444;
+  --color-dataviz-7: #f97316;
+  --color-dataviz-8: #ec4899;
+
+  /* Shadows (Light) */
+  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 16px rgba(15, 23, 42, 0.08), 0 2px 4px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.12), 0 4px 8px rgba(15, 23, 42, 0.06);
+  --shadow-xl: 0 24px 48px rgba(15, 23, 42, 0.16), 0 8px 16px rgba(15, 23, 42, 0.08);
+  --shadow-glow: 0 0 40px rgba(59, 130, 246, 0.2);
+  --shadow-inner: inset 0 1px 2px rgba(15, 23, 42, 0.06);
+
+  /* Gradients */
+  --gradient-brand: linear-gradient(135deg, #2563eb 0%, #7c3aed 55%, #06b6d4 100%);
+  --gradient-brand-subtle: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.08) 0%,
+    rgba(124, 58, 237, 0.06) 55%,
+    rgba(6, 182, 212, 0.04) 100%
+  );
+  --gradient-hero:
+    radial-gradient(circle at 20% 0%, rgba(37, 99, 235, 0.15), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(124, 58, 237, 0.1), transparent 38%),
+    linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  --gradient-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(245, 247, 250, 0.95));
+  --gradient-text: linear-gradient(135deg, hsl(222, 47%, 11%) 0%, hsl(220, 9%, 38%) 100%);
+
+  /* Layout constants */
+  --sidebar-width: 240px;
+  --sidebar-collapsed: 56px;
+  --header-height: 56px;
+}
+
+/* ============================================================
+   DARK MODE TOKEN OVERRIDES
+   Ordo is dark-first — .dark is the primary experience
+   ============================================================ */
+
+.dark {
+  /* Backgrounds */
+  --color-bg: hsl(224, 30%, 7%);
+  --color-surface-1: hsl(224, 24%, 10%);
+  --color-surface-2: hsl(223, 22%, 13%);
+  --color-surface-3: hsl(223, 20%, 16%);
+  --color-surface-elevated: hsl(224, 19%, 18%);
+
+  /* Borders */
+  --color-border: hsl(220, 14%, 20%);
+  --color-border-strong: hsl(220, 14%, 28%);
+  --color-border-focus: hsl(221, 83%, 62%);
+
+  /* Text */
+  --color-text-primary: hsl(210, 20%, 98%);
+  --color-text-secondary: hsl(215, 16%, 78%);
+  --color-text-tertiary: hsl(217, 10%, 62%);
+  --color-text-placeholder: hsl(217, 8%, 48%);
+  --color-text-inverse: hsl(222, 47%, 11%);
+  --color-text-disabled: hsl(217, 8%, 38%);
+
+  /* Brand */
+  --color-primary: hsl(221, 83%, 62%);
+  --color-primary-hover: hsl(221, 83%, 68%);
+  --color-primary-active: hsl(221, 83%, 72%);
+  --color-primary-subtle: hsl(221, 83%, 12%);
+  --color-secondary: hsl(262, 83%, 68%);
+  --color-secondary-hover: hsl(262, 83%, 74%);
+  --color-accent: hsl(191, 96%, 56%);
+
+  /* Semantic */
+  --color-success: hsl(145, 63%, 49%);
+  --color-success-subtle: hsl(145, 40%, 10%);
+  --color-warning: hsl(38, 95%, 62%);
+  --color-warning-subtle: hsl(38, 60%, 10%);
+  --color-danger: hsl(0, 84%, 67%);
+  --color-danger-subtle: hsl(0, 50%, 10%);
+  --color-info: hsl(214, 95%, 68%);
+  --color-info-subtle: hsl(214, 60%, 10%);
+
+  /* Shadows (Dark) */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.32), 0 1px 2px rgba(0, 0, 0, 0.24);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.36), 0 2px 6px rgba(0, 0, 0, 0.24);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.44), 0 6px 12px rgba(0, 0, 0, 0.28);
+  --shadow-xl: 0 32px 80px rgba(0, 0, 0, 0.56), 0 12px 24px rgba(0, 0, 0, 0.32);
+  --shadow-glow: 0 0 60px rgba(99, 102, 241, 0.24);
+  --shadow-inner: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+
+  /* Gradients (Dark) */
+  --gradient-brand: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 55%, #22d3ee 100%);
+  --gradient-brand-subtle: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.12) 0%,
+    rgba(139, 92, 246, 0.08) 55%,
+    rgba(34, 211, 238, 0.06) 100%
+  );
+  --gradient-hero:
+    radial-gradient(circle at 20% 0%, rgba(59, 130, 246, 0.22), transparent 40%),
+    radial-gradient(circle at 80% 0%, rgba(139, 92, 246, 0.16), transparent 35%),
+    radial-gradient(circle at 50% 60%, rgba(6, 182, 212, 0.06), transparent 50%),
+    linear-gradient(180deg, #090d18 0%, #0b0f1a 100%);
+  --gradient-surface: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.07) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  --gradient-text: linear-gradient(135deg, hsl(210, 20%, 98%) 0%, hsl(215, 16%, 75%) 100%);
+}

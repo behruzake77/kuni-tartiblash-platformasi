@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Schedule · Ordo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="app.css" />
+</head>
+<body data-page="schedule" data-title="Schedule">
+  <div class="shell" id="app-shell"></div>
+  <template id="page-source">
+    <div class="page-head">
+      <div>
+        <p class="sub">Shape the day hour by hour</p>
+        <h2>Time blocks</h2>
+      </div>
+      <div class="page-actions">
+        <button class="btn btn-grad" type="button" id="add-block">+ Add block</button>
+      </div>
+    </div>
+    <div class="card" id="hours"></div>
+  </template>
+  <script src="_shell.js"></script>
+  <script>
+    const hours = ["08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00"];
+    const events = {
+      "09:00": { title: "Deep work — Onboarding polish", duration: "2h", kind: "focus" },
+      "11:00": { title: "Standup", duration: "30m", kind: "meet" },
+      "12:00": { title: "Lunch", duration: "1h", kind: "break" },
+      "13:00": { title: "Focus — Hiring plan", duration: "1.5h", kind: "focus" },
+      "15:00": { title: "1:1 with Sam", duration: "45m", kind: "meet" },
+      "16:00": { title: "Admin buffer", duration: "30m", kind: "admin" },
+      "17:00": { title: "Day close review", duration: "15m", kind: "review" },
+    };
+    const badge = { focus: "badge-primary", meet: "badge-sec", admin: "badge-muted", review: "badge-primary", break: "badge-muted" };
+
+    function render() {
+      document.getElementById("hours").innerHTML = hours
+        .map((h) => {
+          const e = events[h];
+          return `<div class="hour-row"><div class="h">${h}</div>${
+            e
+              ? `<div class="event"><div><div style="font-size:14px;font-weight:500">${e.title}</div><div style="font-family:var(--mono);font-size:11px;color:var(--text-3);margin-top:2px">${e.duration}</div></div><span class="badge ${badge[e.kind] || "badge-muted"}">${e.kind}</span></div>`
+              : `<button class="free" type="button" data-h="${h}">Free — click to block</button>`
+          }</div>`;
+        })
+        .join("");
+      document.querySelectorAll(".free").forEach((btn) => {
+        btn.onclick = () => {
+          const title = prompt("Block title for " + btn.dataset.h);
+          if (!title) return;
+          events[btn.dataset.h] = { title, duration: "30m", kind: "focus" };
+          render();
+        };
+      });
+    }
+    document.getElementById("add-block").onclick = () => {
+      const h = prompt("Start time (e.g. 10:00)", "10:00");
+      if (!h) return;
+      const title = prompt("Title", "Focus block");
+      if (!title) return;
+      events[h] = { title, duration: "30m", kind: "focus" };
+      if (!hours.includes(h)) hours.push(h), hours.sort();
+      render();
+    };
+    render();
+  </script>
+</body>
+</html>

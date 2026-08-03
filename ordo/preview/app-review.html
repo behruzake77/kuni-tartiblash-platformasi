@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Day close · Ordo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="app.css" />
+</head>
+<body data-page="review" data-title="Day close">
+  <div class="shell" id="app-shell"></div>
+  <template id="page-source">
+    <div class="page-head">
+      <div>
+        <p class="sub">Two-minute evening ritual</p>
+        <h2>☾ Close the day</h2>
+      </div>
+    </div>
+
+    <div class="stack" style="max-width:640px">
+      <div class="card" style="padding:20px">
+        <h3 style="font-size:15px;margin-bottom:6px">Today at a glance</h3>
+        <p style="font-size:13px;color:var(--text-3);margin-bottom:12px">Auto-filled from your board — edit freely.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <span class="badge badge-success">5/11 tasks</span>
+          <span class="badge badge-primary">1h 20m focus</span>
+          <span class="badge badge-sec">2/4 habits</span>
+          <span class="badge badge-muted">2 priorities open</span>
+        </div>
+      </div>
+
+      <div class="card" style="padding:20px">
+        <label for="wins">What went well?</label>
+        <textarea id="wins">Shipped onboarding polish PR
+Cleared inbox
+Protected a 90-minute focus block</textarea>
+      </div>
+
+      <div class="card" style="padding:20px">
+        <label for="slipped">What slipped?</label>
+        <textarea id="slipped">Weekly update still open
+Didn't start blog outline</textarea>
+      </div>
+
+      <div class="card" style="padding:20px">
+        <label for="tomorrow">Tomorrow's first priority</label>
+        <p style="font-size:13px;color:var(--text-3);margin:-2px 0 10px">One clear move so morning-you doesn't have to decide.</p>
+        <input class="input" id="tomorrow" value="Finish weekly update before standup" />
+      </div>
+
+      <div class="card" style="padding:20px">
+        <label>Energy today</label>
+        <div class="energy" id="energy">
+          <button type="button" data-n="1">1</button>
+          <button type="button" data-n="2">2</button>
+          <button type="button" data-n="3">3</button>
+          <button type="button" class="on" data-n="4">4</button>
+          <button type="button" data-n="5">5</button>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:12px">
+        <button class="btn btn-grad btn-lg" type="button" id="save">☾ Save & close day</button>
+        <button class="btn btn-sec btn-lg" type="button">✦ Draft with AI</button>
+      </div>
+      <p id="msg" style="font-size:14px;color:var(--success);display:none" role="status">Day closed. Tomorrow's priority is ready on your Today board.</p>
+    </div>
+  </template>
+  <script src="_shell.js"></script>
+  <script>
+    document.getElementById("energy").onclick = (e) => {
+      const b = e.target.closest("[data-n]");
+      if (!b) return;
+      document.querySelectorAll("#energy button").forEach((x) => x.classList.toggle("on", x === b));
+    };
+    document.getElementById("save").onclick = () => {
+      document.getElementById("msg").style.display = "block";
+      document.getElementById("save").textContent = "✓ Day closed";
+    };
+  </script>
+</body>
+</html>

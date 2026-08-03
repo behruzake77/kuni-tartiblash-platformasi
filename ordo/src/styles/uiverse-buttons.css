@@ -1,0 +1,184 @@
+/* =============================================================================
+   Uiverse.io–inspired button effects (adapted to Ordo design tokens)
+   Source archive: https://github.com/uiverse-io/galaxy  (Buttons/)
+   Site: https://uiverse.io/
+
+   Original authors (attribution required by Uiverse):
+   - satyamchaudharydev — modern-sheep-10 (arrow CTA)
+   - Itskrish01 — soft-skunk-68 (corner wipe / slide fill)
+   - Codecite — modern-pig-84 (gradient lift pill)
+
+   Adapted: colors, radii, type, and sizing → Ordo Design Bible.
+   Not a raw paste — restyled for production React Button variants.
+   ============================================================================= */
+
+/* --- CTA arrow (from satyamchaudharydev) --- */
+.btn-uiverse-cta {
+  --uv-cta-bg: var(--color-primary);
+  --uv-cta-fg: #fff;
+  --uv-cta-hover: hsl(222, 47%, 11%);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65em;
+  border: 0;
+  border-radius: 9999px;
+  color: var(--uv-cta-fg);
+  background: var(--uv-cta-bg);
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.2s var(--ease-standard), box-shadow 0.2s, transform 0.08s;
+}
+.dark .btn-uiverse-cta {
+  --uv-cta-hover: hsl(210, 20%, 12%);
+}
+.btn-uiverse-cta:hover {
+  background: var(--uv-cta-hover);
+  box-shadow: var(--shadow-md);
+}
+.btn-uiverse-cta .uv-arrow-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-uiverse-cta .uv-arrow {
+  width: 10px;
+  height: 2px;
+  background: currentColor;
+  position: relative;
+  opacity: 0.95;
+  transition: background 0.2s, transform 0.2s;
+}
+.btn-uiverse-cta .uv-arrow::before {
+  content: "";
+  position: absolute;
+  box-sizing: border-box;
+  border: solid currentColor;
+  border-width: 0 2px 2px 0;
+  top: -3px;
+  right: 2px;
+  padding: 3px;
+  transform: rotate(-45deg);
+  transition: right 0.2s;
+}
+.btn-uiverse-cta:hover .uv-arrow {
+  background: var(--uv-cta-fg);
+}
+.btn-uiverse-cta:hover .uv-arrow::before {
+  right: 0;
+}
+/* gradient surface for brand CTAs */
+.btn-uiverse-cta.btn-uiverse-cta-gradient {
+  background-image: var(--gradient-brand);
+  background-color: transparent;
+}
+.btn-uiverse-cta.btn-uiverse-cta-gradient:hover {
+  filter: brightness(1.08);
+  background-image: var(--gradient-brand);
+}
+
+/* --- Shine / corner wipe (from Itskrish01, indigo → Ordo primary) --- */
+.btn-uiverse-shine {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.25s var(--ease-soft), transform 0.08s;
+}
+.btn-uiverse-shine:hover {
+  box-shadow: var(--shadow-md), var(--shadow-glow);
+}
+.btn-uiverse-shine .uv-shine-label {
+  position: relative;
+  z-index: 2;
+}
+.btn-uiverse-shine .uv-shine-sweep {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: color-mix(in srgb, var(--color-primary-hover) 90%, #000);
+  transform: translateX(-102%);
+  transition: transform 0.45s var(--ease-soft);
+}
+.btn-uiverse-shine:hover .uv-shine-sweep {
+  transform: translateX(0);
+}
+.btn-uiverse-shine .uv-shine-corner {
+  position: absolute;
+  z-index: 2;
+  width: 14px;
+  height: 14px;
+  background: color-mix(in srgb, var(--color-primary) 55%, #0b0f1a);
+  transition: all 0.45s var(--ease-soft);
+}
+.btn-uiverse-shine .uv-shine-corner-tr {
+  top: 0;
+  right: 0;
+  border-radius: 0 var(--radius-sm) 0 0;
+}
+.btn-uiverse-shine .uv-shine-corner-bl {
+  bottom: 0;
+  left: 0;
+  border-radius: 0 0 0 var(--radius-sm);
+  transform: rotate(180deg);
+}
+.btn-uiverse-shine:hover .uv-shine-corner-tr {
+  margin-right: -14px;
+  margin-top: -14px;
+}
+.btn-uiverse-shine:hover .uv-shine-corner-bl {
+  margin-left: -14px;
+  margin-bottom: -14px;
+}
+.btn-uiverse-shine .uv-shine-corner::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 18px;
+  height: 18px;
+  background: var(--color-bg);
+  transform: translate(50%, -50%) rotate(45deg);
+}
+
+/* --- Lift gradient pill (from Codecite, recolored to brand gradient) --- */
+.btn-uiverse-lift {
+  border: 0;
+  border-radius: 9999px;
+  color: #fff;
+  font-weight: 600;
+  background-image: var(--gradient-brand);
+  box-shadow: 0 14px 28px -8px color-mix(in srgb, var(--color-primary) 55%, transparent);
+  transition: transform 0.25s var(--ease-soft), box-shadow 0.25s var(--ease-soft),
+    filter 0.2s;
+}
+.btn-uiverse-lift:hover {
+  transform: translateY(2px);
+  box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--color-primary) 40%, transparent);
+  filter: brightness(1.06);
+}
+.btn-uiverse-lift:active {
+  transform: translateY(3px);
+  opacity: 0.92;
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .btn-uiverse-cta,
+  .btn-uiverse-shine,
+  .btn-uiverse-shine .uv-shine-sweep,
+  .btn-uiverse-shine .uv-shine-corner,
+  .btn-uiverse-lift {
+    transition: none !important;
+  }
+  .btn-uiverse-shine:hover .uv-shine-sweep {
+    transform: none;
+    opacity: 0.15;
+  }
+}
