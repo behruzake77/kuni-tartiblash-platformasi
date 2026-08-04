@@ -118,9 +118,9 @@ export function OnboardingGate({ children }: { children: React.ReactNode }) {
           )}
         </div>
 
-          <div className="mt-8 flex items-center justify-between gap-3">
-            {step > 0 ? <Button type="button" variant="ghost" size="sm" onClick={() => setStep((s) => s - 1)} leftIcon={<ArrowLeft className="size-4" />}>{t("common.back")}</Button> : <Button type="button" variant="ghost" onClick={finish}>{t("onboard.skip")}</Button>}
-            {step < 2 ? <Button type="button" variant="gradient" onClick={() => setStep((s) => s + 1)}>{t("onboard.next")}</Button> : <Button type="button" variant="gradient" onClick={finish} rightIcon={<CheckCircle2 className="size-4" />}>{t("onboard.finish")}</Button>}
+          <div className="mt-8 grid grid-cols-2 gap-3">
+            {step > 0 ? <Button type="button" variant="ghost" className="min-w-0 w-full px-2 sm:px-4" onClick={() => setStep((s) => s - 1)} leftIcon={<ArrowLeft className="size-4" />}>{t("common.back")}</Button> : <Button type="button" variant="ghost" className="min-w-0 w-full px-2 sm:px-4" onClick={finish}>{t("onboard.skip")}</Button>}
+            {step < 2 ? <Button type="button" variant="gradient" className="min-w-0 w-full px-2 sm:px-4" onClick={() => setStep((s) => s + 1)}>{t("onboard.next")}</Button> : <Button type="button" variant="gradient" className="min-w-0 w-full px-2 sm:px-4" onClick={finish} rightIcon={<CheckCircle2 className="size-4" />}>{t("onboard.finish")}</Button>}
           </div>
         </div>
         <aside className="relative hidden overflow-hidden border-l border-border bg-[radial-gradient(circle_at_50%_35%,rgba(168,85,247,.22),transparent_32%),linear-gradient(145deg,rgba(99,102,241,.13),rgba(34,211,238,.05))] p-10 md:flex md:flex-col md:justify-between">

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { AppShell } from "@/components/layout/app-shell";
 import {
   Card,
@@ -32,6 +33,7 @@ import { useUser } from "@/providers/user-provider";
 import { useSync } from "@/providers/sync-provider";
 import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
+import { isAdminEmail } from "@/lib/admin";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -245,6 +247,7 @@ export default function SettingsPage() {
           {t("settings.title")}
         </h2>
         <p className="mt-1 text-sm text-text-secondary">{t("settings.sub")}</p>
+        {isAdminEmail(user?.email) && <Link href="/app/admin" className="mt-3 inline-flex text-sm font-medium text-primary hover:underline">Admin panelni ochish →</Link>}
       </div>
 
       <div className="mx-auto flex max-w-2xl flex-col gap-4">

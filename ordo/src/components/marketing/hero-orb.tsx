@@ -50,15 +50,19 @@ function ClockScene() {
 
 function Calendar() {
   const [hovered, setHovered] = useState(false);
-  const date = hovered ? "24" : "23";
+  const now = useClock();
+  const shown = now ? new Date(now) : null;
+  if (shown && hovered) shown.setDate(shown.getDate() + 1);
+  const month = shown ? new Intl.DateTimeFormat("en-US", { month: "short" }).format(shown).toUpperCase() : "…";
+  const weekday = shown ? new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(shown) : "";
   return (
-    <button onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} className="hero-calendar absolute left-1/2 top-[2%] z-30 h-28 w-28 -translate-x-1/2 cursor-pointer rounded-2xl text-left sm:h-32 sm:w-32" aria-label="Sana kartasi">
+    <button onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} className="hero-calendar absolute left-1/2 top-[2%] z-30 h-28 w-28 -translate-x-1/2 cursor-pointer rounded-2xl text-left sm:h-32 sm:w-32" aria-label="Bugungi sana kartasi">
       <span className="hero-paper hero-paper-back" />
       <span className="hero-paper hero-paper-mid" />
       <span className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/25 bg-[#eeefff] shadow-[0_18px_35px_rgba(0,0,0,.4)]">
-        <span className="flex h-8 items-center justify-center bg-gradient-to-r from-violet-600 to-indigo-500 text-[9px] font-bold tracking-[.16em] text-white">AUGUST</span>
-        <strong className="mt-1 text-center text-5xl leading-none tracking-tighter text-[#151331] sm:text-6xl">{date}</strong>
-        <small className="mt-1 text-center text-[9px] font-bold uppercase tracking-widest text-indigo-500">Friday</small>
+        <span className="flex h-8 items-center justify-center bg-gradient-to-r from-violet-600 to-indigo-500 text-[9px] font-bold tracking-[.16em] text-white">{month}</span>
+        <strong className="mt-1 text-center text-5xl leading-none tracking-tighter text-[#151331] sm:text-6xl">{shown?.getDate() || "—"}</strong>
+        <small className="mt-1 text-center text-[9px] font-bold uppercase tracking-widest text-indigo-500">{weekday}</small>
       </span>
     </button>
   );

@@ -5,9 +5,8 @@ import { buildDayMarkdown, buildWeeklyMarkdown } from "@/lib/export/markdown";
 
 describe("buildScheduleIcs", () => {
   it("emits VCALENDAR with events", () => {
-    const day = createDefaultDay("2026-08-03");
     const ics = buildScheduleIcs({
-      blocks: day.schedule,
+      blocks: [{ id: "s_test", time: "09:00", endTime: "10:00", label: "Test focus", kind: "focus" }],
       date: new Date("2026-08-03T12:00:00"),
       calName: "Ordo Test",
     });
