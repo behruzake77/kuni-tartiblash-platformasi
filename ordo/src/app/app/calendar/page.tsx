@@ -10,6 +10,7 @@ import { Dialog } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/lib/auth/supabase";
 import { addPlannedTask, removePlannedTask, updatePlannedTask } from "@/lib/planned-tasks";
+import { todayKey } from "@/lib/day-defaults";
 import { useDay } from "@/providers/day-provider";
 import type { DayState } from "@/lib/types";
 
@@ -18,7 +19,7 @@ const weekdayLabels = ["Du", "Se", "Ch", "Pa", "Ju", "Sh", "Ya"];
 
 type StoredDay = Pick<DayState, "date" | "tasks" | "habits" | "focusSecondsToday" | "review">;
 
-function dateKey(date: Date) { return date.toISOString().slice(0, 10); }
+function dateKey(date: Date) { return todayKey(date); }
 function shiftMonth(date: Date, delta: number) { return new Date(date.getFullYear(), date.getMonth() + delta, 1); }
 
 export default function CalendarPage() {

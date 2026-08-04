@@ -8,6 +8,7 @@ import {
   timeToTodayDate,
 } from "@/lib/notifications";
 import { pushInbox } from "@/lib/inbox";
+import { todayKey } from "@/lib/day-defaults";
 import type { ScheduleBlock } from "@/lib/types";
 import type { OrdoPrefs } from "@/lib/user-storage";
 
@@ -41,7 +42,7 @@ export function useReminders({
 
     const tick = () => {
       const now = new Date();
-      const dayKey = now.toISOString().slice(0, 10);
+      const dayKey = todayKey(now);
       const lead = Math.max(0, prefs.reminderLeadMinutes || 0);
       const perm = getNotificationPermission();
 
