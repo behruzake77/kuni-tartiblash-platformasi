@@ -66,7 +66,7 @@ export function LogoMark({
 }) {
   return (
     <Image
-      src="/brand/ordo-checkmark-mark.svg"
+      src="/brand/ordo-checkmark-mark.svg?v=20260805"
       width={size}
       height={size}
       className={cn("shrink-0", className)}
