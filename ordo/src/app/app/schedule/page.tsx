@@ -66,7 +66,8 @@ export default function SchedulePage() {
         </div>
         <Button
           variant="gradient"
-          size="sm"
+          size="md"
+          className="w-full sm:w-auto"
           leftIcon={<Plus className="size-4" />}
           onClick={() => setOpen(true)}
         >
@@ -80,9 +81,11 @@ export default function SchedulePage() {
             <button
               type="button"
               onClick={() => setOpen(true)}
-              className="w-full rounded-[var(--radius-md)] border border-dashed border-border px-3 py-8 text-sm text-text-tertiary hover:border-border-strong"
+              className="flex w-full flex-col items-center rounded-[var(--radius-md)] border border-dashed border-border px-4 py-10 text-center text-sm text-text-tertiary transition-colors hover:border-primary hover:bg-primary-subtle/30 hover:text-text-secondary"
             >
-              {t("schedule.free")}
+              <span className="grid size-11 place-items-center rounded-2xl bg-primary-subtle text-primary"><Plus className="size-5" /></span>
+              <span className="mt-3 font-medium text-text-secondary">{t("schedule.free")}</span>
+              <span className="mt-1 text-xs">{t("schedule.add")}</span>
             </button>
           ) : (
             sorted.map((event) => (
@@ -107,7 +110,7 @@ export default function SchedulePage() {
                   setOverId(null);
                 }}
                 className={cn(
-                  "flex flex-wrap items-center gap-3 rounded-[var(--radius-md)] border bg-surface-2 px-3 py-3 transition-colors",
+                  "flex flex-wrap items-center gap-2 rounded-[var(--radius-md)] border bg-surface-2 px-3 py-3 transition-colors sm:gap-3",
                   dragId === event.id && "opacity-50",
                   overId === event.id && dragId && dragId !== event.id
                     ? "border-primary bg-primary-subtle/40"
@@ -139,7 +142,7 @@ export default function SchedulePage() {
                     removeBlock(event.id);
                     toast({ title: t("schedule.removed"), kind: "default" });
                   }}
-                  className="inline-flex size-8 items-center justify-center rounded-[var(--radius-sm)] text-text-tertiary hover:bg-surface-3 hover:text-danger"
+                  className="ml-auto inline-flex size-10 items-center justify-center rounded-[var(--radius-sm)] text-text-tertiary hover:bg-surface-3 hover:text-danger sm:ml-0"
                   aria-label={t("common.delete")}
                 >
                   <Trash2 className="size-3.5" />

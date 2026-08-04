@@ -1,0 +1,16 @@
+/* Lightweight per-keystroke feedback for auth fields. No continuous animation. */
+@keyframes input-keystroke {
+  0% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0); }
+  45% { box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.14), 0 0 20px rgba(34, 211, 238, 0.12); }
+  100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0); }
+}
+@keyframes input-icon-pop {
+  0% { transform: scale(1); color: var(--color-text-tertiary); }
+  50% { transform: scale(1.16) rotate(-4deg); color: #22D3EE; }
+  100% { transform: scale(1); color: var(--color-text-tertiary); }
+}
+.input-typing { animation: input-keystroke 360ms var(--ease-soft); }
+.input-shell-typing > span { animation: input-icon-pop 360ms var(--ease-soft); }
+@media (prefers-reduced-motion: reduce) {
+  .input-typing, .input-shell-typing > span { animation: none !important; }
+}

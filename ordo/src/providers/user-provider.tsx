@@ -44,6 +44,11 @@ type UserContextValue = {
     password: string;
     name?: string;
   }) => Promise<OrdoUser>;
+  signUpAsync: (opts: {
+    email: string;
+    password: string;
+    name?: string;
+  }) => Promise<OrdoUser>;
   signOut: () => void;
   updateUser: (patch: Partial<Pick<OrdoUser, "name" | "email">>) => void;
   updatePrefs: (patch: Partial<OrdoPrefs>) => void;
@@ -88,9 +93,26 @@ export function UserProvider({ children }: { children: ReactNode }) {
       savePrefs(p);
     }
     setPrefs(p);
-    setUser(loadUser());
     setOnboarded(isOnboarded());
-    setReady(true);
+    const provider = resolveAuthProvider();
+    if (provider.isRemote) {
+      void Promise.resolve(provider.getSessionUser()).then((sessionUser) => {
+        if (sessionUser) {
+          const next = authToOrdo(sessionUser);
+          saveUser(next);
+          setUser(next);
+        } else {
+          setUser(null);
+        }
+        setReady(true);
+      }).catch(() => {
+        setUser(null);
+        setReady(true);
+      });
+    } else {
+      setUser(loadUser());
+      setReady(true);
+    }
   }, []);
 
   const t = useCallback(
@@ -103,6 +125,18 @@ export function UserProvider({ children }: { children: ReactNode }) {
     async (opts: { email: string; password: string; name?: string }) => {
       const provider = resolveAuthProvider();
       const authUser = await provider.signIn(opts);
+      const next = authToOrdo(authUser);
+      saveUser(next);
+      setUser(next);
+      return next;
+    },
+    []
+  );
+
+  const signUpAsync = useCallback(
+    async (opts: { email: string; password: string; name?: string }) => {
+      const provider = resolveAuthProvider();
+      const authUser = await provider.signUp(opts);
       const next = authToOrdo(authUser);
       saveUser(next);
       setUser(next);
@@ -240,6 +274,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
       t,
       signIn,
       signInAsync,
+      signUpAsync,
       signOut,
       updateUser,
       updatePrefs,
@@ -257,6 +292,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
       t,
       signIn,
       signInAsync,
+      signUpAsync,
       signOut,
       updateUser,
       updatePrefs,

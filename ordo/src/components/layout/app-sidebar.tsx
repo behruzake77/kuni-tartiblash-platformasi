@@ -6,6 +6,7 @@ import {
   Activity,
   BarChart3,
   CalendarClock,
+  CalendarDays,
   ChevronLeft,
   ChevronRight,
   Command,
@@ -13,10 +14,12 @@ import {
   Focus,
   Moon,
   Settings,
+  ShieldCheck,
   Sun,
 } from "lucide-react";
 import { Logo, LogoMark } from "@/components/shared/logo";
 import { useUser } from "@/providers/user-provider";
+import { isAdminEmail } from "@/lib/admin";
 import { cn } from "@/lib/utils";
 
 type AppSidebarProps = {
@@ -33,10 +36,12 @@ export function AppSidebar({
   onOpenCommand,
 }: AppSidebarProps) {
   const pathname = usePathname();
-  const { t } = useUser();
+  const { t, user } = useUser();
+  const isAdmin = isAdminEmail(user?.email);
 
   const NAV = [
     { label: t("nav.today"), href: "/app", icon: Sun },
+    { label: "Kalendar", href: "/app/calendar", icon: CalendarDays },
     { label: t("nav.schedule"), href: "/app/schedule", icon: CalendarClock },
     { label: t("nav.focus"), href: "/app/focus", icon: Focus },
     { label: t("nav.habits"), href: "/app/habits", icon: Flame },
@@ -147,6 +152,21 @@ export function AppSidebar({
             </>
           )}
         </button>
+
+        {isAdmin && (
+          <Link
+            href="/app/admin"
+            title={collapsed ? "Admin panel" : undefined}
+            className={cn(
+              "flex h-9 items-center gap-2 rounded-[var(--radius-sm)] text-sm font-medium transition-colors",
+              collapsed ? "justify-center" : "px-2.5",
+              pathname.startsWith("/app/admin") ? "bg-primary-subtle text-primary" : "text-text-secondary hover:bg-surface-2 hover:text-text-primary"
+            )}
+          >
+            <ShieldCheck className="size-[18px]" strokeWidth={1.75} aria-hidden="true" />
+            {!collapsed && "Admin panel"}
+          </Link>
+        )}
 
         <Link
           href="/app/settings"

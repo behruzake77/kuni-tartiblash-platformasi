@@ -167,7 +167,7 @@ export default function FocusPage() {
             </Badge>
 
             <div
-              className="relative mb-2 font-[family-name:var(--font-mono)] text-6xl font-medium tracking-tight text-text-primary sm:text-7xl"
+              className="relative mb-2 font-[family-name:var(--font-mono)] text-[clamp(3.25rem,14vw,4.5rem)] font-medium tracking-tight text-text-primary"
               aria-live="polite"
               aria-atomic="true"
             >
@@ -188,14 +188,14 @@ export default function FocusPage() {
               />
             </div>
 
-            <div className="relative mt-8 flex flex-wrap items-center justify-center gap-2">
+            <div className="relative mt-8 grid w-full max-w-sm grid-cols-2 gap-2 sm:flex sm:w-auto sm:flex-wrap sm:justify-center">
               {PRESETS.map((p) => (
                 <button
                   key={p.label}
                   type="button"
                   onClick={() => selectPreset(p.seconds)}
                   className={cn(
-                    "h-9 rounded-full border px-4 text-sm font-medium transition-colors",
+                    "h-11 rounded-full border px-4 text-sm font-medium transition-colors sm:h-9",
                     duration === p.seconds
                       ? "border-primary bg-primary-subtle text-primary"
                       : "border-border bg-surface-2 text-text-secondary hover:border-border-strong"
@@ -206,7 +206,7 @@ export default function FocusPage() {
               ))}
             </div>
 
-            <div className="relative mt-8 flex items-center gap-3">
+            <div className="relative mt-8 grid w-full max-w-sm grid-cols-2 gap-3">
               <Button
                 variant="gradient"
                 size="lg"

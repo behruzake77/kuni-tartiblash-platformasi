@@ -175,10 +175,11 @@ export default function ReviewPage() {
           </CardContent>
         </Card>
 
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="grid gap-3 sm:flex sm:items-center">
           <Button
             variant="gradient"
             size="lg"
+            className="w-full sm:w-auto"
             leftIcon={
               closed ? (
                 <CheckCircle2 className="size-4" />
@@ -193,6 +194,7 @@ export default function ReviewPage() {
           <Button
             variant="secondary"
             size="lg"
+            className="w-full sm:w-auto"
             leftIcon={<Sparkles className="size-4 text-secondary" />}
             onClick={draftAi}
           >

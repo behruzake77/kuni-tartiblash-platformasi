@@ -501,14 +501,14 @@ export default function SettingsPage() {
             <CardTitle className="text-base">{t("export.section")}</CardTitle>
             <CardDescription>{t("export.sectionDesc")}</CardDescription>
           </CardHeader>
-          <CardContent className="flex flex-wrap gap-2">
-            <Button variant="secondary" size="sm" onClick={exportMd}>
+          <CardContent className="grid gap-2 sm:flex sm:flex-wrap">
+            <Button variant="secondary" size="md" className="w-full sm:w-auto" onClick={exportMd}>
               {t("export.dayMd")}
             </Button>
-            <Button variant="secondary" size="sm" onClick={exportIcs}>
+            <Button variant="secondary" size="md" className="w-full sm:w-auto" onClick={exportIcs}>
               {t("export.scheduleIcs")}
             </Button>
-            <Button variant="secondary" size="sm" onClick={exportWeek}>
+            <Button variant="secondary" size="md" className="w-full sm:w-auto" onClick={exportWeek}>
               {t("export.weekMd")}
             </Button>
           </CardContent>

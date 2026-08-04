@@ -13,6 +13,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { AppShell } from "@/components/layout/app-shell";
+import { AiPlanner } from "@/components/app/ai-planner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -81,7 +82,7 @@ export default function TodayPage() {
             {t("today.title")}
           </h2>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto sm:flex-wrap sm:items-center">
           <Button
             variant="secondary"
             size="sm"
@@ -90,6 +91,7 @@ export default function TodayPage() {
           >
             {t("today.plan")}
           </Button>
+          <AiPlanner />
           <Button
             variant="gradient"
             size="sm"
@@ -363,11 +365,11 @@ function TaskRow({
           <p className="text-xs text-text-tertiary">{task.tag}</p>
         </div>
       </button>
-      <div className="flex items-center gap-0.5 pr-1 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
+      <div className="flex items-center gap-0.5 pr-1 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100 sm:focus-within:opacity-100">
         <button
           type="button"
           onClick={onStar}
-          className="inline-flex size-8 items-center justify-center rounded-[var(--radius-sm)] text-text-tertiary hover:bg-surface-2 hover:text-warning"
+          className="inline-flex size-10 items-center justify-center rounded-[var(--radius-sm)] text-text-tertiary hover:bg-surface-2 hover:text-warning"
           aria-label="Priority"
         >
           <Star
@@ -377,7 +379,7 @@ function TaskRow({
         <button
           type="button"
           onClick={onRemove}
-          className="inline-flex size-8 items-center justify-center rounded-[var(--radius-sm)] text-text-tertiary hover:bg-surface-2 hover:text-danger"
+          className="inline-flex size-10 items-center justify-center rounded-[var(--radius-sm)] text-text-tertiary hover:bg-surface-2 hover:text-danger"
           aria-label="Delete"
         >
           <Trash2 className="size-3.5" />

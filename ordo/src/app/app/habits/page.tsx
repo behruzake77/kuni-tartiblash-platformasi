@@ -47,7 +47,8 @@ export default function HabitsPage() {
         </div>
         <Button
           variant="gradient"
-          size="sm"
+          size="md"
+          className="w-full sm:w-auto"
           leftIcon={<Plus className="size-4" />}
           onClick={() => setOpen(true)}
         >
@@ -56,6 +57,16 @@ export default function HabitsPage() {
       </div>
 
       <div className="grid gap-3">
+        {state.habits.length === 0 && (
+          <Card className="border-dashed">
+            <CardContent className="flex flex-col items-center px-6 py-12 text-center">
+              <span className="grid size-12 place-items-center rounded-2xl bg-primary-subtle text-primary"><Flame className="size-6" /></span>
+              <p className="mt-4 font-semibold text-text-primary">{t("habits.title")}</p>
+              <p className="mt-1 max-w-sm text-sm leading-relaxed text-text-secondary">{t("habits.sub")}</p>
+              <Button variant="shine" className="mt-5" leftIcon={<Plus className="size-4" />} onClick={() => setOpen(true)}>{t("habits.new")}</Button>
+            </CardContent>
+          </Card>
+        )}
         {state.habits.map((h) => (
           <Card key={h.id}>
             <CardContent className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">

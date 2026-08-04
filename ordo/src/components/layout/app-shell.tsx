@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { CheckSquare, Focus, Moon, Plus, Sun, Zap } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { AppHeader } from "@/components/layout/app-header";
@@ -15,6 +16,7 @@ import { useUser } from "@/providers/user-provider";
 import { useReminders } from "@/hooks/use-reminders";
 import { useKeyboardNav } from "@/hooks/use-keyboard-nav";
 import { useWeeklySnapshot } from "@/hooks/use-weekly-snapshot";
+import { addPlannedTask } from "@/lib/planned-tasks";
 import { cn } from "@/lib/utils";
 
 type AppShellProps = {
@@ -29,6 +31,9 @@ export function AppShell({ children, title }: AppShellProps) {
   const [cmdOpen, setCmdOpen] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
   const [taskTitle, setTaskTitle] = useState("");
+  const [targetDate, setTargetDate] = useState("");
+  const [taskTag, setTaskTag] = useState("Shaxsiy");
+  const [taskTime, setTaskTime] = useState("");
   const [asPriority, setAsPriority] = useState(false);
   const { addTask, toggleTask, stats, state } = useDay();
   const { toast } = useToast();
@@ -58,7 +63,7 @@ export function AppShell({ children, title }: AppShellProps) {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [state.date]);
 
   useEffect(() => {
     const onToggle = (e: Event) => {
@@ -74,11 +79,12 @@ export function AppShell({ children, title }: AppShellProps) {
     const onAdd = () => {
       setAsPriority(false);
       setTaskTitle("");
+      setTargetDate(state.date);
       setAddOpen(true);
     };
     window.addEventListener("ordo:add-task", onAdd);
     return () => window.removeEventListener("ordo:add-task", onAdd);
-  }, []);
+  }, [state.date]);
 
   // Register service worker once
   useEffect(() => {
@@ -87,40 +93,33 @@ export function AppShell({ children, title }: AppShellProps) {
     }
   }, []);
 
-  function submitTask(e?: React.FormEvent) {
+  async function submitTask(e?: React.FormEvent) {
     e?.preventDefault();
     if (!taskTitle.trim()) return;
-    addTask(taskTitle, {
-      priority: asPriority,
-      tag: asPriority ? "Priority" : "Inbox",
-    });
-    toast({
-      title: asPriority ? t("task.priorityAdded") : t("task.added"),
-      description: taskTitle.trim(),
-      kind: "success",
-    });
-    setTaskTitle("");
-    setAsPriority(false);
-    setAddOpen(false);
+    const title = taskTitle.trim();
+    try {
+      if (targetDate && targetDate !== state.date) {
+        await addPlannedTask({ date: targetDate, title, priority: asPriority, tag: taskTag, time: taskTime });
+        toast({ title: "Vazifa rejalashtirildi", description: `${targetDate} · ${title}`, kind: "success" });
+      } else {
+        addTask(title, { priority: asPriority, tag: taskTag || "Shaxsiy", time: taskTime });
+        toast({ title: asPriority ? t("task.priorityAdded") : t("task.added"), description: title, kind: "success" });
+      }
+      setTaskTitle("");
+      setTaskTag("Shaxsiy");
+      setTaskTime("");
+      setAsPriority(false);
+      setAddOpen(false);
+    } catch {
+      toast({ title: "Vazifa saqlanmadi", description: "Internet va sinxronlash sozlamalarini tekshiring.", kind: "default" });
+    }
   }
 
   const mobile = [
-    { href: "/app", label: t("mobile.today"), match: (p: string) => p === "/app" },
-    {
-      href: "/app/focus",
-      label: t("mobile.focus"),
-      match: (p: string) => p.startsWith("/app/focus"),
-    },
-    {
-      href: "/app/habits",
-      label: t("mobile.habits"),
-      match: (p: string) => p.startsWith("/app/habits"),
-    },
-    {
-      href: "/app/review",
-      label: t("mobile.close"),
-      match: (p: string) => p.startsWith("/app/review"),
-    },
+    { href: "/app", label: t("mobile.today"), icon: Sun, match: (p: string) => p === "/app" },
+    { href: "/app/focus", label: t("mobile.focus"), icon: Focus, match: (p: string) => p.startsWith("/app/focus") },
+    { href: "/app/habits", label: t("mobile.habits"), icon: CheckSquare, match: (p: string) => p.startsWith("/app/habits") },
+    { href: "/app/review", label: t("mobile.close"), icon: Moon, match: (p: string) => p.startsWith("/app/review") },
   ];
 
   return (
@@ -151,30 +150,21 @@ export function AppShell({ children, title }: AppShellProps) {
       </main>
 
       <nav
-        className="fixed inset-x-0 bottom-0 z-[var(--z-sticky)] flex border-t border-border bg-surface-1/95 px-1 py-2 backdrop-blur md:hidden"
+        className="fixed inset-x-0 bottom-0 z-[var(--z-sticky)] flex min-h-[4.25rem] items-end border-t border-border bg-surface-1/95 px-1 pt-1.5 backdrop-blur md:hidden"
         style={{ paddingBottom: "max(0.5rem, env(safe-area-inset-bottom))" }}
-        aria-label="Mobile"
+        aria-label="Mobile navigation"
       >
-        {mobile.map((l) => (
-          <Link
-            key={l.href}
-            href={l.href}
-            className={cn(
-              "flex flex-1 flex-col items-center gap-0.5 py-1 text-[10px] font-medium",
-              l.match(pathname) ? "text-primary" : "text-text-tertiary"
-            )}
-          >
-            {l.label}
-          </Link>
-        ))}
-        <button
-          type="button"
-          onClick={() => setCmdOpen(true)}
-          className="flex flex-1 flex-col items-center gap-0.5 py-1 text-[10px] font-medium text-primary"
-        >
-          ⌘K
-        </button>
+        {mobile.slice(0, 2).map((l) => {
+          const Icon = l.icon;
+          return <Link key={l.href} href={l.href} className={cn("flex min-h-11 flex-1 flex-col items-center justify-center gap-0.5 rounded-lg text-[10px] font-medium", l.match(pathname) ? "text-primary" : "text-text-tertiary")}><Icon className="size-[19px]" aria-hidden="true" /><span className="max-w-full truncate px-1">{l.label}</span></Link>;
+        })}
+        <button type="button" onClick={() => { setAsPriority(false); setTaskTitle(""); setTargetDate(state.date); setAddOpen(true); }} className="-mt-7 flex size-14 shrink-0 items-center justify-center rounded-full border-4 border-bg bg-gradient-brand text-white shadow-lg shadow-primary/30" aria-label={t("today.addTask")}><Plus className="size-6" /></button>
+        {mobile.slice(2).map((l) => {
+          const Icon = l.icon;
+          return <Link key={l.href} href={l.href} className={cn("flex min-h-11 flex-1 flex-col items-center justify-center gap-0.5 rounded-lg text-[10px] font-medium", l.match(pathname) ? "text-primary" : "text-text-tertiary")}><Icon className="size-[19px]" aria-hidden="true" /><span className="max-w-full truncate px-1">{l.label}</span></Link>;
+        })}
       </nav>
+      <button type="button" onClick={() => setCmdOpen(true)} className="fixed bottom-[5.25rem] right-4 z-[var(--z-sticky)] grid size-11 place-items-center rounded-full border border-border bg-surface-elevated text-primary shadow-lg md:hidden" aria-label={t("nav.command")}><Zap className="size-4" /></button>
 
       <CommandPalette
         open={cmdOpen}
@@ -183,6 +173,7 @@ export function AppShell({ children, title }: AppShellProps) {
           setCmdOpen(false);
           setAsPriority(false);
           setTaskTitle("");
+          setTargetDate(state.date);
           setAddOpen(true);
         }}
       />
@@ -200,6 +191,14 @@ export function AppShell({ children, title }: AppShellProps) {
             placeholder={t("task.placeholder")}
             autoComplete="off"
           />
+          <div>
+            <label htmlFor="task-date" className="mb-1.5 block text-sm font-medium text-text-primary">Qaysi kun uchun?</label>
+            <Input id="task-date" type="date" value={targetDate || state.date} min={state.date} onChange={(e) => setTargetDate(e.target.value)} />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div><label htmlFor="task-tag" className="mb-1.5 block text-sm font-medium text-text-primary">Kategoriya</label><select id="task-tag" value={taskTag} onChange={(e) => setTaskTag(e.target.value)} className="h-10 w-full rounded-[var(--radius-sm)] border border-border bg-surface-3 px-3 text-sm text-text-primary"><option>Shaxsiy</option><option>Ish</option><option>O‘qish</option><option>Sog‘liq</option><option>Boshqa</option></select></div>
+            <div><label htmlFor="task-time" className="mb-1.5 block text-sm font-medium text-text-primary">Vaqt (ixtiyoriy)</label><Input id="task-time" type="time" value={taskTime} onChange={(e) => setTaskTime(e.target.value)} /></div>
+          </div>
           <label className="flex items-center gap-2 text-sm text-text-secondary">
             <input
               type="checkbox"

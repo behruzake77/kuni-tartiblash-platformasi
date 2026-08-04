@@ -71,7 +71,7 @@ export default function InsightsPage() {
           </h2>
           <p className="mt-1 text-sm text-text-secondary">{t("insights.sub")}</p>
         </div>
-        <Button variant="secondary" size="sm" onClick={exportWeek}>
+        <Button variant="secondary" size="md" className="w-full sm:w-auto" onClick={exportWeek}>
           {t("export.weekMd")}
         </Button>
       </div>

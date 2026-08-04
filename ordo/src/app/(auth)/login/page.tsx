@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import Link from "next/link";
 import { LoginForm } from "@/components/auth/login-form";
 import { useUser } from "@/providers/user-provider";
@@ -13,7 +14,9 @@ export default function LoginPage() {
       </h1>
       <p className="mt-2 text-sm text-text-secondary">{t("auth.welcomeSub")}</p>
       <div className="mt-8">
-        <LoginForm />
+        <Suspense fallback={<div className="h-64 animate-pulse rounded-xl bg-surface-2" />}>
+          <LoginForm />
+        </Suspense>
       </div>
       <p className="mt-8 text-center text-sm text-text-secondary">
         {t("auth.noAccount")}{" "}

@@ -6,6 +6,8 @@ export type Task = {
   tag: string;
   done: boolean;
   priority: boolean;
+  /** Optional time assigned within the planned day. */
+  time?: string;
   createdAt: string;
 };
 

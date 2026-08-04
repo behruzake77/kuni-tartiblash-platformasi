@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -64,49 +65,14 @@ export function LogoMark({
   className?: string;
 }) {
   return (
-    <svg
+    <Image
+      src="/brand/ordo-checkmark-mark.svg"
       width={size}
       height={size}
-      viewBox="0 0 32 32"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
       className={cn("shrink-0", className)}
+      alt=""
       aria-hidden="true"
-    >
-      <defs>
-        <linearGradient
-          id="ordo-mark-grad"
-          x1="4"
-          y1="4"
-          x2="28"
-          y2="28"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stopColor="#3B82F6" />
-          <stop offset="0.55" stopColor="#8B5CF6" />
-          <stop offset="1" stopColor="#22D3EE" />
-        </linearGradient>
-      </defs>
-      {/* Outer orbital ring */}
-      <ellipse
-        cx="16"
-        cy="16"
-        rx="13"
-        ry="13"
-        stroke="url(#ordo-mark-grad)"
-        strokeWidth="1.5"
-        opacity="0.45"
-      />
-      {/* Inner core O */}
-      <circle
-        cx="16"
-        cy="16"
-        r="7.5"
-        stroke="url(#ordo-mark-grad)"
-        strokeWidth="2.25"
-      />
-      {/* Orbital accent node */}
-      <circle cx="26.5" cy="11" r="2.25" fill="url(#ordo-mark-grad)" />
-    </svg>
+      priority
+    />
   );
 }

@@ -36,7 +36,7 @@ type DayContextValue = {
     dayPct: number;
   };
   // tasks
-  addTask: (title: string, opts?: { priority?: boolean; tag?: string }) => void;
+  addTask: (title: string, opts?: { priority?: boolean; tag?: string; time?: string }) => void;
   toggleTask: (id: string) => void;
   removeTask: (id: string) => void;
   setTaskPriority: (id: string, priority: boolean) => void;
@@ -142,7 +142,7 @@ export function DayProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const addTask = useCallback(
-    (title: string, opts?: { priority?: boolean; tag?: string }) => {
+    (title: string, opts?: { priority?: boolean; tag?: string; time?: string }) => {
       const clean = title.trim();
       if (!clean) return;
       update((prev) => {
@@ -154,6 +154,7 @@ export function DayProvider({ children }: { children: ReactNode }) {
           tag: opts?.tag?.trim() || "Inbox",
           done: false,
           priority: wantPriority,
+          time: opts?.time || undefined,
           createdAt: new Date().toISOString(),
         };
         pushActivity({

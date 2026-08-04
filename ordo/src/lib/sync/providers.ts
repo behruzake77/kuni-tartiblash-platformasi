@@ -1,4 +1,5 @@
 import type { SyncPayload, SyncProvider } from "@/lib/sync/types";
+import { supabase } from "@/lib/auth/supabase";
 import { loadPrefs } from "@/lib/user-storage";
 
 /** Always available — no network */
@@ -72,6 +73,43 @@ export function createHttpProvider(
   };
 }
 
+/** Supabase row-per-user sync. RLS makes every row private to auth.uid(). */
+export const supabaseSyncProvider: SyncProvider = {
+  id: "supabase",
+  label: "Supabase cloud sync",
+  isRemote: Boolean(supabase),
+  async pull() {
+    if (!supabase) return null;
+    const { data: auth } = await supabase.auth.getUser();
+    if (!auth.user) return null;
+    const { data, error } = await supabase
+      .from("ordo_day_states")
+      .select("payload")
+      .eq("user_id", auth.user.id)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    const payload = data?.payload as SyncPayload | undefined;
+    return payload?.version === 1 && payload.day ? payload : null;
+  },
+  async push(payload) {
+    if (!supabase) return { ok: false, error: "Supabase is not configured" };
+    const { data: auth, error: authError } = await supabase.auth.getUser();
+    if (authError || !auth.user) return { ok: false, error: "No active Supabase session" };
+    const stateWrite = supabase.from("ordo_day_states").upsert(
+      { user_id: auth.user.id, payload, updated_at: payload.updatedAt },
+      { onConflict: "user_id" }
+    );
+    // Preserve a row per date for the month calendar and historical review.
+    const historyWrite = supabase.from("ordo_day_history").upsert(
+      { user_id: auth.user.id, day_date: payload.day.date, payload: payload.day, updated_at: payload.updatedAt },
+      { onConflict: "user_id,day_date" }
+    );
+    const [{ error: stateError }, { error: historyError }] = await Promise.all([stateWrite, historyWrite]);
+    const error = stateError || historyError;
+    return error ? { ok: false, error: error.message } : { ok: true };
+  },
+};
+
 /**
  * Built-in Next.js route handlers under /api/sync
  * Multi-device when app is deployed and devices share workspaceKey.
@@ -108,6 +146,10 @@ export function resolveProvider(): SyncProvider {
 
   const workspace =
     (prefs as { workspaceKey?: string }).workspaceKey?.trim() || "default";
+  const authMode = typeof process !== "undefined" ? process.env.NEXT_PUBLIC_ORDO_AUTH : undefined;
+
+  // A signed-in Supabase user always syncs into their own RLS-protected row.
+  if (authMode === "supabase" && supabase) return supabaseSyncProvider;
 
   if (external && external.startsWith("http")) {
     return createHttpProvider(external, { token, workspace });

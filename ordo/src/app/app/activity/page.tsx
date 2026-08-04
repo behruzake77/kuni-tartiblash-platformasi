@@ -71,7 +71,7 @@ export default function ActivityPage() {
           <p className="mt-1 text-sm text-text-secondary">{t("activity.sub")}</p>
         </div>
         {items.length > 0 && (
-          <Button variant="secondary" size="sm" onClick={() => clear()}>
+          <Button variant="secondary" size="md" className="w-full sm:w-auto" onClick={() => clear()}>
             {t("activity.clear")}
           </Button>
         )}
@@ -80,9 +80,10 @@ export default function ActivityPage() {
       <Card>
         <CardContent className="p-0">
           {items.length === 0 ? (
-            <p className="px-6 py-16 text-center text-sm text-text-tertiary">
-              {t("activity.empty")}
-            </p>
+            <div className="flex flex-col items-center px-6 py-14 text-center">
+              <span className="grid size-12 place-items-center rounded-2xl bg-primary-subtle text-primary"><Clock className="size-6" /></span>
+              <p className="mt-4 text-sm text-text-tertiary">{t("activity.empty")}</p>
+            </div>
           ) : (
             <ul className="divide-y divide-border">
               {items.map((item) => {
