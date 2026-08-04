@@ -45,7 +45,7 @@ export function MarketingHeader() {
       )}
     >
       <div className="container-ordo flex h-14 items-center justify-between gap-4 md:h-16">
-        <Logo size="sm" />
+        <Logo size="md" />
 
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
           {NAV.map((item) => (

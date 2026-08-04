@@ -69,10 +69,15 @@ function Calendar() {
 }
 
 function Sidebar() {
+  const now = useClock();
+  const date = now || new Date(0);
+  const monthLabel = now ? new Intl.DateTimeFormat("uz-UZ", { month: "long", year: "numeric" }).format(date) : "Kalendar";
+  const daysInMonth = now ? new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate() : 31;
+  const activeDay = now ? date.getDate() : 1;
   return (
     <aside className="hero-sidebar w-full max-w-[285px] self-center rounded-3xl border border-white/10 bg-[#11162a]/80 p-4 shadow-2xl backdrop-blur-xl lg:justify-self-end">
-      <div className="mb-4 flex items-center justify-between"><span className="text-sm font-semibold text-white">Avgust 2026</span><span className="flex gap-1 text-slate-400"><ChevronLeft className="size-4" /><ChevronRight className="size-4" /></span></div>
-      <div className="grid grid-cols-7 gap-1 text-center text-[10px] text-slate-500">{"D S C P J S Y".split(" ").map((d) => <span key={d}>{d}</span>)}{Array.from({ length: 31 }, (_, i) => <span key={i} className={i === 22 ? "rounded-md bg-violet-500 py-1 font-bold text-white shadow-[0_0_14px_#a855f7]" : "py-1 text-slate-300"}>{i + 1}</span>)}</div>
+      <div className="mb-4 flex items-center justify-between"><span className="text-sm font-semibold capitalize text-white">{monthLabel}</span><span className="flex gap-1 text-slate-400"><ChevronLeft className="size-4" /><ChevronRight className="size-4" /></span></div>
+      <div className="grid grid-cols-7 gap-1 text-center text-[10px] text-slate-500">{"D S C P J S Y".split(" ").map((d) => <span key={d}>{d}</span>)}{Array.from({ length: daysInMonth }, (_, i) => <span key={i} className={i + 1 === activeDay ? "rounded-md bg-violet-500 py-1 font-bold text-white shadow-[0_0_14px_#a855f7]" : "py-1 text-slate-300"}>{i + 1}</span>)}</div>
       <div className="my-5 h-px bg-white/10" />
       <div className="flex items-end justify-between"><div><p className="text-xs text-slate-400">Bugungi progress</p><p className="mt-1 text-2xl font-bold text-white">78%</p></div><div className="hero-progress-ring"><span>4/5</span></div></div>
       <div className="hero-progress-track mt-3"><span /></div>

@@ -142,6 +142,20 @@ export default function TodayPage() {
         ))}
       </div>
 
+      {state.tasks.length === 0 && (
+        <Card className="mt-6 overflow-hidden border-primary/25 bg-gradient-brand-subtle">
+          <CardContent className="p-5 sm:p-6">
+            <p className="text-xs font-semibold uppercase tracking-[var(--tracking-widest)] text-primary">Boshlash uchun qo‘llanma</p>
+            <h3 className="mt-2 font-[family-name:var(--font-display)] text-xl font-bold text-text-primary">Bugungi kuningizni 3 qadamda rejalang</h3>
+            <div className="mt-5 grid gap-3 md:grid-cols-3">
+              <button type="button" onClick={openAdd} className="rounded-[var(--radius-md)] border border-border bg-surface-1/80 p-4 text-left transition hover:border-primary"><span className="text-xs font-bold text-primary">1-QADAM</span><p className="mt-1 text-sm font-semibold text-text-primary">Birinchi vazifani yozing</p><p className="mt-1 text-xs text-text-tertiary">Nima qilish kerakligini aniq yozing.</p></button>
+              <Link href="/app/schedule" className="rounded-[var(--radius-md)] border border-border bg-surface-1/80 p-4 transition hover:border-primary"><span className="text-xs font-bold text-primary">2-QADAM</span><p className="mt-1 text-sm font-semibold text-text-primary">Vaqtni belgilang</p><p className="mt-1 text-xs text-text-tertiary">Ish uchun vaqt bloki yarating.</p></Link>
+              <Link href="/app/focus" className="rounded-[var(--radius-md)] border border-border bg-surface-1/80 p-4 transition hover:border-primary"><span className="text-xs font-bold text-primary">3-QADAM</span><p className="mt-1 text-sm font-semibold text-text-primary">Fokusni boshlang</p><p className="mt-1 text-xs text-text-tertiary">Muhim ishga vaqt ajrating.</p></Link>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       <div className="mt-6 grid gap-4 lg:grid-cols-5">
         <div className="flex flex-col gap-4 lg:col-span-3">
           <Card>
