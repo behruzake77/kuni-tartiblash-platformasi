@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   CheckCircle2,
   Circle,
@@ -49,6 +50,7 @@ function formatToday(locale: string) {
 
 export default function TodayPage() {
   const { t, locale } = useUser();
+  const router = useRouter();
   const {
     state,
     stats,
@@ -105,7 +107,7 @@ export default function TodayPage() {
             size="sm"
             leftIcon={<Focus className="size-4" />}
             onClick={() => {
-              window.location.href = "/app/focus";
+              router.push("/app/focus");
             }}
           >
             {t("today.startFocus")}
