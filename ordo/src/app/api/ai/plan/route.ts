@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { BedrockRuntimeClient, InvokeModelCommand } from "@aws-sdk/client-bedrock-runtime";
-import { createClient } from "@supabase/supabase-js";
+import { getServerUser } from "@/lib/server-auth";
 
 export const runtime = "nodejs";
 
@@ -8,16 +8,6 @@ type PlanRequest = { prompt?: string; existingTasks?: string[]; locale?: string 
 
 function jsonError(message: string, status: number) {
   return NextResponse.json({ error: message }, { status });
-}
-
-async function authenticated(request: Request) {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  const token = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
-  if (!url || !key || !token) return null;
-  const client = createClient(url, key, { auth: { persistSession: false } });
-  const { data } = await client.auth.getUser(token);
-  return data.user || null;
 }
 
 const usage = new Map<string, { startedAt: number; count: number }>();
@@ -34,7 +24,7 @@ function withinAiLimit(userId: string) {
 }
 
 export async function POST(request: Request) {
-  const user = await authenticated(request);
+  const user = await getServerUser(request);
   if (!user) return jsonError("UNAUTHORIZED", 401);
   if (!withinAiLimit(user.id)) return jsonError("AI_RATE_LIMITED", 429);
   if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {

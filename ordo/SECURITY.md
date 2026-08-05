@@ -23,6 +23,10 @@ ORDO_ADMIN_EMAILS=owner@example.com
 ORDO_SYNC_TOKEN=a-long-random-secret
 ```
 
+## Server-side admin authorization
+
+The UI allowlist is only for navigation. Sensitive admin APIs must validate the Supabase bearer token server-side and compare the verified email against `ORDO_ADMIN_EMAILS`. `/api/admin/security` is the reference implementation.
+
 ## Supabase
 
 1. Run both migrations in `supabase/migrations/`.
