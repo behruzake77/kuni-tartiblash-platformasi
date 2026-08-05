@@ -199,6 +199,33 @@ h3,
   border: 1px solid var(--color-border-strong);
 }
 
+/* ============================================================
+   CARD VISUALS — Theme Engine v2
+   .ordo-card owns all card visuals; each theme preset restyles
+   it by overriding --card-* variables on html[data-ordo-theme].
+   ============================================================ */
+.ordo-card {
+  background: var(--card-bg, var(--color-surface-2));
+  border: var(--card-border-width, 1px) solid var(--card-border-color, var(--color-border));
+  box-shadow: var(--card-shadow, var(--shadow-sm));
+  backdrop-filter: var(--card-blur, none);
+  -webkit-backdrop-filter: var(--card-blur, none);
+  transition:
+    border-color var(--duration-base) var(--ease-soft),
+    box-shadow var(--duration-base) var(--ease-soft),
+    background-color var(--duration-base) var(--ease-soft),
+    background var(--duration-base) var(--ease-soft),
+    transform var(--duration-base) var(--ease-soft),
+    backdrop-filter var(--duration-base) var(--ease-soft);
+}
+
+.ordo-card.ordo-card-hover:hover {
+  border-color: var(--card-border-hover, var(--color-border-strong));
+  box-shadow: var(--card-shadow-hover, var(--shadow-lg));
+  background: var(--card-bg-hover, var(--card-bg, var(--color-surface-2)));
+}
+
+
 /* Subtle noise overlay for hero depth */
 .noise-overlay::before {
   content: "";

@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { GeistSans } from "geist/font/sans";
+import "@fontsource-variable/inter";
+import "@fontsource/jetbrains-mono";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { UserProvider } from "@/providers/user-provider";
 import { getSiteUrl } from "@/lib/site";
@@ -78,6 +80,12 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-dvh bg-bg text-text-primary antialiased">
+        {/* Restore the saved theme preset before first paint (prevents FOUC). */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var p=JSON.parse(localStorage.getItem("ordo.prefs.v1")||"null");if(p&&p.themePreset){document.documentElement.dataset.ordoTheme=p.themePreset;}}catch(e){}`,
+          }}
+        />
         <ThemeProvider>
           <UserProvider>
             <a

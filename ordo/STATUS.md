@@ -6,6 +6,8 @@
 - lint ✅ · unit 20+ · API e2e 7 ✅ · build ✅
 
 ## Shu turda yopildi
+- **Theme Engine v2** — har bir mavzu butun dizaynni qayta bezaydi:
+  to‘liq rang palitrasi (dark+light), animatsion fon sahnalari (qor, yulduzlar, pufakchalar, gul barglari, halftone, piksel panjara), karta uslublari (shisha, neon, pop-art, piksel), shrift/radius shaxsiyati, View-Transition silliq almashtirish, FOUC himoyasi
 - Upstash Redis durable sync
 - Contact email env (Privacy/Terms)
 - Sync rate limit

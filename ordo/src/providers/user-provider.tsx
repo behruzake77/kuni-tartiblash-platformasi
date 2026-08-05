@@ -10,6 +10,7 @@ import {
   type ReactNode,
 } from "react";
 import { detectLocale, t as translate, type Locale } from "@/lib/i18n";
+import { applyThemePreset } from "@/lib/themes";
 import {
   clearUser,
   isOnboarded,
@@ -118,7 +119,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    document.documentElement.dataset.ordoTheme = prefs.themePreset;
+    applyThemePreset(prefs.themePreset);
   }, [prefs.themePreset]);
 
   const t = useCallback(
