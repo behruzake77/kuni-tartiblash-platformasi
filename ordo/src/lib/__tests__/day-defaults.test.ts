@@ -28,9 +28,9 @@ describe("createDefaultDay", () => {
     const day = createDefaultDay("2026-08-03");
     expect(day.version).toBe(1);
     expect(day.date).toBe("2026-08-03");
-    expect(day.tasks.length).toBeGreaterThan(0);
-    expect(day.habits.length).toBeGreaterThan(0);
-    expect(day.schedule.length).toBeGreaterThan(0);
+    expect(day.tasks).toEqual([]);
+    expect(day.habits).toEqual([]);
+    expect(day.schedule).toEqual([]);
     expect(day.updatedAt).toBeTruthy();
   });
 

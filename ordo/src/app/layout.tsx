@@ -1,24 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
 import { GeistSans } from "geist/font/sans";
+import "@fontsource-variable/inter";
+import "@fontsource/jetbrains-mono";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { UserProvider } from "@/providers/user-provider";
 import { getSiteUrl } from "@/lib/site";
 import "./globals.css";
-
-const inter = Inter({
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-inter",
-  display: "swap",
-  weight: ["400", "500", "600", "700"],
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-jetbrains-mono",
-  display: "swap",
-  weight: ["400", "500"],
-});
 
 const siteUrl = getSiteUrl();
 
@@ -57,9 +44,11 @@ export const metadata: Metadata = {
     title: "Ordo — Take control of your day",
     description: "Plan, focus, and close every day with intention.",
     url: siteUrl,
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Ordo — Take control of every day" }],
   },
   twitter: {
     card: "summary_large_image",
+    images: ["/og.png"],
     title: "Ordo — Take control of your day",
     description: "Plan, focus, and close every day with intention.",
   },
@@ -86,11 +75,17 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
-      className={`${inter.variable} ${GeistSans.variable} ${jetbrainsMono.variable}`}
+      lang="uz"
+      className={GeistSans.variable}
       suppressHydrationWarning
     >
       <body className="min-h-dvh bg-bg text-text-primary antialiased">
+        {/* Restore the saved theme preset before first paint (prevents FOUC). */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var p=JSON.parse(localStorage.getItem("ordo.prefs.v1")||"null");document.documentElement.dataset.ordoTheme=(p&&p.themePreset)?p.themePreset:"winter";}catch(e){document.documentElement.dataset.ordoTheme="winter";}`,
+          }}
+        />
         <ThemeProvider>
           <UserProvider>
             <a

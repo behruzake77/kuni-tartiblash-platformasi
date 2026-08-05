@@ -1,4 +1,5 @@
 import { localAuthProvider } from "@/lib/auth/local-provider";
+import { supabaseAuthProvider } from "@/lib/auth/supabase";
 import type { AuthProvider, AuthProviderId } from "@/lib/auth/types";
 
 /**
@@ -51,32 +52,7 @@ export function resolveAuthProvider(): AuthProvider {
     };
   }
 
-  if (id === "supabase") {
-    return {
-      id: "supabase",
-      label: "Supabase Auth",
-      isRemote: true,
-      getSessionUser: async () => {
-        console.warn(
-          "[ordo-auth] Supabase selected but not configured. See DEPLOY.md"
-        );
-        return null;
-      },
-      signIn: async () => {
-        throw new Error(
-          "SUPABASE_NOT_CONFIGURED: Add @supabase/ssr and keys. See DEPLOY.md"
-        );
-      },
-      signUp: async () => {
-        throw new Error(
-          "SUPABASE_NOT_CONFIGURED: Add @supabase/ssr and keys. See DEPLOY.md"
-        );
-      },
-      signOut: async () => {
-        /* no-op */
-      },
-    };
-  }
+  if (id === "supabase") return supabaseAuthProvider;
 
   return localAuthProvider;
 }

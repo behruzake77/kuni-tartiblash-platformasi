@@ -1,18 +1,24 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import type { CSSProperties } from "react";
 import {
   CheckCircle2,
   Circle,
   Clock,
+  Flag,
   Focus,
   MoreHorizontal,
+  Pencil,
   Plus,
   Sparkles,
   Star,
+  Timer,
   Trash2,
 } from "lucide-react";
 import { AppShell } from "@/components/layout/app-shell";
+import { AiPlanner } from "@/components/app/ai-planner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -29,23 +35,35 @@ function greetingKey() {
   return "greet.evening";
 }
 
+const scheduleKindLabel: Record<string, string> = {
+  focus: "Fokus",
+  meet: "Uchrashuv",
+  admin: "Boshqa ish",
+  review: "Kun yakuni",
+  break: "Tanaffus",
+};
+
 function formatToday(locale: string) {
-  const loc = locale === "uz" ? "uz-UZ" : locale === "ru" ? "ru-RU" : "en-US";
-  return new Intl.DateTimeFormat(loc, {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-  }).format(new Date());
+  const date = new Date();
+  if (locale === "uz") {
+    const weekdays = ["yakshanba", "dushanba", "seshanba", "chorshanba", "payshanba", "juma", "shanba"];
+    const months = ["yanvar", "fevral", "mart", "aprel", "may", "iyun", "iyul", "avgust", "sentabr", "oktabr", "noyabr", "dekabr"];
+    return `${weekdays[date.getDay()]}, ${date.getDate()}-${months[date.getMonth()]}`;
+  }
+  const loc = locale === "ru" ? "ru-RU" : "en-US";
+  return new Intl.DateTimeFormat(loc, { weekday: "long", month: "long", day: "numeric" }).format(date);
 }
 
 export default function TodayPage() {
   const { t, locale } = useUser();
+  const router = useRouter();
   const {
     state,
     stats,
     toggleTask,
     removeTask,
     setTaskPriority,
+    updateTaskTitle,
     toggleHabit,
   } = useDay();
   const { toast } = useToast();
@@ -81,7 +99,7 @@ export default function TodayPage() {
             {t("today.title")}
           </h2>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto sm:flex-wrap sm:items-center">
           <Button
             variant="secondary"
             size="sm"
@@ -90,12 +108,13 @@ export default function TodayPage() {
           >
             {t("today.plan")}
           </Button>
+          <AiPlanner />
           <Button
             variant="gradient"
             size="sm"
             leftIcon={<Focus className="size-4" />}
             onClick={() => {
-              window.location.href = "/app/focus";
+              router.push("/app/focus");
             }}
           >
             {t("today.startFocus")}
@@ -109,36 +128,87 @@ export default function TodayPage() {
             label: t("today.tasksDone"),
             value: `${stats.tasksDone}/${stats.tasksTotal}`,
             sub: `${stats.tasksPct}% ${t("today.complete")}`,
+            Icon: CheckCircle2,
+            tint: "#68ffd2",
           },
           {
             label: t("today.priorities"),
             value: `${stats.prioritiesDone}/${stats.prioritiesTotal}`,
             sub: t("today.mustFinish"),
+            Icon: Flag,
+            tint: "#8b7dff",
           },
           {
             label: t("today.focusProtected"),
             value: stats.focusLabel,
             sub: t("today.loggedToday"),
+            Icon: Timer,
+            tint: "#5dbdff",
           },
           {
             label: t("today.habits"),
             value: `${stats.habitsDone}/${stats.habitsTotal}`,
             sub: t("today.checkedIn"),
+            Icon: Star,
+            tint: "#7de7ff",
           },
         ].map((m) => (
-          <Card key={m.label}>
-            <CardContent className="p-5">
-              <p className="text-[11px] font-semibold uppercase tracking-[var(--tracking-widest)] text-text-tertiary">
-                {m.label}
-              </p>
-              <p className="mt-2 font-[family-name:var(--font-display)] text-3xl font-bold tracking-tight text-text-primary">
-                {m.value}
-              </p>
-              <p className="mt-1 text-xs text-text-tertiary">{m.sub}</p>
+          <Card key={m.label} interactive className="ordo-stat-card">
+            <CardContent className="relative p-5 pb-10">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="text-[11px] font-semibold uppercase tracking-[var(--tracking-widest)] text-text-tertiary">
+                    {m.label}
+                  </p>
+                  <p className="mt-2 font-[family-name:var(--font-display)] text-3xl font-bold tracking-tight text-text-primary">
+                    {m.value}
+                  </p>
+                  <p className="mt-1 text-xs text-text-tertiary">{m.sub}</p>
+                </div>
+                <span
+                  className="ordo-stat-icon"
+                  style={{ "--tint": m.tint } as CSSProperties}
+                  aria-hidden="true"
+                >
+                  <m.Icon className="size-4" strokeWidth={1.75} />
+                </span>
+              </div>
+              <div
+                className="ordo-stat-wave"
+                style={{ color: m.tint } as CSSProperties}
+                aria-hidden="true"
+              >
+                <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+                  <path
+                    d="M0,30 C150,0 300,60 450,30 C600,0 750,60 900,30 C1050,0 1200,60 1200,30 L1200,60 L0,60 Z"
+                    fill="currentColor"
+                    opacity="0.32"
+                  />
+                  <path
+                    d="M0,44 C180,18 340,64 520,44 C700,18 860,64 1040,44 C1180,28 1280,52 1200,46 L1200,60 L0,60 Z"
+                    fill="currentColor"
+                    opacity="0.16"
+                  />
+                </svg>
+              </div>
             </CardContent>
           </Card>
         ))}
       </div>
+
+      {state.tasks.length === 0 && (
+        <Card className="mt-6 overflow-hidden border-primary/25 bg-gradient-brand-subtle">
+          <CardContent className="p-5 sm:p-6">
+            <p className="text-xs font-semibold uppercase tracking-[var(--tracking-widest)] text-primary">Boshlash uchun qo‘llanma</p>
+            <h3 className="mt-2 font-[family-name:var(--font-display)] text-xl font-bold text-text-primary">Bugungi kuningizni 3 qadamda rejalang</h3>
+            <div className="mt-5 grid gap-3 md:grid-cols-3">
+              <button type="button" onClick={openAdd} className="rounded-[var(--radius-md)] border border-border bg-surface-1/80 p-4 text-left transition hover:border-primary"><span className="text-xs font-bold text-primary">1-QADAM</span><p className="mt-1 text-sm font-semibold text-text-primary">Birinchi vazifani yozing</p><p className="mt-1 text-xs text-text-tertiary">Nima qilish kerakligini aniq yozing.</p></button>
+              <Link href="/app/schedule" className="rounded-[var(--radius-md)] border border-border bg-surface-1/80 p-4 transition hover:border-primary"><span className="text-xs font-bold text-primary">2-QADAM</span><p className="mt-1 text-sm font-semibold text-text-primary">Vaqtni belgilang</p><p className="mt-1 text-xs text-text-tertiary">Ish uchun vaqt bloki yarating.</p></Link>
+              <Link href="/app/focus" className="rounded-[var(--radius-md)] border border-border bg-surface-1/80 p-4 transition hover:border-primary"><span className="text-xs font-bold text-primary">3-QADAM</span><p className="mt-1 text-sm font-semibold text-text-primary">Fokusni boshlang</p><p className="mt-1 text-xs text-text-tertiary">Muhim ishga vaqt ajrating.</p></Link>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="mt-6 grid gap-4 lg:grid-cols-5">
         <div className="flex flex-col gap-4 lg:col-span-3">
@@ -174,6 +244,10 @@ export default function TodayPage() {
                       toast({ title: t("task.removed"), kind: "default" });
                     }}
                     onStar={() => setTaskPriority(task.id, false)}
+                    onEdit={() => {
+                      const next = window.prompt("Vazifa nomini tahrirlang", task.title);
+                      if (next) updateTaskTitle(task.id, next);
+                    }}
                   />
                 ))
               )}
@@ -197,9 +271,13 @@ export default function TodayPage() {
                     removeTask(task.id);
                     toast({ title: t("task.removed"), kind: "default" });
                   }}
-                  onStar={() => {
-                    setTaskPriority(task.id, true);
-                    toast({
+                    onEdit={() => {
+                      const next = window.prompt("Vazifa nomini tahrirlang", task.title);
+                      if (next) updateTaskTitle(task.id, next);
+                    }}
+                    onStar={() => {
+                      setTaskPriority(task.id, true);
+                      toast({
                       title: t("task.promoted"),
                       description: task.title,
                       kind: "success",
@@ -255,7 +333,7 @@ export default function TodayPage() {
                       }
                       className="mt-1"
                     >
-                      {b.kind}
+                      {scheduleKindLabel[b.kind] || b.kind}
                     </Badge>
                   </div>
                 </div>
@@ -327,12 +405,14 @@ function TaskRow({
   onToggle,
   onRemove,
   onStar,
+  onEdit,
 }: {
   task: Task;
   index?: number;
   onToggle: () => void;
   onRemove: () => void;
   onStar: () => void;
+  onEdit: () => void;
 }) {
   return (
     <div className="group flex items-start gap-1 rounded-[var(--radius-sm)] hover:bg-surface-3/60">
@@ -342,7 +422,7 @@ function TaskRow({
         className="flex min-w-0 flex-1 items-start gap-3 px-2 py-2.5 text-left"
       >
         {task.done ? (
-          <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-success" aria-hidden="true" />
+          <CheckCircle2 className="task-complete-icon mt-0.5 size-4 shrink-0 text-success" aria-hidden="true" />
         ) : (
           <Circle className="mt-0.5 size-4 shrink-0 text-text-tertiary" aria-hidden="true" />
         )}
@@ -363,11 +443,19 @@ function TaskRow({
           <p className="text-xs text-text-tertiary">{task.tag}</p>
         </div>
       </button>
-      <div className="flex items-center gap-0.5 pr-1 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
+      <div className="flex items-center gap-0.5 pr-1 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100 sm:focus-within:opacity-100">
+        <button
+          type="button"
+          onClick={onEdit}
+          className="inline-flex size-10 items-center justify-center rounded-[var(--radius-sm)] text-text-tertiary hover:bg-surface-2 hover:text-primary"
+          aria-label="Tahrirlash"
+        >
+          <Pencil className="size-3.5" />
+        </button>
         <button
           type="button"
           onClick={onStar}
-          className="inline-flex size-8 items-center justify-center rounded-[var(--radius-sm)] text-text-tertiary hover:bg-surface-2 hover:text-warning"
+          className="inline-flex size-10 items-center justify-center rounded-[var(--radius-sm)] text-text-tertiary hover:bg-surface-2 hover:text-warning"
           aria-label="Priority"
         >
           <Star
@@ -377,7 +465,7 @@ function TaskRow({
         <button
           type="button"
           onClick={onRemove}
-          className="inline-flex size-8 items-center justify-center rounded-[var(--radius-sm)] text-text-tertiary hover:bg-surface-2 hover:text-danger"
+          className="inline-flex size-10 items-center justify-center rounded-[var(--radius-sm)] text-text-tertiary hover:bg-surface-2 hover:text-danger"
           aria-label="Delete"
         >
           <Trash2 className="size-3.5" />

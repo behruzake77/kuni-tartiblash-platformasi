@@ -6,6 +6,7 @@ import {
   Activity,
   BarChart3,
   CalendarClock,
+  CalendarDays,
   ChevronLeft,
   ChevronRight,
   Command,
@@ -13,10 +14,13 @@ import {
   Focus,
   Moon,
   Settings,
+  ShieldCheck,
+  Snowflake,
   Sun,
 } from "lucide-react";
 import { Logo, LogoMark } from "@/components/shared/logo";
 import { useUser } from "@/providers/user-provider";
+import { isAdminEmail } from "@/lib/admin";
 import { cn } from "@/lib/utils";
 
 type AppSidebarProps = {
@@ -33,10 +37,13 @@ export function AppSidebar({
   onOpenCommand,
 }: AppSidebarProps) {
   const pathname = usePathname();
-  const { t } = useUser();
+  const { t, user, prefs } = useUser();
+  const isWinter = prefs.themePreset === "winter";
+  const isAdmin = isAdminEmail(user?.email);
 
   const NAV = [
     { label: t("nav.today"), href: "/app", icon: Sun },
+    { label: "Kalendar", href: "/app/calendar", icon: CalendarDays },
     { label: t("nav.schedule"), href: "/app/schedule", icon: CalendarClock },
     { label: t("nav.focus"), href: "/app/focus", icon: Focus },
     { label: t("nav.habits"), href: "/app/habits", icon: Flame },
@@ -48,7 +55,7 @@ export function AppSidebar({
   return (
     <aside
       className={cn(
-        "fixed inset-y-0 left-0 z-[var(--z-sticky)] flex flex-col border-r border-border bg-surface-1",
+        "ordo-sidebar fixed inset-y-0 left-0 z-[var(--z-sticky)] flex flex-col border-r border-border bg-surface-1",
         "transition-[width] duration-[var(--duration-base)] ease-[var(--ease-soft)]",
         collapsed ? "w-14" : "w-60"
       )}
@@ -64,7 +71,16 @@ export function AppSidebar({
             <LogoMark size={24} />
           </Link>
         ) : (
-          <Logo href="/app" size="sm" />
+          <>
+            <Logo href="/app" size="sm" />
+            {isWinter && (
+              <Snowflake
+                className="ordo-sidebar-snow size-4"
+                strokeWidth={1.75}
+                aria-hidden="true"
+              />
+            )}
+          </>
         )}
       </div>
 
@@ -89,13 +105,13 @@ export function AppSidebar({
                 "group relative flex h-9 items-center gap-2 rounded-[var(--radius-sm)] text-sm font-medium transition-colors duration-[var(--duration-fast)]",
                 collapsed ? "justify-center px-0" : "px-2.5",
                 active
-                  ? "bg-primary-subtle text-primary"
+                  ? "ordo-nav-active bg-primary-subtle text-primary"
                   : "text-text-secondary hover:bg-surface-2 hover:text-text-primary"
               )}
             >
               {active && (
                 <span
-                  className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full bg-primary"
+                  className="ordo-nav-bar absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full bg-primary animate-[sidebar-active-glow_2.8s_ease-in-out_infinite]"
                   aria-hidden="true"
                 />
               )}
@@ -119,7 +135,7 @@ export function AppSidebar({
             </div>
             <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-surface-3">
               <div
-                className="h-full rounded-full bg-gradient-brand transition-[width] duration-500"
+                className="ordo-ice-bar h-full rounded-full bg-gradient-brand transition-[width] duration-500"
                 style={{ width: `${Math.min(100, dayPct)}%` }}
               />
             </div>
@@ -147,6 +163,21 @@ export function AppSidebar({
             </>
           )}
         </button>
+
+        {isAdmin && (
+          <Link
+            href="/app/admin"
+            title={collapsed ? "Admin panel" : undefined}
+            className={cn(
+              "flex h-9 items-center gap-2 rounded-[var(--radius-sm)] text-sm font-medium transition-colors",
+              collapsed ? "justify-center" : "px-2.5",
+              pathname.startsWith("/app/admin") ? "bg-primary-subtle text-primary" : "text-text-secondary hover:bg-surface-2 hover:text-text-primary"
+            )}
+          >
+            <ShieldCheck className="size-[18px]" strokeWidth={1.75} aria-hidden="true" />
+            {!collapsed && "Admin panel"}
+          </Link>
+        )}
 
         <Link
           href="/app/settings"

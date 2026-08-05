@@ -9,7 +9,7 @@ import { useUser } from "@/providers/user-provider";
 
 export function SignupForm() {
   const router = useRouter();
-  const { t, signInAsync, setOnboardedFlag, authProviderId } = useUser();
+  const { t, signUpAsync, setOnboardedFlag, authProviderId } = useUser();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,7 +26,7 @@ export function SignupForm() {
       if (!email.includes("@") || password.length < 8) {
         throw new Error("INVALID");
       }
-      await signInAsync({ email, password, name });
+      await signUpAsync({ email, password, name });
       setOnboardedFlag(false);
       router.push("/app");
     } catch {
@@ -40,7 +40,7 @@ export function SignupForm() {
     setLoading(true);
     setError(null);
     try {
-      await signInAsync({
+      await signUpAsync({
         email: "demo@ordo.app",
         password: "demo-demo",
         name: "Demo Operator",
@@ -76,6 +76,7 @@ export function SignupForm() {
           required
           placeholder="Ada Lovelace"
           leftIcon={<User aria-hidden="true" />}
+          animated
         />
       </div>
 
@@ -94,6 +95,7 @@ export function SignupForm() {
           required
           placeholder="you@company.com"
           leftIcon={<Mail aria-hidden="true" />}
+          animated
           error={Boolean(error)}
         />
       </div>
@@ -114,6 +116,7 @@ export function SignupForm() {
           minLength={8}
           placeholder="••••••••"
           leftIcon={<Lock aria-hidden="true" />}
+          animated
           error={Boolean(error)}
         />
         <p className="text-xs text-text-tertiary">{t("auth.passwordHint")}</p>

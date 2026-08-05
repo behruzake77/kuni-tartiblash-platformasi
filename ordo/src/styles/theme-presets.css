@@ -1,0 +1,1817 @@
+/* ============================================================
+   ORDO THEME ENGINE v2 — theme-presets.css
+   ------------------------------------------------------------
+   Every preset is now a full visual identity:
+     · complete color remap (dark + light)
+     · an animated background "scene" (blobs + texture layer)
+     · card treatment (glass / neon / pop / pixel)
+     · typography personality  · radius personality
+     · smooth View-Transition crossfade when switching
+   Keyed on <html data-ordo-theme="..."> (set by src/lib/themes.ts)
+   ============================================================ */
+
+/* ──────────────────────────────────────────────
+   SCENE LAYERS (shared mechanics, per-theme vars)
+   ────────────────────────────────────────────── */
+
+/* Blob layer — large drifting color fields */
+html[data-ordo-theme]::before {
+  content: "";
+  position: fixed;
+  inset: -5%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(46% 56% at 14% 18%, var(--scene-a, transparent), transparent 68%),
+    radial-gradient(52% 62% at 88% 10%, var(--scene-b, transparent), transparent 68%),
+    radial-gradient(58% 60% at 70% 94%, var(--scene-c, transparent), transparent 70%),
+    radial-gradient(40% 46% at 24% 90%, var(--scene-d, transparent), transparent 70%);
+  opacity: var(--scene-opacity, 0);
+  animation: ordo-scene-drift var(--scene-duration, 26s) var(--ease-in-out) infinite alternate;
+  will-change: transform;
+}
+
+@keyframes ordo-scene-drift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(-2.5%, 2%, 0) scale(1.07);
+  }
+}
+
+/* Texture layer — snow, stars, bubbles, petals, grid, halftone… */
+html[data-ordo-theme]::after {
+  content: "";
+  position: fixed;
+  inset: -5%;
+  z-index: -1;
+  pointer-events: none;
+  background-image: var(--texture-bg, none);
+  background-size: var(--texture-size, auto);
+  opacity: var(--texture-opacity, 0);
+  animation: var(--texture-anim, none) var(--texture-duration, 14s) linear infinite;
+  will-change: background-position, opacity;
+}
+
+/* Texture keyframes (background-position layer counts match per-theme vars) */
+@keyframes ordo-snow {
+  0% {
+    background-position: 0 0, 0 0, 0 0;
+  }
+  100% {
+    background-position: 26px 720px, -34px 540px, 14px 420px;
+  }
+}
+@keyframes ordo-bubbles {
+  0% {
+    background-position: 0 0, 0 0, 0 0;
+  }
+  100% {
+    background-position: 24px -640px, -30px -480px, 12px -360px;
+  }
+}
+@keyframes ordo-petals {
+  0% {
+    background-position: 0 0, 0 0, 0 0;
+  }
+  50% {
+    background-position: 18px 320px, -22px 220px, 10px 160px;
+  }
+  100% {
+    background-position: -16px 640px, 26px 460px, -8px 320px;
+  }
+}
+@keyframes ordo-spores {
+  0% {
+    background-position: 0 640px, 0 480px, 0 360px;
+  }
+  100% {
+    background-position: 20px 0, -26px 0, 12px 0;
+  }
+}
+@keyframes ordo-stars {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes ordo-dust {
+  0% {
+    background-position: 0 0, 0 0, 0 0;
+  }
+  100% {
+    background-position: -220px 40px, -320px -30px, -160px 20px;
+  }
+}
+@keyframes ordo-streaks {
+  0% {
+    background-position: 0 0, 0 0;
+  }
+  100% {
+    background-position: -520px 0, -760px 0;
+  }
+}
+
+/* ──────────────────────────────────────────────
+   THEME: DEFAULT  (original calm look + soft aurora)
+   ────────────────────────────────────────────── */
+html[data-ordo-theme="default"] {
+  --scene-a: rgba(59, 130, 246, 0.24);
+  --scene-b: rgba(139, 92, 246, 0.18);
+  --scene-c: rgba(6, 182, 212, 0.14);
+  --scene-d: transparent;
+  --scene-opacity: 1;
+  --scene-duration: 30s;
+  --texture-bg: none;
+}
+html[data-ordo-theme="default"]:not(.dark) {
+  --scene-a: rgba(59, 130, 246, 0.2);
+  --scene-b: rgba(139, 92, 246, 0.14);
+  --scene-c: rgba(6, 182, 212, 0.12);
+  --scene-opacity: 0.9;
+}
+
+/* ──────────────────────────────────────────────
+   THEME: OCEAN — deep sea, bubbles, glass
+   ────────────────────────────────────────────── */
+html[data-ordo-theme="ocean"] {
+  --scene-a: rgba(34, 211, 238, 0.3);
+  --scene-b: rgba(37, 99, 235, 0.26);
+  --scene-c: rgba(20, 184, 166, 0.2);
+  --scene-d: rgba(14, 116, 144, 0.18);
+  --scene-duration: 24s;
+  --texture-bg:
+    radial-gradient(circle at 8px 10px, rgba(103, 232, 249, 0.55) 1.4px, transparent 2.2px),
+    radial-gradient(circle at 14px 20px, rgba(125, 211, 252, 0.35) 1px, transparent 1.8px),
+    radial-gradient(circle at 5px 16px, rgba(165, 243, 252, 0.25) 1px, transparent 1.7px);
+  --texture-size: 130px 130px, 200px 200px, 90px 90px;
+  --texture-opacity: 0.55;
+  --texture-anim: ordo-bubbles;
+  --texture-duration: 12s;
+  --card-blur: blur(14px);
+}
+html[data-ordo-theme="ocean"].dark {
+  --color-bg: hsl(214, 50%, 6%);
+  --color-surface-1: hsl(211, 38%, 9%);
+  --color-surface-2: hsl(209, 33%, 12%);
+  --color-surface-3: hsl(207, 29%, 15%);
+  --color-surface-elevated: hsl(205, 30%, 18%);
+  --color-border: hsl(204, 24%, 21%);
+  --color-border-strong: hsl(200, 20%, 30%);
+  --color-border-focus: hsl(190, 95%, 55%);
+  --color-text-primary: hsl(197, 55%, 96%);
+  --color-text-secondary: hsl(201, 24%, 76%);
+  --color-text-tertiary: hsl(203, 14%, 60%);
+  --color-text-placeholder: hsl(204, 12%, 46%);
+  --color-text-disabled: hsl(204, 10%, 36%);
+  --color-primary: hsl(190, 95%, 52%);
+  --color-primary-hover: hsl(190, 92%, 58%);
+  --color-primary-active: hsl(190, 90%, 62%);
+  --color-primary-subtle: hsl(190, 85%, 13%);
+  --color-secondary: hsl(215, 92%, 62%);
+  --color-secondary-hover: hsl(215, 90%, 68%);
+  --color-accent: hsl(170, 80%, 55%);
+  --color-success: hsl(160, 70%, 50%);
+  --color-success-subtle: hsl(160, 45%, 10%);
+  --color-warning: hsl(45, 95%, 60%);
+  --color-warning-subtle: hsl(45, 70%, 10%);
+  --color-danger: hsl(5, 85%, 62%);
+  --color-danger-subtle: hsl(5, 60%, 11%);
+  --color-info: hsl(200, 92%, 62%);
+  --color-info-subtle: hsl(200, 65%, 11%);
+  --color-dataviz-1: #22d3ee;
+  --color-dataviz-2: #2563eb;
+  --color-dataviz-3: #14b8a6;
+  --color-dataviz-4: #0ea5e9;
+  --color-dataviz-5: #f59e0b;
+  --color-dataviz-6: #f43f5e;
+  --color-dataviz-7: #38bdf8;
+  --color-dataviz-8: #a78bfa;
+  --shadow-glow: 0 0 50px rgba(34, 211, 238, 0.18);
+  --gradient-brand: linear-gradient(135deg, #0891b2, #2563eb 55%, #22d3ee);
+  --gradient-brand-subtle: linear-gradient(135deg, rgba(8, 145, 178, 0.14), rgba(37, 99, 235, 0.1) 55%, rgba(34, 211, 238, 0.08));
+  --gradient-hero:
+    radial-gradient(circle at 20% 0%, rgba(34, 211, 238, 0.2), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(37, 99, 235, 0.18), transparent 40%),
+    linear-gradient(180deg, #04121d 0%, #06283d 100%);
+  --gradient-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  --gradient-text: linear-gradient(135deg, hsl(197, 55%, 96%) 0%, hsl(201, 24%, 78%) 100%);
+  --card-bg: color-mix(in srgb, rgba(34, 211, 238, 0.06), var(--color-surface-2));
+  --card-bg-hover: color-mix(in srgb, rgba(34, 211, 238, 0.11), var(--color-surface-2));
+  --card-border-color: rgba(125, 211, 252, 0.16);
+  --card-border-hover: rgba(125, 211, 252, 0.34);
+  --card-shadow: 0 10px 32px rgba(0, 0, 0, 0.25), 0 0 40px rgba(34, 211, 238, 0.07);
+  --card-shadow-hover: 0 14px 40px rgba(0, 0, 0, 0.3), 0 0 60px rgba(34, 211, 238, 0.12);
+}
+html[data-ordo-theme="ocean"]:not(.dark) {
+  --scene-a: rgba(34, 211, 238, 0.32);
+  --scene-b: rgba(37, 99, 235, 0.24);
+  --scene-c: rgba(20, 184, 166, 0.22);
+  --texture-opacity: 0.4;
+  --color-bg: hsl(195, 55%, 96%);
+  --color-surface-1: hsl(0, 0%, 100%);
+  --color-surface-2: hsl(197, 45%, 94%);
+  --color-surface-3: hsl(199, 40%, 90%);
+  --color-surface-elevated: hsl(0, 0%, 100%);
+  --color-border: hsl(199, 30%, 84%);
+  --color-border-strong: hsl(199, 26%, 74%);
+  --color-border-focus: hsl(190, 95%, 40%);
+  --color-primary: hsl(190, 95%, 38%);
+  --color-primary-hover: hsl(190, 90%, 33%);
+  --color-primary-active: hsl(190, 90%, 28%);
+  --color-primary-subtle: hsl(190, 80%, 92%);
+  --color-secondary: hsl(215, 90%, 48%);
+  --color-secondary-hover: hsl(215, 88%, 42%);
+  --color-accent: hsl(170, 75%, 36%);
+  --color-success: hsl(160, 65%, 34%);
+  --color-success-subtle: hsl(160, 60%, 94%);
+  --color-warning: hsl(40, 92%, 42%);
+  --color-warning-subtle: hsl(40, 90%, 94%);
+  --color-danger: hsl(5, 80%, 52%);
+  --color-danger-subtle: hsl(5, 80%, 95%);
+  --color-info: hsl(200, 90%, 42%);
+  --color-info-subtle: hsl(200, 85%, 94%);
+  --shadow-glow: 0 0 40px rgba(8, 145, 178, 0.22);
+  --gradient-brand: linear-gradient(135deg, #0891b2, #2563eb 55%, #0e7490);
+  --gradient-hero:
+    radial-gradient(circle at 20% 0%, rgba(34, 211, 238, 0.22), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(37, 99, 235, 0.18), transparent 40%),
+    linear-gradient(180deg, #eefbfe 0%, #ffffff 100%);
+  --gradient-text: linear-gradient(135deg, hsl(212, 45%, 12%) 0%, hsl(206, 18%, 38%) 100%);
+  --card-bg: color-mix(in srgb, rgba(8, 145, 178, 0.05), #ffffff);
+  --card-bg-hover: color-mix(in srgb, rgba(8, 145, 178, 0.1), #ffffff);
+  --card-border-color: rgba(8, 145, 178, 0.16);
+  --card-border-hover: rgba(8, 145, 178, 0.3);
+  --card-shadow: 0 8px 24px rgba(8, 145, 178, 0.08);
+  --card-shadow-hover: 0 12px 32px rgba(8, 145, 178, 0.14);
+}
+
+/* ──────────────────────────────────────────────
+   THEME: FOREST — living greens, spores
+   ────────────────────────────────────────────── */
+html[data-ordo-theme="forest"] {
+  --scene-a: rgba(34, 197, 94, 0.28);
+  --scene-b: rgba(163, 230, 53, 0.16);
+  --scene-c: rgba(16, 185, 129, 0.22);
+  --scene-d: rgba(22, 101, 52, 0.18);
+  --scene-duration: 27s;
+  --texture-bg:
+    radial-gradient(circle at 8px 8px, rgba(134, 239, 172, 0.5) 1.2px, transparent 2px),
+    radial-gradient(circle at 16px 16px, rgba(163, 230, 53, 0.3) 1px, transparent 1.8px),
+    radial-gradient(circle at 6px 18px, rgba(187, 247, 208, 0.3) 1px, transparent 1.7px);
+  --texture-size: 140px 140px, 210px 210px, 95px 95px;
+  --texture-opacity: 0.5;
+  --texture-anim: ordo-spores;
+  --texture-duration: 16s;
+}
+html[data-ordo-theme="forest"].dark {
+  --color-bg: hsl(150, 35%, 5%);
+  --color-surface-1: hsl(148, 28%, 8%);
+  --color-surface-2: hsl(147, 24%, 11%);
+  --color-surface-3: hsl(146, 21%, 14%);
+  --color-surface-elevated: hsl(145, 22%, 17%);
+  --color-border: hsl(148, 18%, 20%);
+  --color-border-strong: hsl(148, 14%, 29%);
+  --color-border-focus: hsl(152, 75%, 50%);
+  --color-text-primary: hsl(145, 40%, 95%);
+  --color-text-secondary: hsl(147, 18%, 75%);
+  --color-text-tertiary: hsl(149, 12%, 58%);
+  --color-text-placeholder: hsl(149, 10%, 45%);
+  --color-text-disabled: hsl(149, 9%, 35%);
+  --color-primary: hsl(152, 75%, 45%);
+  --color-primary-hover: hsl(152, 72%, 52%);
+  --color-primary-active: hsl(152, 70%, 57%);
+  --color-primary-subtle: hsl(152, 60%, 12%);
+  --color-secondary: hsl(95, 60%, 48%);
+  --color-secondary-hover: hsl(95, 58%, 54%);
+  --color-accent: hsl(140, 80%, 55%);
+  --color-success: hsl(152, 70%, 48%);
+  --color-success-subtle: hsl(152, 45%, 10%);
+  --color-warning: hsl(45, 95%, 60%);
+  --color-warning-subtle: hsl(45, 70%, 10%);
+  --color-danger: hsl(5, 85%, 62%);
+  --color-danger-subtle: hsl(5, 60%, 11%);
+  --color-info: hsl(170, 75%, 55%);
+  --color-info-subtle: hsl(170, 55%, 10%);
+  --color-dataviz-1: #22c55e;
+  --color-dataviz-2: #a3e635;
+  --color-dataviz-3: #10b981;
+  --color-dataviz-4: #16a34a;
+  --color-dataviz-5: #f59e0b;
+  --color-dataviz-6: #ef4444;
+  --color-dataviz-7: #34d399;
+  --color-dataviz-8: #84cc16;
+  --shadow-glow: 0 0 50px rgba(34, 197, 94, 0.16);
+  --gradient-brand: linear-gradient(135deg, #15803d, #22c55e 55%, #a3e635);
+  --gradient-brand-subtle: linear-gradient(135deg, rgba(21, 128, 61, 0.14), rgba(34, 197, 94, 0.1) 55%, rgba(163, 230, 53, 0.08));
+  --gradient-hero:
+    radial-gradient(circle at 20% 0%, rgba(34, 197, 94, 0.2), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(163, 230, 53, 0.12), transparent 40%),
+    linear-gradient(180deg, #04150c 0%, #0a2416 100%);
+  --gradient-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  --gradient-text: linear-gradient(135deg, hsl(145, 40%, 95%) 0%, hsl(147, 18%, 76%) 100%);
+  --card-bg: color-mix(in srgb, rgba(34, 197, 94, 0.06), var(--color-surface-2));
+  --card-bg-hover: color-mix(in srgb, rgba(34, 197, 94, 0.11), var(--color-surface-2));
+  --card-border-color: rgba(134, 239, 172, 0.15);
+  --card-border-hover: rgba(134, 239, 172, 0.32);
+  --card-shadow: 0 10px 32px rgba(0, 0, 0, 0.25), 0 0 40px rgba(34, 197, 94, 0.06);
+  --card-shadow-hover: 0 14px 40px rgba(0, 0, 0, 0.3), 0 0 60px rgba(34, 197, 94, 0.1);
+}
+html[data-ordo-theme="forest"]:not(.dark) {
+  --scene-a: rgba(34, 197, 94, 0.3);
+  --scene-b: rgba(163, 230, 53, 0.2);
+  --scene-c: rgba(16, 185, 129, 0.22);
+  --texture-opacity: 0.4;
+  --color-bg: hsl(140, 40%, 96%);
+  --color-surface-1: hsl(0, 0%, 100%);
+  --color-surface-2: hsl(140, 35%, 93%);
+  --color-surface-3: hsl(140, 32%, 89%);
+  --color-surface-elevated: hsl(0, 0%, 100%);
+  --color-border: hsl(140, 25%, 84%);
+  --color-border-strong: hsl(140, 22%, 74%);
+  --color-border-focus: hsl(152, 75%, 38%);
+  --color-primary: hsl(152, 70%, 32%);
+  --color-primary-hover: hsl(152, 68%, 27%);
+  --color-primary-active: hsl(152, 68%, 23%);
+  --color-primary-subtle: hsl(152, 65%, 92%);
+  --color-secondary: hsl(95, 60%, 36%);
+  --color-secondary-hover: hsl(95, 58%, 31%);
+  --color-accent: hsl(140, 75%, 34%);
+  --color-success: hsl(152, 65%, 32%);
+  --color-success-subtle: hsl(152, 60%, 93%);
+  --color-warning: hsl(40, 92%, 42%);
+  --color-warning-subtle: hsl(40, 90%, 94%);
+  --color-danger: hsl(5, 80%, 52%);
+  --color-danger-subtle: hsl(5, 80%, 95%);
+  --color-info: hsl(170, 70%, 34%);
+  --color-info-subtle: hsl(170, 65%, 93%);
+  --shadow-glow: 0 0 40px rgba(21, 128, 61, 0.2);
+  --gradient-brand: linear-gradient(135deg, #15803d, #16a34a 55%, #65a30d);
+  --gradient-hero:
+    radial-gradient(circle at 20% 0%, rgba(34, 197, 94, 0.2), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(163, 230, 53, 0.16), transparent 40%),
+    linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
+  --gradient-text: linear-gradient(135deg, hsl(152, 45%, 12%) 0%, hsl(147, 18%, 38%) 100%);
+  --card-bg: color-mix(in srgb, rgba(21, 128, 61, 0.05), #ffffff);
+  --card-bg-hover: color-mix(in srgb, rgba(21, 128, 61, 0.09), #ffffff);
+  --card-border-color: rgba(21, 128, 61, 0.16);
+  --card-border-hover: rgba(21, 128, 61, 0.3);
+  --card-shadow: 0 8px 24px rgba(21, 128, 61, 0.08);
+  --card-shadow-hover: 0 12px 32px rgba(21, 128, 61, 0.14);
+}
+
+/* ──────────────────────────────────────────────
+   THEME: SUNSET — golden hour, warm dust
+   ────────────────────────────────────────────── */
+html[data-ordo-theme="sunset"] {
+  --scene-a: rgba(249, 115, 22, 0.3);
+  --scene-b: rgba(236, 72, 153, 0.24);
+  --scene-c: rgba(251, 191, 36, 0.18);
+  --scene-d: rgba(190, 24, 93, 0.16);
+  --scene-duration: 25s;
+  --texture-bg:
+    radial-gradient(circle at 8px 8px, rgba(254, 215, 170, 0.5) 1.4px, transparent 2.2px),
+    radial-gradient(circle at 18px 20px, rgba(253, 230, 138, 0.35) 1px, transparent 1.8px),
+    radial-gradient(circle at 10px 26px, rgba(249, 168, 212, 0.3) 1px, transparent 1.7px);
+  --texture-size: 150px 150px, 230px 230px, 100px 100px;
+  --texture-opacity: 0.6;
+  --texture-anim: ordo-dust;
+  --texture-duration: 22s;
+}
+html[data-ordo-theme="sunset"].dark {
+  --color-bg: hsl(20, 35%, 6%);
+  --color-surface-1: hsl(18, 28%, 9%);
+  --color-surface-2: hsl(16, 25%, 12%);
+  --color-surface-3: hsl(14, 22%, 15%);
+  --color-surface-elevated: hsl(14, 24%, 18%);
+  --color-border: hsl(16, 20%, 21%);
+  --color-border-strong: hsl(16, 17%, 30%);
+  --color-border-focus: hsl(24, 95%, 55%);
+  --color-text-primary: hsl(20, 45%, 96%);
+  --color-text-secondary: hsl(20, 20%, 76%);
+  --color-text-tertiary: hsl(20, 12%, 60%);
+  --color-text-placeholder: hsl(20, 10%, 46%);
+  --color-text-disabled: hsl(20, 9%, 36%);
+  --color-primary: hsl(24, 95%, 58%);
+  --color-primary-hover: hsl(24, 92%, 64%);
+  --color-primary-active: hsl(24, 90%, 68%);
+  --color-primary-subtle: hsl(24, 85%, 14%);
+  --color-secondary: hsl(330, 75%, 60%);
+  --color-secondary-hover: hsl(330, 73%, 66%);
+  --color-accent: hsl(40, 95%, 55%);
+  --color-success: hsl(140, 65%, 50%);
+  --color-success-subtle: hsl(140, 45%, 10%);
+  --color-warning: hsl(35, 95%, 58%);
+  --color-warning-subtle: hsl(35, 70%, 11%);
+  --color-danger: hsl(5, 85%, 64%);
+  --color-danger-subtle: hsl(5, 60%, 11%);
+  --color-info: hsl(210, 90%, 62%);
+  --color-info-subtle: hsl(210, 65%, 11%);
+  --color-dataviz-1: #f97316;
+  --color-dataviz-2: #ec4899;
+  --color-dataviz-3: #fbbf24;
+  --color-dataviz-4: #fb7185;
+  --color-dataviz-5: #f59e0b;
+  --color-dataviz-6: #ef4444;
+  --color-dataviz-7: #fda4af;
+  --color-dataviz-8: #facc15;
+  --shadow-glow: 0 0 50px rgba(249, 115, 22, 0.18);
+  --gradient-brand: linear-gradient(135deg, #f97316, #ec4899 55%, #fbbf24);
+  --gradient-brand-subtle: linear-gradient(135deg, rgba(249, 115, 22, 0.14), rgba(236, 72, 153, 0.1) 55%, rgba(251, 191, 36, 0.08));
+  --gradient-hero:
+    radial-gradient(circle at 20% 0%, rgba(249, 115, 22, 0.22), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(236, 72, 153, 0.18), transparent 40%),
+    linear-gradient(180deg, #1c0a04 0%, #3b1407 100%);
+  --gradient-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  --gradient-text: linear-gradient(135deg, hsl(20, 45%, 96%) 0%, hsl(20, 20%, 77%) 100%);
+  --card-bg: color-mix(in srgb, rgba(249, 115, 22, 0.06), var(--color-surface-2));
+  --card-bg-hover: color-mix(in srgb, rgba(249, 115, 22, 0.11), var(--color-surface-2));
+  --card-border-color: rgba(253, 186, 116, 0.15);
+  --card-border-hover: rgba(253, 186, 116, 0.32);
+  --card-shadow: 0 10px 32px rgba(0, 0, 0, 0.25), 0 0 40px rgba(249, 115, 22, 0.07);
+  --card-shadow-hover: 0 14px 40px rgba(0, 0, 0, 0.3), 0 0 60px rgba(249, 115, 22, 0.12);
+}
+html[data-ordo-theme="sunset"]:not(.dark) {
+  --scene-a: rgba(249, 115, 22, 0.3);
+  --scene-b: rgba(236, 72, 153, 0.22);
+  --scene-c: rgba(251, 191, 36, 0.24);
+  --texture-opacity: 0.45;
+  --color-bg: hsl(25, 60%, 96%);
+  --color-surface-1: hsl(0, 0%, 100%);
+  --color-surface-2: hsl(28, 55%, 93%);
+  --color-surface-3: hsl(30, 50%, 89%);
+  --color-surface-elevated: hsl(0, 0%, 100%);
+  --color-border: hsl(28, 40%, 84%);
+  --color-border-strong: hsl(28, 35%, 74%);
+  --color-border-focus: hsl(24, 95%, 42%);
+  --color-primary: hsl(24, 92%, 40%);
+  --color-primary-hover: hsl(24, 90%, 35%);
+  --color-primary-active: hsl(24, 90%, 30%);
+  --color-primary-subtle: hsl(24, 90%, 93%);
+  --color-secondary: hsl(330, 72%, 48%);
+  --color-secondary-hover: hsl(330, 70%, 42%);
+  --color-accent: hsl(40, 95%, 40%);
+  --color-success: hsl(140, 60%, 34%);
+  --color-success-subtle: hsl(140, 60%, 93%);
+  --color-warning: hsl(35, 95%, 40%);
+  --color-warning-subtle: hsl(35, 90%, 93%);
+  --color-danger: hsl(5, 80%, 52%);
+  --color-danger-subtle: hsl(5, 80%, 95%);
+  --color-info: hsl(210, 88%, 42%);
+  --color-info-subtle: hsl(210, 85%, 94%);
+  --shadow-glow: 0 0 40px rgba(234, 88, 12, 0.22);
+  --gradient-brand: linear-gradient(135deg, #ea580c, #db2777 55%, #d97706);
+  --gradient-hero:
+    radial-gradient(circle at 20% 0%, rgba(249, 115, 22, 0.22), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(236, 72, 153, 0.16), transparent 40%),
+    linear-gradient(180deg, #fff7ed 0%, #ffffff 100%);
+  --gradient-text: linear-gradient(135deg, hsl(20, 45%, 12%) 0%, hsl(20, 20%, 38%) 100%);
+  --card-bg: color-mix(in srgb, rgba(234, 88, 12, 0.05), #ffffff);
+  --card-bg-hover: color-mix(in srgb, rgba(234, 88, 12, 0.09), #ffffff);
+  --card-border-color: rgba(234, 88, 12, 0.16);
+  --card-border-hover: rgba(234, 88, 12, 0.3);
+  --card-shadow: 0 8px 24px rgba(234, 88, 12, 0.08);
+  --card-shadow-hover: 0 12px 32px rgba(234, 88, 12, 0.14);
+}
+
+/* ──────────────────────────────────────────────
+   THEME: WINTER AURORA — cinematic night, aurora, snowfall
+   Premium glassmorphism · Ice Blue #5DBDFF · Cyan #7DE7FF
+   Aurora Purple #8B7DFF · Mint #68FFD2
+   ────────────────────────────────────────────── */
+html[data-ordo-theme="winter"] {
+  --scene-a: rgba(104, 255, 210, 0.2);
+  --scene-b: rgba(93, 189, 255, 0.2);
+  --scene-c: rgba(139, 125, 255, 0.22);
+  --scene-d: rgba(125, 231, 255, 0.12);
+  --scene-opacity: 1;
+  --scene-duration: 22s;
+  --texture-opacity: 0;
+  /* Premium card system — frosted glass, 20px corners */
+  --radius-xs: 8px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-2xl: 28px;
+  --radius-3xl: 32px;
+  --card-blur: blur(20px);
+  --card-border-width: 1px;
+  --card-bg: rgba(255, 255, 255, 0.05);
+  --card-bg-hover: rgba(255, 255, 255, 0.09);
+  --card-border-color: rgba(255, 255, 255, 0.1);
+  --card-border-hover: rgba(255, 255, 255, 0.24);
+  --card-shadow:
+    0 8px 32px rgba(2, 8, 20, 0.45),
+    0 0 44px rgba(93, 189, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --card-shadow-hover:
+    0 16px 48px rgba(2, 8, 20, 0.5),
+    0 0 64px rgba(93, 189, 255, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+html[data-ordo-theme="winter"].dark {
+  /* Cinematic winter night */
+  --color-bg: #061220;
+  --color-surface-1: #08172d;
+  --color-surface-2: #0d1f3c;
+  --color-surface-3: hsl(212, 58%, 19%);
+  --color-surface-elevated: hsl(211, 55%, 22%);
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-border-strong: rgba(255, 255, 255, 0.2);
+  --color-border-focus: #5dbdff;
+  --color-text-primary: hsl(200, 60%, 97%);
+  --color-text-secondary: hsl(203, 24%, 76%);
+  --color-text-tertiary: hsl(206, 16%, 60%);
+  --color-text-placeholder: hsl(207, 12%, 46%);
+  --color-text-inverse: #061220;
+  --color-text-disabled: hsl(208, 10%, 36%);
+  --color-primary: #5dbdff;
+  --color-primary-hover: #7de7ff;
+  --color-primary-active: #4aa8f0;
+  --color-primary-subtle: rgba(93, 189, 255, 0.13);
+  --color-secondary: #7de7ff;
+  --color-secondary-hover: #9ff0ff;
+  --color-accent: #8b7dff;
+  --color-success: #68ffd2;
+  --color-success-subtle: rgba(104, 255, 210, 0.13);
+  --color-warning: #fbbf24;
+  --color-warning-subtle: rgba(251, 191, 36, 0.13);
+  --color-danger: #fb7185;
+  --color-danger-subtle: rgba(251, 113, 133, 0.13);
+  --color-info: #7de7ff;
+  --color-info-subtle: rgba(125, 231, 255, 0.13);
+  --color-dataviz-1: #5dbdff;
+  --color-dataviz-2: #8b7dff;
+  --color-dataviz-3: #68ffd2;
+  --color-dataviz-4: #7de7ff;
+  --color-dataviz-5: #fbbf24;
+  --color-dataviz-6: #fb7185;
+  --color-dataviz-7: #a78bfa;
+  --color-dataviz-8: #22d3ee;
+  --shadow-xs: 0 1px 2px rgba(2, 8, 20, 0.4);
+  --shadow-sm: 0 2px 10px rgba(2, 8, 20, 0.35);
+  --shadow-md: 0 6px 22px rgba(2, 8, 20, 0.4);
+  --shadow-lg: 0 14px 40px rgba(2, 8, 20, 0.45);
+  --shadow-xl: 0 24px 64px rgba(2, 8, 20, 0.55);
+  --shadow-glow: 0 0 60px rgba(93, 189, 255, 0.28);
+  --shadow-inner: inset 0 1px 2px rgba(2, 8, 20, 0.4);
+  --gradient-brand: linear-gradient(135deg, #5dbdff, #8b7dff);
+  --gradient-brand-subtle: linear-gradient(135deg, rgba(93, 189, 255, 0.14), rgba(139, 125, 255, 0.1) 60%);
+  --gradient-hero:
+    radial-gradient(circle at 18% 0%, rgba(104, 255, 210, 0.16), transparent 42%),
+    radial-gradient(circle at 55% 0%, rgba(93, 189, 255, 0.2), transparent 45%),
+    radial-gradient(circle at 85% 0%, rgba(139, 125, 255, 0.2), transparent 42%),
+    linear-gradient(180deg, #061220 0%, #08172d 55%, #0d1f3c 100%);
+  --gradient-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015));
+  --gradient-text: linear-gradient(135deg, hsl(200, 60%, 97%) 0%, hsl(203, 24%, 80%) 100%);
+}
+html[data-ordo-theme="winter"]:not(.dark) {
+  --scene-opacity: 0.85;
+  --color-bg: hsl(207, 55%, 96%);
+  --color-surface-1: #ffffff;
+  --color-surface-2: hsl(207, 45%, 93%);
+  --color-surface-3: hsl(207, 40%, 89%);
+  --color-surface-elevated: #ffffff;
+  --color-border: hsl(208, 30%, 84%);
+  --color-border-strong: hsl(208, 25%, 74%);
+  --color-border-focus: #1e90e0;
+  --color-text-primary: hsl(210, 40%, 12%);
+  --color-text-secondary: hsl(210, 20%, 40%);
+  --color-text-tertiary: hsl(210, 14%, 54%);
+  --color-text-placeholder: hsl(210, 10%, 64%);
+  --color-text-inverse: #ffffff;
+  --color-text-disabled: hsl(210, 8%, 70%);
+  --color-primary: hsl(205, 92%, 45%);
+  --color-primary-hover: hsl(205, 90%, 40%);
+  --color-primary-active: hsl(205, 90%, 35%);
+  --color-primary-subtle: hsl(205, 90%, 93%);
+  --color-secondary: hsl(190, 90%, 42%);
+  --color-secondary-hover: hsl(190, 88%, 36%);
+  --color-accent: hsl(250, 90%, 58%);
+  --color-success: hsl(162, 70%, 36%);
+  --color-success-subtle: hsl(162, 60%, 93%);
+  --color-warning: hsl(42, 92%, 46%);
+  --color-warning-subtle: hsl(42, 90%, 94%);
+  --color-danger: hsl(0, 80%, 54%);
+  --color-danger-subtle: hsl(0, 80%, 95%);
+  --color-info: hsl(203, 90%, 44%);
+  --color-info-subtle: hsl(203, 85%, 94%);
+  --shadow-glow: 0 0 40px rgba(30, 144, 224, 0.22);
+  --gradient-brand: linear-gradient(135deg, #0e86d4, #6d5df2);
+  --gradient-brand-subtle: linear-gradient(135deg, rgba(14, 134, 212, 0.1), rgba(109, 93, 242, 0.08) 60%);
+  --gradient-hero:
+    radial-gradient(circle at 18% 0%, rgba(104, 255, 210, 0.2), transparent 42%),
+    radial-gradient(circle at 55% 0%, rgba(93, 189, 255, 0.24), transparent 45%),
+    radial-gradient(circle at 85% 0%, rgba(139, 125, 255, 0.2), transparent 42%),
+    linear-gradient(180deg, #eef7fd 0%, #ffffff 100%);
+  --gradient-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.5));
+  --gradient-text: linear-gradient(135deg, hsl(210, 40%, 12%) 0%, hsl(210, 20%, 40%) 100%);
+  --card-bg: rgba(255, 255, 255, 0.72);
+  --card-bg-hover: rgba(255, 255, 255, 0.92);
+  --card-border-color: rgba(30, 144, 224, 0.16);
+  --card-border-hover: rgba(30, 144, 224, 0.32);
+  --card-shadow: 0 8px 28px rgba(30, 80, 140, 0.08);
+  --card-shadow-hover: 0 14px 40px rgba(30, 80, 140, 0.15);
+  --card-blur: blur(16px);
+}
+
+/* ──────────────────────────────────────────────
+   THEME: SPRING — blossom petals, fresh greens
+   ────────────────────────────────────────────── */
+html[data-ordo-theme="spring"] {
+  --scene-a: rgba(16, 185, 129, 0.26);
+  --scene-b: rgba(244, 114, 182, 0.2);
+  --scene-c: rgba(132, 204, 22, 0.18);
+  --scene-d: rgba(167, 243, 208, 0.14);
+  --scene-duration: 26s;
+  --texture-bg:
+    radial-gradient(circle at 6px 8px, rgba(244, 114, 182, 0.6) 2px, transparent 3px),
+    radial-gradient(circle at 14px 16px, rgba(187, 247, 208, 0.5) 1.6px, transparent 2.6px),
+    radial-gradient(circle at 8px 20px, rgba(244, 114, 182, 0.35) 1.2px, transparent 2.1px);
+  --texture-size: 150px 150px, 220px 220px, 100px 100px;
+  --texture-opacity: 0.6;
+  --texture-anim: ordo-petals;
+  --texture-duration: 20s;
+}
+html[data-ordo-theme="spring"].dark {
+  --color-bg: hsl(140, 25%, 6%);
+  --color-surface-1: hsl(140, 20%, 9%);
+  --color-surface-2: hsl(140, 18%, 12%);
+  --color-surface-3: hsl(140, 15%, 15%);
+  --color-surface-elevated: hsl(140, 17%, 18%);
+  --color-border: hsl(140, 13%, 21%);
+  --color-border-strong: hsl(140, 11%, 30%);
+  --color-border-focus: hsl(160, 85%, 50%);
+  --color-text-primary: hsl(140, 35%, 96%);
+  --color-text-secondary: hsl(142, 15%, 76%);
+  --color-text-tertiary: hsl(144, 10%, 60%);
+  --color-text-placeholder: hsl(144, 9%, 46%);
+  --color-text-disabled: hsl(144, 8%, 36%);
+  --color-primary: hsl(160, 84%, 45%);
+  --color-primary-hover: hsl(160, 80%, 52%);
+  --color-primary-active: hsl(160, 78%, 57%);
+  --color-primary-subtle: hsl(160, 65%, 12%);
+  --color-secondary: hsl(88, 60%, 50%);
+  --color-secondary-hover: hsl(88, 58%, 56%);
+  --color-accent: hsl(330, 75%, 62%);
+  --color-success: hsl(160, 70%, 48%);
+  --color-success-subtle: hsl(160, 45%, 10%);
+  --color-warning: hsl(45, 95%, 60%);
+  --color-warning-subtle: hsl(45, 70%, 10%);
+  --color-danger: hsl(5, 85%, 62%);
+  --color-danger-subtle: hsl(5, 60%, 11%);
+  --color-info: hsl(210, 90%, 62%);
+  --color-info-subtle: hsl(210, 65%, 11%);
+  --color-dataviz-1: #10b981;
+  --color-dataviz-2: #f472b6;
+  --color-dataviz-3: #84cc16;
+  --color-dataviz-4: #34d399;
+  --color-dataviz-5: #fbbf24;
+  --color-dataviz-6: #fb7185;
+  --color-dataviz-7: #a7f3d0;
+  --color-dataviz-8: #f9a8d4;
+  --shadow-glow: 0 0 50px rgba(16, 185, 129, 0.16);
+  --gradient-brand: linear-gradient(135deg, #10b981, #84cc16 55%, #f472b6);
+  --gradient-brand-subtle: linear-gradient(135deg, rgba(16, 185, 129, 0.14), rgba(132, 204, 22, 0.1) 55%, rgba(244, 114, 182, 0.08));
+  --gradient-hero:
+    radial-gradient(circle at 20% 0%, rgba(16, 185, 129, 0.2), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(244, 114, 182, 0.16), transparent 40%),
+    linear-gradient(180deg, #06150e 0%, #0d2418 100%);
+  --gradient-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  --gradient-text: linear-gradient(135deg, hsl(140, 35%, 96%) 0%, hsl(142, 15%, 77%) 100%);
+  --card-bg: color-mix(in srgb, rgba(16, 185, 129, 0.06), var(--color-surface-2));
+  --card-bg-hover: color-mix(in srgb, rgba(244, 114, 182, 0.09), var(--color-surface-2));
+  --card-border-color: rgba(110, 231, 183, 0.15);
+  --card-border-hover: rgba(244, 114, 182, 0.3);
+  --card-shadow: 0 10px 32px rgba(0, 0, 0, 0.25), 0 0 40px rgba(16, 185, 129, 0.06);
+  --card-shadow-hover: 0 14px 40px rgba(0, 0, 0, 0.3), 0 0 60px rgba(16, 185, 129, 0.1);
+}
+html[data-ordo-theme="spring"]:not(.dark) {
+  --scene-a: rgba(16, 185, 129, 0.28);
+  --scene-b: rgba(244, 114, 182, 0.24);
+  --scene-c: rgba(132, 204, 22, 0.2);
+  --texture-opacity: 0.45;
+  --color-bg: hsl(145, 45%, 96%);
+  --color-surface-1: hsl(0, 0%, 100%);
+  --color-surface-2: hsl(145, 40%, 93%);
+  --color-surface-3: hsl(145, 35%, 89%);
+  --color-surface-elevated: hsl(0, 0%, 100%);
+  --color-border: hsl(145, 28%, 84%);
+  --color-border-strong: hsl(145, 24%, 74%);
+  --color-border-focus: hsl(160, 85%, 40%);
+  --color-primary: hsl(160, 80%, 34%);
+  --color-primary-hover: hsl(160, 78%, 29%);
+  --color-primary-active: hsl(160, 78%, 25%);
+  --color-primary-subtle: hsl(160, 75%, 92%);
+  --color-secondary: hsl(88, 60%, 36%);
+  --color-secondary-hover: hsl(88, 58%, 31%);
+  --color-accent: hsl(330, 72%, 48%);
+  --color-success: hsl(160, 65%, 32%);
+  --color-success-subtle: hsl(160, 60%, 93%);
+  --color-warning: hsl(45, 92%, 42%);
+  --color-warning-subtle: hsl(45, 90%, 94%);
+  --color-danger: hsl(5, 80%, 52%);
+  --color-danger-subtle: hsl(5, 80%, 95%);
+  --color-info: hsl(210, 88%, 42%);
+  --color-info-subtle: hsl(210, 85%, 94%);
+  --shadow-glow: 0 0 40px rgba(16, 185, 129, 0.2);
+  --gradient-brand: linear-gradient(135deg, #059669, #65a30d 55%, #db2777);
+  --gradient-hero:
+    radial-gradient(circle at 20% 0%, rgba(16, 185, 129, 0.2), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(244, 114, 182, 0.16), transparent 40%),
+    linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
+  --gradient-text: linear-gradient(135deg, hsl(145, 45%, 12%) 0%, hsl(142, 15%, 38%) 100%);
+  --card-bg: color-mix(in srgb, rgba(5, 150, 105, 0.05), #ffffff);
+  --card-bg-hover: color-mix(in srgb, rgba(219, 39, 119, 0.07), #ffffff);
+  --card-border-color: rgba(5, 150, 105, 0.16);
+  --card-border-hover: rgba(219, 39, 119, 0.28);
+  --card-shadow: 0 8px 24px rgba(5, 150, 105, 0.08);
+  --card-shadow-hover: 0 12px 32px rgba(5, 150, 105, 0.14);
+}
+
+/* ──────────────────────────────────────────────
+   THEME: COMIC — pop-art, halftone, punchy shadows
+   ────────────────────────────────────────────── */
+html[data-ordo-theme="comic"] {
+  --scene-a: rgba(239, 68, 68, 0.24);
+  --scene-b: rgba(37, 99, 235, 0.24);
+  --scene-c: rgba(250, 204, 21, 0.16);
+  --scene-d: rgba(236, 72, 153, 0.14);
+  --scene-duration: 24s;
+  --texture-bg: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.14) 1.6px, transparent 2.2px);
+  --texture-size: 26px 26px;
+  --texture-opacity: 0.9;
+  --card-border-width: 2px;
+}
+html[data-ordo-theme="comic"].dark {
+  --color-bg: hsl(230, 30%, 6%);
+  --color-surface-1: hsl(230, 25%, 9%);
+  --color-surface-2: hsl(230, 22%, 12%);
+  --color-surface-3: hsl(230, 19%, 15%);
+  --color-surface-elevated: hsl(230, 20%, 18%);
+  --color-border: hsl(230, 16%, 21%);
+  --color-border-strong: hsl(230, 13%, 30%);
+  --color-border-focus: hsl(0, 90%, 60%);
+  --color-text-primary: hsl(230, 30%, 97%);
+  --color-text-secondary: hsl(230, 14%, 78%);
+  --color-text-tertiary: hsl(230, 10%, 60%);
+  --color-text-placeholder: hsl(230, 8%, 46%);
+  --color-text-disabled: hsl(230, 8%, 36%);
+  --color-primary: hsl(0, 90%, 62%);
+  --color-primary-hover: hsl(0, 88%, 68%);
+  --color-primary-active: hsl(0, 86%, 72%);
+  --color-primary-subtle: hsl(0, 80%, 14%);
+  --color-secondary: hsl(221, 90%, 62%);
+  --color-secondary-hover: hsl(221, 88%, 68%);
+  --color-accent: hsl(45, 95%, 55%);
+  --color-success: hsl(140, 70%, 50%);
+  --color-success-subtle: hsl(140, 45%, 10%);
+  --color-warning: hsl(45, 95%, 60%);
+  --color-warning-subtle: hsl(45, 70%, 10%);
+  --color-danger: hsl(0, 85%, 64%);
+  --color-danger-subtle: hsl(0, 60%, 11%);
+  --color-info: hsl(210, 90%, 62%);
+  --color-info-subtle: hsl(210, 65%, 11%);
+  --color-dataviz-1: #ef4444;
+  --color-dataviz-2: #3b82f6;
+  --color-dataviz-3: #facc15;
+  --color-dataviz-4: #ec4899;
+  --color-dataviz-5: #f97316;
+  --color-dataviz-6: #ef4444;
+  --color-dataviz-7: #60a5fa;
+  --color-dataviz-8: #fde047;
+  --shadow-glow: 0 0 50px rgba(239, 68, 68, 0.18);
+  --gradient-brand: linear-gradient(135deg, #ef4444, #2563eb 55%, #facc15);
+  --gradient-brand-subtle: linear-gradient(135deg, rgba(239, 68, 68, 0.14), rgba(37, 99, 235, 0.1) 55%, rgba(250, 204, 21, 0.08));
+  --gradient-hero:
+    radial-gradient(circle at 20% 0%, rgba(239, 68, 68, 0.2), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(37, 99, 235, 0.18), transparent 40%),
+    linear-gradient(180deg, #170b14 0%, #251035 100%);
+  --gradient-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  --gradient-text: linear-gradient(135deg, hsl(230, 30%, 97%) 0%, hsl(230, 14%, 79%) 100%);
+  --card-bg: var(--color-surface-2);
+  --card-bg-hover: var(--color-surface-3);
+  --card-border-color: rgba(255, 255, 255, 0.2);
+  --card-border-hover: rgba(250, 204, 21, 0.55);
+  --card-shadow: 5px 5px 0 rgba(250, 204, 21, 0.18), 9px 9px 0 rgba(239, 68, 68, 0.14), 0 12px 28px rgba(0, 0, 0, 0.35);
+  --card-shadow-hover: 7px 7px 0 rgba(250, 204, 21, 0.28), 12px 12px 0 rgba(239, 68, 68, 0.2), 0 16px 36px rgba(0, 0, 0, 0.4);
+}
+html[data-ordo-theme="comic"]:not(.dark) {
+  --scene-a: rgba(239, 68, 68, 0.26);
+  --scene-b: rgba(37, 99, 235, 0.24);
+  --scene-c: rgba(250, 204, 21, 0.22);
+  --texture-opacity: 0.7;
+  --color-bg: hsl(228, 40%, 96%);
+  --color-surface-1: hsl(0, 0%, 100%);
+  --color-surface-2: hsl(228, 35%, 93%);
+  --color-surface-3: hsl(228, 30%, 89%);
+  --color-surface-elevated: hsl(0, 0%, 100%);
+  --color-border: hsl(228, 25%, 84%);
+  --color-border-strong: hsl(228, 20%, 74%);
+  --color-border-focus: hsl(0, 90%, 50%);
+  --color-primary: hsl(0, 88%, 48%);
+  --color-primary-hover: hsl(0, 86%, 42%);
+  --color-primary-active: hsl(0, 86%, 37%);
+  --color-primary-subtle: hsl(0, 85%, 93%);
+  --color-secondary: hsl(221, 90%, 48%);
+  --color-secondary-hover: hsl(221, 88%, 42%);
+  --color-accent: hsl(45, 95%, 42%);
+  --color-success: hsl(140, 65%, 34%);
+  --color-success-subtle: hsl(140, 60%, 94%);
+  --color-warning: hsl(45, 92%, 44%);
+  --color-warning-subtle: hsl(45, 90%, 94%);
+  --color-danger: hsl(0, 80%, 54%);
+  --color-danger-subtle: hsl(0, 80%, 95%);
+  --color-info: hsl(210, 90%, 44%);
+  --color-info-subtle: hsl(210, 85%, 94%);
+  --shadow-glow: 0 0 40px rgba(220, 38, 38, 0.2);
+  --gradient-brand: linear-gradient(135deg, #dc2626, #2563eb 55%, #eab308);
+  --gradient-hero:
+    radial-gradient(circle at 20% 0%, rgba(239, 68, 68, 0.22), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(37, 99, 235, 0.18), transparent 40%),
+    linear-gradient(180deg, #fef2f2 0%, #ffffff 100%);
+  --gradient-text: linear-gradient(135deg, hsl(230, 40%, 12%) 0%, hsl(230, 14%, 38%) 100%);
+  --card-bg: #ffffff;
+  --card-bg-hover: #ffffff;
+  --card-border-color: rgba(15, 23, 42, 0.22);
+  --card-border-hover: rgba(220, 38, 38, 0.5);
+  --card-shadow: 4px 4px 0 rgba(234, 179, 8, 0.28), 7px 7px 0 rgba(220, 38, 38, 0.18), 0 8px 20px rgba(15, 23, 42, 0.08);
+  --card-shadow-hover: 5px 5px 0 rgba(234, 179, 8, 0.4), 9px 9px 0 rgba(220, 38, 38, 0.24), 0 12px 28px rgba(15, 23, 42, 0.12);
+}
+
+/* ──────────────────────────────────────────────
+   THEME: SPACE — nebula, stars, dark glass, mono
+   ────────────────────────────────────────────── */
+html[data-ordo-theme="space"] {
+  --scene-a: rgba(147, 51, 234, 0.3);
+  --scene-b: rgba(79, 70, 229, 0.28);
+  --scene-c: rgba(103, 232, 249, 0.16);
+  --scene-d: rgba(126, 34, 206, 0.18);
+  --scene-duration: 23s;
+  --texture-bg:
+    radial-gradient(circle at 8px 8px, rgba(255, 255, 255, 0.9) 1.2px, transparent 2px),
+    radial-gradient(circle at 18px 22px, rgba(167, 139, 250, 0.7) 1px, transparent 1.8px),
+    radial-gradient(circle at 12px 28px, rgba(103, 232, 249, 0.6) 1px, transparent 1.8px),
+    radial-gradient(circle at 4px 20px, rgba(255, 255, 255, 0.5) 1px, transparent 1.7px);
+  --texture-size: 160px 160px, 240px 240px, 320px 320px, 110px 110px;
+  --texture-opacity: 0.9;
+  --texture-anim: ordo-stars;
+  --texture-duration: 7s;
+  --card-blur: blur(20px);
+  --font-display: var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+html[data-ordo-theme="space"].dark {
+  --color-bg: hsl(255, 35%, 4%);
+  --color-surface-1: hsl(256, 30%, 7%);
+  --color-surface-2: hsl(257, 26%, 10%);
+  --color-surface-3: hsl(258, 23%, 13%);
+  --color-surface-elevated: hsl(259, 25%, 16%);
+  --color-border: hsl(258, 16%, 20%);
+  --color-border-strong: hsl(258, 13%, 29%);
+  --color-border-focus: hsl(268, 85%, 66%);
+  --color-text-primary: hsl(260, 35%, 97%);
+  --color-text-secondary: hsl(260, 15%, 78%);
+  --color-text-tertiary: hsl(262, 10%, 60%);
+  --color-text-placeholder: hsl(262, 8%, 46%);
+  --color-text-disabled: hsl(262, 8%, 36%);
+  --color-primary: hsl(268, 85%, 68%);
+  --color-primary-hover: hsl(268, 82%, 74%);
+  --color-primary-active: hsl(268, 80%, 78%);
+  --color-primary-subtle: hsl(268, 70%, 14%);
+  --color-secondary: hsl(243, 75%, 68%);
+  --color-secondary-hover: hsl(243, 73%, 74%);
+  --color-accent: hsl(190, 90%, 65%);
+  --color-success: hsl(150, 70%, 52%);
+  --color-success-subtle: hsl(150, 45%, 10%);
+  --color-warning: hsl(45, 95%, 62%);
+  --color-warning-subtle: hsl(45, 70%, 10%);
+  --color-danger: hsl(320, 80%, 62%);
+  --color-danger-subtle: hsl(320, 55%, 12%);
+  --color-info: hsl(210, 92%, 64%);
+  --color-info-subtle: hsl(210, 65%, 11%);
+  --color-dataviz-1: #a855f7;
+  --color-dataviz-2: #6366f1;
+  --color-dataviz-3: #67e8f9;
+  --color-dataviz-4: #c084fc;
+  --color-dataviz-5: #f59e0b;
+  --color-dataviz-6: #f472b6;
+  --color-dataviz-7: #818cf8;
+  --color-dataviz-8: #22d3ee;
+  --shadow-glow: 0 0 60px rgba(147, 51, 234, 0.28);
+  --gradient-brand: linear-gradient(135deg, #7e22ce, #4f46e5 55%, #67e8f9);
+  --gradient-brand-subtle: linear-gradient(135deg, rgba(126, 34, 206, 0.16), rgba(79, 70, 229, 0.12) 55%, rgba(103, 232, 249, 0.08));
+  --gradient-hero:
+    radial-gradient(circle at 20% 0%, rgba(147, 51, 234, 0.26), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(79, 70, 229, 0.22), transparent 40%),
+    radial-gradient(circle at 55% 75%, rgba(103, 232, 249, 0.08), transparent 45%),
+    linear-gradient(180deg, #0a0618 0%, #150b2e 100%);
+  --gradient-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  --gradient-text: linear-gradient(135deg, hsl(260, 35%, 97%) 0%, hsl(260, 15%, 79%) 100%);
+  --card-bg: color-mix(in srgb, rgba(168, 85, 247, 0.07), var(--color-surface-2));
+  --card-bg-hover: color-mix(in srgb, rgba(168, 85, 247, 0.13), var(--color-surface-2));
+  --card-border-color: rgba(196, 181, 253, 0.14);
+  --card-border-hover: rgba(196, 181, 253, 0.32);
+  --card-shadow: 0 10px 34px rgba(0, 0, 0, 0.35), 0 0 46px rgba(147, 51, 234, 0.1);
+  --card-shadow-hover: 0 16px 44px rgba(0, 0, 0, 0.4), 0 0 70px rgba(147, 51, 234, 0.18);
+}
+html[data-ordo-theme="space"]:not(.dark) {
+  --scene-a: rgba(147, 51, 234, 0.3);
+  --scene-b: rgba(79, 70, 229, 0.24);
+  --scene-c: rgba(103, 232, 249, 0.2);
+  --texture-opacity: 0.7;
+  --color-bg: hsl(258, 55%, 96%);
+  --color-surface-1: hsl(0, 0%, 100%);
+  --color-surface-2: hsl(258, 50%, 93%);
+  --color-surface-3: hsl(258, 45%, 89%);
+  --color-surface-elevated: hsl(0, 0%, 100%);
+  --color-border: hsl(258, 35%, 84%);
+  --color-border-strong: hsl(258, 30%, 74%);
+  --color-border-focus: hsl(268, 85%, 52%);
+  --color-primary: hsl(268, 80%, 52%);
+  --color-primary-hover: hsl(268, 78%, 46%);
+  --color-primary-active: hsl(268, 78%, 40%);
+  --color-primary-subtle: hsl(268, 80%, 93%);
+  --color-secondary: hsl(243, 72%, 54%);
+  --color-secondary-hover: hsl(243, 70%, 48%);
+  --color-accent: hsl(190, 90%, 44%);
+  --color-success: hsl(150, 65%, 36%);
+  --color-success-subtle: hsl(150, 60%, 94%);
+  --color-warning: hsl(45, 92%, 44%);
+  --color-warning-subtle: hsl(45, 90%, 94%);
+  --color-danger: hsl(320, 75%, 50%);
+  --color-danger-subtle: hsl(320, 70%, 95%);
+  --color-info: hsl(210, 90%, 44%);
+  --color-info-subtle: hsl(210, 85%, 94%);
+  --shadow-glow: 0 0 40px rgba(126, 34, 206, 0.24);
+  --gradient-brand: linear-gradient(135deg, #7e22ce, #4f46e5 55%, #06b6d4);
+  --gradient-hero:
+    radial-gradient(circle at 20% 0%, rgba(147, 51, 234, 0.24), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(79, 70, 229, 0.2), transparent 40%),
+    linear-gradient(180deg, #f5f3ff 0%, #ffffff 100%);
+  --gradient-text: linear-gradient(135deg, hsl(258, 50%, 12%) 0%, hsl(260, 15%, 38%) 100%);
+  --card-bg: color-mix(in srgb, rgba(168, 85, 247, 0.06), #ffffff);
+  --card-bg-hover: color-mix(in srgb, rgba(168, 85, 247, 0.11), #ffffff);
+  --card-border-color: rgba(168, 85, 247, 0.18);
+  --card-border-hover: rgba(168, 85, 247, 0.34);
+  --card-shadow: 0 8px 26px rgba(126, 34, 206, 0.1);
+  --card-shadow-hover: 0 12px 34px rgba(126, 34, 206, 0.18);
+}
+
+/* ──────────────────────────────────────────────
+   THEME: TRAVEL — open skies, sun rays, glass
+   ────────────────────────────────────────────── */
+html[data-ordo-theme="travel"] {
+  --scene-a: rgba(6, 182, 212, 0.28);
+  --scene-b: rgba(14, 165, 233, 0.24);
+  --scene-c: rgba(245, 158, 11, 0.2);
+  --scene-d: rgba(2, 132, 199, 0.16);
+  --scene-duration: 25s;
+  --texture-bg:
+    linear-gradient(115deg, transparent 46%, rgba(255, 255, 255, 0.07) 50%, transparent 54%),
+    linear-gradient(115deg, transparent 66%, rgba(245, 158, 11, 0.06) 70%, transparent 74%);
+  --texture-size: 260px 260px, 380px 380px;
+  --texture-opacity: 0.8;
+  --texture-anim: ordo-streaks;
+  --texture-duration: 26s;
+  --card-blur: blur(14px);
+}
+html[data-ordo-theme="travel"].dark {
+  --color-bg: hsl(210, 30%, 6%);
+  --color-surface-1: hsl(210, 26%, 9%);
+  --color-surface-2: hsl(210, 22%, 12%);
+  --color-surface-3: hsl(210, 19%, 15%);
+  --color-surface-elevated: hsl(210, 20%, 18%);
+  --color-border: hsl(210, 15%, 21%);
+  --color-border-strong: hsl(210, 12%, 30%);
+  --color-border-focus: hsl(190, 95%, 52%);
+  --color-text-primary: hsl(210, 40%, 96%);
+  --color-text-secondary: hsl(212, 18%, 76%);
+  --color-text-tertiary: hsl(214, 10%, 60%);
+  --color-text-placeholder: hsl(214, 9%, 46%);
+  --color-text-disabled: hsl(214, 8%, 36%);
+  --color-primary: hsl(190, 90%, 52%);
+  --color-primary-hover: hsl(190, 88%, 58%);
+  --color-primary-active: hsl(190, 86%, 62%);
+  --color-primary-subtle: hsl(190, 80%, 13%);
+  --color-secondary: hsl(199, 90%, 58%);
+  --color-secondary-hover: hsl(199, 88%, 64%);
+  --color-accent: hsl(38, 95%, 58%);
+  --color-success: hsl(160, 70%, 50%);
+  --color-success-subtle: hsl(160, 45%, 10%);
+  --color-warning: hsl(38, 95%, 60%);
+  --color-warning-subtle: hsl(38, 70%, 11%);
+  --color-danger: hsl(5, 85%, 62%);
+  --color-danger-subtle: hsl(5, 60%, 11%);
+  --color-info: hsl(200, 92%, 62%);
+  --color-info-subtle: hsl(200, 65%, 11%);
+  --color-dataviz-1: #06b6d4;
+  --color-dataviz-2: #0ea5e9;
+  --color-dataviz-3: #f59e0b;
+  --color-dataviz-4: #38bdf8;
+  --color-dataviz-5: #fbbf24;
+  --color-dataviz-6: #fb7185;
+  --color-dataviz-7: #2dd4bf;
+  --color-dataviz-8: #f97316;
+  --shadow-glow: 0 0 50px rgba(6, 182, 212, 0.18);
+  --gradient-brand: linear-gradient(135deg, #06b6d4, #0ea5e9 55%, #f59e0b);
+  --gradient-brand-subtle: linear-gradient(135deg, rgba(6, 182, 212, 0.14), rgba(14, 165, 233, 0.1) 55%, rgba(245, 158, 11, 0.08));
+  --gradient-hero:
+    radial-gradient(circle at 20% 0%, rgba(6, 182, 212, 0.2), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(14, 165, 233, 0.18), transparent 40%),
+    radial-gradient(circle at 70% 85%, rgba(245, 158, 11, 0.1), transparent 45%),
+    linear-gradient(180deg, #051019 0%, #0a2233 100%);
+  --gradient-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  --gradient-text: linear-gradient(135deg, hsl(210, 40%, 96%) 0%, hsl(212, 18%, 77%) 100%);
+  --card-bg: color-mix(in srgb, rgba(6, 182, 212, 0.06), var(--color-surface-2));
+  --card-bg-hover: color-mix(in srgb, rgba(245, 158, 11, 0.08), var(--color-surface-2));
+  --card-border-color: rgba(125, 211, 252, 0.15);
+  --card-border-hover: rgba(251, 191, 36, 0.3);
+  --card-shadow: 0 10px 32px rgba(0, 0, 0, 0.25), 0 0 40px rgba(6, 182, 212, 0.07);
+  --card-shadow-hover: 0 14px 40px rgba(0, 0, 0, 0.3), 0 0 60px rgba(6, 182, 212, 0.12);
+}
+html[data-ordo-theme="travel"]:not(.dark) {
+  --scene-a: rgba(6, 182, 212, 0.3);
+  --scene-b: rgba(14, 165, 233, 0.26);
+  --scene-c: rgba(245, 158, 11, 0.24);
+  --texture-opacity: 0.6;
+  --color-bg: hsl(200, 55%, 96%);
+  --color-surface-1: hsl(0, 0%, 100%);
+  --color-surface-2: hsl(200, 50%, 93%);
+  --color-surface-3: hsl(200, 45%, 89%);
+  --color-surface-elevated: hsl(0, 0%, 100%);
+  --color-border: hsl(200, 35%, 84%);
+  --color-border-strong: hsl(200, 30%, 74%);
+  --color-border-focus: hsl(190, 95%, 40%);
+  --color-primary: hsl(190, 90%, 38%);
+  --color-primary-hover: hsl(190, 88%, 33%);
+  --color-primary-active: hsl(190, 88%, 28%);
+  --color-primary-subtle: hsl(190, 85%, 92%);
+  --color-secondary: hsl(199, 90%, 44%);
+  --color-secondary-hover: hsl(199, 88%, 38%);
+  --color-accent: hsl(38, 95%, 40%);
+  --color-success: hsl(160, 65%, 34%);
+  --color-success-subtle: hsl(160, 60%, 94%);
+  --color-warning: hsl(38, 92%, 42%);
+  --color-warning-subtle: hsl(38, 90%, 94%);
+  --color-danger: hsl(5, 80%, 52%);
+  --color-danger-subtle: hsl(5, 80%, 95%);
+  --color-info: hsl(200, 90%, 42%);
+  --color-info-subtle: hsl(200, 85%, 94%);
+  --shadow-glow: 0 0 40px rgba(2, 132, 199, 0.22);
+  --gradient-brand: linear-gradient(135deg, #0891b2, #0284c7 55%, #d97706);
+  --gradient-hero:
+    radial-gradient(circle at 20% 0%, rgba(6, 182, 212, 0.22), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(14, 165, 233, 0.18), transparent 40%),
+    linear-gradient(180deg, #ecfeff 0%, #ffffff 100%);
+  --gradient-text: linear-gradient(135deg, hsl(200, 50%, 12%) 0%, hsl(212, 18%, 38%) 100%);
+  --card-bg: color-mix(in srgb, rgba(2, 132, 199, 0.05), #ffffff);
+  --card-bg-hover: color-mix(in srgb, rgba(217, 119, 6, 0.07), #ffffff);
+  --card-border-color: rgba(2, 132, 199, 0.16);
+  --card-border-hover: rgba(217, 119, 6, 0.3);
+  --card-shadow: 0 8px 24px rgba(2, 132, 199, 0.08);
+  --card-shadow-hover: 0 12px 32px rgba(2, 132, 199, 0.15);
+}
+
+/* ──────────────────────────────────────────────
+   THEME: PIXEL — retro grid, sharp corners, mono
+   ────────────────────────────────────────────── */
+html[data-ordo-theme="pixel"] {
+  --scene-a: rgba(163, 230, 53, 0.16);
+  --scene-b: rgba(139, 92, 246, 0.2);
+  --scene-c: rgba(250, 204, 21, 0.12);
+  --scene-d: transparent;
+  --scene-duration: 30s;
+  --texture-bg:
+    linear-gradient(rgba(163, 230, 53, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 92, 246, 0.1) 1px, transparent 1px);
+  --texture-size: 26px 26px, 26px 26px;
+  --texture-opacity: 1;
+  --card-border-width: 2px;
+  --radius-xs: 1px;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
+  --radius-2xl: 10px;
+  --radius-3xl: 12px;
+  --font-display: var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+html[data-ordo-theme="pixel"].dark {
+  --color-bg: hsl(250, 25%, 5%);
+  --color-surface-1: hsl(250, 22%, 8%);
+  --color-surface-2: hsl(250, 19%, 11%);
+  --color-surface-3: hsl(250, 16%, 14%);
+  --color-surface-elevated: hsl(250, 18%, 17%);
+  --color-border: hsl(250, 12%, 20%);
+  --color-border-strong: hsl(250, 10%, 29%);
+  --color-border-focus: hsl(84, 80%, 55%);
+  --color-text-primary: hsl(84, 60%, 92%);
+  --color-text-secondary: hsl(250, 12%, 74%);
+  --color-text-tertiary: hsl(250, 9%, 58%);
+  --color-text-placeholder: hsl(250, 8%, 45%);
+  --color-text-disabled: hsl(250, 8%, 35%);
+  --color-primary: hsl(84, 80%, 55%);
+  --color-primary-hover: hsl(84, 78%, 62%);
+  --color-primary-active: hsl(84, 76%, 68%);
+  --color-primary-subtle: hsl(84, 60%, 13%);
+  --color-secondary: hsl(258, 80%, 68%);
+  --color-secondary-hover: hsl(258, 78%, 74%);
+  --color-accent: hsl(45, 95%, 55%);
+  --color-success: hsl(120, 70%, 52%);
+  --color-success-subtle: hsl(120, 50%, 10%);
+  --color-warning: hsl(45, 95%, 60%);
+  --color-warning-subtle: hsl(45, 70%, 10%);
+  --color-danger: hsl(0, 85%, 62%);
+  --color-danger-subtle: hsl(0, 60%, 11%);
+  --color-info: hsl(210, 90%, 62%);
+  --color-info-subtle: hsl(210, 65%, 11%);
+  --color-dataviz-1: #a3e635;
+  --color-dataviz-2: #8b5cf6;
+  --color-dataviz-3: #facc15;
+  --color-dataviz-4: #4ade80;
+  --color-dataviz-5: #fb923c;
+  --color-dataviz-6: #f87171;
+  --color-dataviz-7: #60a5fa;
+  --color-dataviz-8: #c084fc;
+  --shadow-glow: 0 0 40px rgba(163, 230, 53, 0.18);
+  --gradient-brand: linear-gradient(135deg, #a3e635, #8b5cf6 55%, #facc15);
+  --gradient-brand-subtle: linear-gradient(135deg, rgba(163, 230, 53, 0.14), rgba(139, 92, 246, 0.12) 55%, rgba(250, 204, 21, 0.08));
+  --gradient-hero:
+    radial-gradient(circle at 20% 0%, rgba(163, 230, 53, 0.14), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(139, 92, 246, 0.2), transparent 40%),
+    linear-gradient(180deg, #0d0918 0%, #16102b 100%);
+  --gradient-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  --gradient-text: linear-gradient(135deg, hsl(84, 60%, 92%) 0%, hsl(250, 12%, 75%) 100%);
+  --card-bg: var(--color-surface-2);
+  --card-bg-hover: var(--color-surface-3);
+  --card-border-color: rgba(163, 230, 53, 0.28);
+  --card-border-hover: rgba(163, 230, 53, 0.5);
+  --card-shadow: 3px 3px 0 rgba(163, 230, 53, 0.16), 6px 6px 0 rgba(139, 92, 246, 0.1), 0 10px 26px rgba(0, 0, 0, 0.3);
+  --card-shadow-hover: 4px 4px 0 rgba(163, 230, 53, 0.26), 8px 8px 0 rgba(139, 92, 246, 0.16), 0 14px 34px rgba(0, 0, 0, 0.36);
+}
+html[data-ordo-theme="pixel"]:not(.dark) {
+  --scene-a: rgba(163, 230, 53, 0.24);
+  --scene-b: rgba(139, 92, 246, 0.18);
+  --scene-c: rgba(250, 204, 21, 0.16);
+  --texture-opacity: 0.8;
+  --color-bg: hsl(60, 40%, 96%);
+  --color-surface-1: hsl(0, 0%, 100%);
+  --color-surface-2: hsl(60, 35%, 93%);
+  --color-surface-3: hsl(60, 30%, 89%);
+  --color-surface-elevated: hsl(0, 0%, 100%);
+  --color-border: hsl(60, 25%, 84%);
+  --color-border-strong: hsl(60, 20%, 74%);
+  --color-border-focus: hsl(84, 80%, 40%);
+  --color-primary: hsl(84, 75%, 34%);
+  --color-primary-hover: hsl(84, 72%, 29%);
+  --color-primary-active: hsl(84, 72%, 25%);
+  --color-primary-subtle: hsl(84, 75%, 92%);
+  --color-secondary: hsl(258, 75%, 54%);
+  --color-secondary-hover: hsl(258, 72%, 48%);
+  --color-accent: hsl(45, 95%, 42%);
+  --color-success: hsl(120, 65%, 34%);
+  --color-success-subtle: hsl(120, 60%, 93%);
+  --color-warning: hsl(45, 92%, 42%);
+  --color-warning-subtle: hsl(45, 90%, 94%);
+  --color-danger: hsl(0, 80%, 52%);
+  --color-danger-subtle: hsl(0, 80%, 95%);
+  --color-info: hsl(210, 88%, 42%);
+  --color-info-subtle: hsl(210, 85%, 94%);
+  --shadow-glow: 0 0 30px rgba(101, 163, 13, 0.2);
+  --gradient-brand: linear-gradient(135deg, #65a30d, #7c3aed 55%, #ca8a04);
+  --gradient-hero:
+    radial-gradient(circle at 20% 0%, rgba(163, 230, 53, 0.2), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(139, 92, 246, 0.16), transparent 40%),
+    linear-gradient(180deg, #fefce8 0%, #ffffff 100%);
+  --gradient-text: linear-gradient(135deg, hsl(84, 60%, 14%) 0%, hsl(250, 12%, 38%) 100%);
+  --card-bg: #ffffff;
+  --card-bg-hover: #ffffff;
+  --card-border-color: rgba(101, 163, 13, 0.32);
+  --card-border-hover: rgba(124, 58, 237, 0.4);
+  --card-shadow: 3px 3px 0 rgba(101, 163, 13, 0.24), 0 8px 20px rgba(15, 23, 42, 0.08);
+  --card-shadow-hover: 4px 4px 0 rgba(101, 163, 13, 0.34), 0 12px 28px rgba(15, 23, 42, 0.12);
+}
+
+/* ──────────────────────────────────────────────
+   THEME SWITCH TRANSITION (View Transitions API)
+   ────────────────────────────────────────────── */
+::view-transition-group(root) {
+  animation-duration: 480ms;
+}
+::view-transition-old(root) {
+  animation: ordo-theme-out 240ms var(--ease-standard) both;
+}
+::view-transition-new(root) {
+  animation: ordo-theme-in 460ms var(--ease-soft) both;
+}
+@keyframes ordo-theme-out {
+  to {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+}
+@keyframes ordo-theme-in {
+  from {
+    opacity: 0;
+    transform: scale(1.015);
+  }
+}
+
+/* Respect reduced motion on scene layers too */
+@media (prefers-reduced-motion: reduce) {
+  html[data-ordo-theme]::before,
+  html[data-ordo-theme]::after {
+    animation: none !important;
+  }
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+}
+
+/* ============================================================
+   WINTER AURORA — PREMIUM DETAILS
+   Scene layers, glassmorphism surfaces and micro-interactions.
+   Only active under html[data-ordo-theme="winter"].
+   ============================================================ */
+
+/* ── Aurora Borealis (animated, parallax-aware) ── */
+html[data-ordo-theme="winter"]::before {
+  background:
+    radial-gradient(58% 42% at 22% -8%, rgba(104, 255, 210, 0.24), transparent 62%),
+    radial-gradient(52% 40% at 52% -6%, rgba(93, 189, 255, 0.22), transparent 62%),
+    radial-gradient(46% 38% at 80% -4%, rgba(139, 125, 255, 0.26), transparent 60%),
+    radial-gradient(70% 55% at 50% 108%, rgba(13, 31, 60, 0.9), transparent 70%);
+  opacity: 1;
+  animation: ordo-aurora 17s ease-in-out infinite alternate;
+}
+
+@keyframes ordo-aurora {
+  0% {
+    transform: translate3d(calc(var(--parallax-x, 0) * 18px - 1%), calc(var(--parallax-y, 0) * 14px - 0.5%), 0) scale(1);
+  }
+  100% {
+    transform: translate3d(calc(var(--parallax-x, 0) * 24px + 1.5%), calc(var(--parallax-y, 0) * 18px + 0.8%), 0) scale(1.06);
+  }
+}
+
+/* ── Snowy mountains + pine silhouettes (bottom, parallax-aware) ── */
+html[data-ordo-theme="winter"] body::before {
+  content: "";
+  position: fixed;
+  left: -2%;
+  right: -2%;
+  bottom: 0;
+  height: 36vh;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 260'%3E%3Cdefs%3E%3Cg id='t'%3E%3Cpath d='M40,0 L78,52 L58,52 L92,96 L70,96 L104,140 L82,140 L116,186 L96,186 L128,232 L148,260 L-8,260 L14,232 L44,186 L24,186 L56,140 L34,140 L68,96 L46,96 L80,52 L2,52 Z'/%3E%3C/g%3E%3C/defs%3E%3Cuse href='%23t' x='0'/%3E%3Cuse href='%23t' x='120'/%3E%3Cuse href='%23t' x='240'/%3E%3Cuse href='%23t' x='360'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320' preserveAspectRatio='none'%3E%3Cpath fill='%230B1C36' d='M0,210 L140,90 L300,210 L460,70 L620,210 L780,120 L940,210 L1100,80 L1260,210 L1440,130 L1440,320 L0,320 Z'/%3E%3Cpath fill='%2308182E' d='M0,250 L160,150 L340,250 L520,170 L700,250 L880,180 L1060,250 L1240,160 L1440,250 L1440,320 L0,320 Z'/%3E%3Cpath fill='%23061326' d='M0,280 L200,210 L400,280 L600,220 L800,280 L1000,230 L1200,280 L1440,240 L1440,320 L0,320 Z'/%3E%3C/svg%3E");
+  background-repeat: repeat-x, repeat-x;
+  background-position: bottom left, bottom left;
+  background-size: auto 42%, 100% 68%;
+  opacity: 0.85;
+  transform: translate3d(calc(var(--parallax-x, 0) * -12px), 0, 0);
+  will-change: transform;
+}
+html[data-ordo-theme="winter"] body::before {
+  filter: saturate(0.9) brightness(0.98);
+}
+html[data-ordo-theme="winter"]:not(.dark) body::before {
+  opacity: 0.4;
+}
+
+/* ── Snowfall particles (front-most scene layer) ── */
+html[data-ordo-theme="winter"] body::after {
+  content: "";
+  position: fixed;
+  inset: -5%;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at 6px 8px, rgba(255, 255, 255, 0.9) 1.4px, transparent 2.2px),
+    radial-gradient(circle at 12px 18px, rgba(224, 242, 254, 0.6) 1.1px, transparent 1.9px),
+    radial-gradient(circle at 4px 14px, rgba(255, 255, 255, 0.45) 1px, transparent 1.7px);
+  background-size: 150px 150px, 240px 240px, 100px 100px;
+  opacity: 0.6;
+  animation: ordo-snow 24s linear infinite;
+  will-change: background-position;
+}
+html[data-ordo-theme="winter"]:not(.dark) body::after {
+  opacity: 0.45;
+}
+
+/* ── Sidebar: frosted glass + glowing active item ── */
+html[data-ordo-theme="winter"] .ordo-sidebar {
+  background: rgba(8, 23, 45, 0.55);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-right-color: rgba(93, 189, 255, 0.16);
+  box-shadow:
+    1px 0 32px rgba(2, 8, 20, 0.35),
+    inset -1px 0 0 rgba(255, 255, 255, 0.04);
+}
+html[data-ordo-theme="winter"] .ordo-sidebar .ordo-nav-active {
+  background: rgba(93, 189, 255, 0.14);
+  color: #cdeeff;
+  box-shadow:
+    inset 0 0 0 1px rgba(93, 189, 255, 0.22),
+    0 0 20px rgba(93, 189, 255, 0.14);
+}
+html[data-ordo-theme="winter"] .ordo-sidebar .ordo-nav-active svg {
+  color: #7de7ff;
+}
+html[data-ordo-theme="winter"] .ordo-sidebar .ordo-nav-bar {
+  background: #7de7ff;
+  box-shadow: 0 0 14px rgba(93, 189, 255, 0.9);
+}
+html[data-ordo-theme="winter"] .ordo-sidebar a:hover,
+html[data-ordo-theme="winter"] .ordo-sidebar button:hover {
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+html[data-ordo-theme="winter"] .ordo-sidebar .ordo-sidebar-snow {
+  color: #7de7ff;
+  filter: drop-shadow(0 0 6px rgba(125, 231, 255, 0.8));
+  animation: ordo-snowflake-twinkle 3.2s ease-in-out infinite;
+}
+@keyframes ordo-snowflake-twinkle {
+  0%,
+  100% {
+    opacity: 0.75;
+    transform: rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: rotate(24deg);
+  }
+}
+
+/* ── App header + mobile nav: frosted ── */
+html[data-ordo-theme="winter"] .ordo-header {
+  background: rgba(8, 23, 45, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom-color: rgba(93, 189, 255, 0.14);
+}
+html[data-ordo-theme="winter"] .ordo-mobile-nav {
+  background: rgba(8, 23, 45, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ── Cards: glass reflections + floating ── */
+html[data-ordo-theme="winter"] .ordo-card::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 42%;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0));
+  pointer-events: none;
+}
+
+/* ── Buttons: aurora glow + ice shine sweep ── */
+html[data-ordo-theme="winter"] .bg-gradient-brand {
+  background-image: linear-gradient(135deg, #5dbdff, #8b7dff);
+  box-shadow: 0 4px 18px rgba(93, 189, 255, 0.28);
+}
+html[data-ordo-theme="winter"] .bg-gradient-brand:hover {
+  box-shadow:
+    0 4px 26px rgba(93, 189, 255, 0.45),
+    0 0 40px rgba(139, 125, 255, 0.25);
+}
+html[data-ordo-theme="winter"] button.bg-gradient-brand,
+html[data-ordo-theme="winter"] a.bg-gradient-brand {
+  position: relative;
+  overflow: hidden;
+}
+html[data-ordo-theme="winter"] button.bg-gradient-brand::after,
+html[data-ordo-theme="winter"] a.bg-gradient-brand::after {
+  content: "";
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: -70%;
+  width: 45%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.55s var(--ease-standard);
+  pointer-events: none;
+}
+html[data-ordo-theme="winter"] button.bg-gradient-brand:hover::after,
+html[data-ordo-theme="winter"] a.bg-gradient-brand:hover::after {
+  left: 125%;
+}
+html[data-ordo-theme="winter"] button.bg-primary,
+html[data-ordo-theme="winter"] a.bg-primary {
+  box-shadow:
+    inset 0 0 0 1px rgba(125, 231, 255, 0.2),
+    0 2px 14px rgba(93, 189, 255, 0.25);
+}
+html[data-ordo-theme="winter"] button.bg-primary:hover,
+html[data-ordo-theme="winter"] a.bg-primary:hover {
+  box-shadow:
+    inset 0 0 0 1px rgba(125, 231, 255, 0.35),
+    0 4px 22px rgba(93, 189, 255, 0.4);
+}
+
+/* ── Inputs: frosted glass fields ── */
+html[data-ordo-theme="winter"] input,
+html[data-ordo-theme="winter"] select,
+html[data-ordo-theme="winter"] textarea {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+html[data-ordo-theme="winter"] input:focus,
+html[data-ordo-theme="winter"] select:focus,
+html[data-ordo-theme="winter"] textarea:focus {
+  border-color: rgba(125, 231, 255, 0.5);
+}
+
+/* ── Icy progress bars (shimmer every few seconds) ── */
+html[data-ordo-theme="winter"] .ordo-ice-bar {
+  background-image: linear-gradient(90deg, #5dbdff, #7de7ff 40%, #8b7dff 70%, #5dbdff);
+  background-size: 200% 100%;
+  animation: ordo-ice-shimmer 3.2s ease-in-out infinite;
+  box-shadow: 0 0 14px rgba(93, 189, 255, 0.5);
+}
+@keyframes ordo-ice-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  60% {
+    background-position: 0% 0;
+  }
+  100% {
+    background-position: 0% 0;
+  }
+}
+
+/* ── Stat cards: glowing circular icon + animated wave ── */
+html[data-ordo-theme="winter"] .ordo-stat-icon {
+  background: color-mix(in srgb, var(--tint, var(--color-primary)) 13%, transparent);
+  border: 1px solid color-mix(in srgb, var(--tint, var(--color-primary)) 38%, transparent);
+  color: var(--tint, var(--color-primary));
+  box-shadow:
+    0 0 22px color-mix(in srgb, var(--tint, var(--color-primary)) 32%, transparent),
+    inset 0 0 14px color-mix(in srgb, var(--tint, var(--color-primary)) 16%, transparent);
+  animation: ordo-icon-breathe 3.6s ease-in-out infinite;
+}
+@keyframes ordo-icon-breathe {
+  0%,
+  100% {
+    box-shadow:
+      0 0 16px color-mix(in srgb, var(--tint, var(--color-primary)) 26%, transparent),
+      inset 0 0 12px color-mix(in srgb, var(--tint, var(--color-primary)) 14%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 0 30px color-mix(in srgb, var(--tint, var(--color-primary)) 52%, transparent),
+      inset 0 0 16px color-mix(in srgb, var(--tint, var(--color-primary)) 20%, transparent);
+  }
+}
+html[data-ordo-theme="winter"] .ordo-stat-wave {
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 26px;
+  opacity: 0.6;
+  pointer-events: none;
+}
+html[data-ordo-theme="winter"] .ordo-stat-wave svg {
+  display: block;
+  width: 200%;
+  height: 100%;
+  animation: ordo-wave-slide 5.6s linear infinite;
+}
+@keyframes ordo-wave-slide {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ── Focus timer: frozen glowing ring + rotating ice ── */
+html[data-ordo-theme="winter"] .ordo-focus-ring {
+  box-shadow:
+    0 0 60px rgba(93, 189, 255, 0.22),
+    0 0 120px rgba(139, 125, 255, 0.12);
+}
+html[data-ordo-theme="winter"] .ordo-focus-inner {
+  background:
+    radial-gradient(circle at 35% 28%, rgba(125, 231, 255, 0.14), transparent 40%),
+    rgba(8, 23, 45, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+html[data-ordo-theme="winter"] .ordo-ice-rotor {
+  position: absolute;
+  inset: -16px;
+  border-radius: 9999px;
+  border: 1px dashed rgba(125, 231, 255, 0.35);
+  animation: ordo-rotor-spin 16s linear infinite;
+  pointer-events: none;
+}
+html[data-ordo-theme="winter"] .ordo-ice-rotor::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border-radius: 9999px;
+  border: 1px solid rgba(93, 189, 255, 0.1);
+  box-shadow: inset 0 0 24px rgba(93, 189, 255, 0.08);
+}
+@keyframes ordo-rotor-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+html[data-ordo-theme="winter"] .ordo-focus-ring.ordo-focus-done {
+  animation: ordo-done-pulse 1.6s var(--ease-out) 2;
+}
+@keyframes ordo-done-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(104, 255, 210, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 0 64px rgba(104, 255, 210, 0);
+  }
+}
+
+/* Snow explosion on focus completion */
+html[data-ordo-theme="winter"] .winter-explosion {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 6;
+}
+html[data-ordo-theme="winter"] .winter-explosion i {
+  position: absolute;
+  width: var(--sz, 4px);
+  height: var(--sz, 4px);
+  border-radius: 9999px;
+  background: #e0f4ff;
+  box-shadow: 0 0 8px rgba(125, 231, 255, 0.9);
+  animation: ordo-explode 640ms var(--ease-out) var(--delay, 0s) both;
+}
+@keyframes ordo-explode {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--dx, 40px), var(--dy, -40px)) scale(0.2);
+    opacity: 0;
+  }
+}
+
+/* Click sparkles (spawned by WinterFx) */
+.winter-sparkles {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+}
+.winter-sparkles i {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--sz, 3px);
+  height: var(--sz, 3px);
+  margin: calc(var(--sz, 3px) / -2) 0 0 calc(var(--sz, 3px) / -2);
+  border-radius: 9999px;
+  background: #e0f4ff;
+  box-shadow: 0 0 6px rgba(125, 231, 255, 0.9);
+  animation: ordo-sparkle 520ms var(--ease-out) var(--delay, 0s) both;
+}
+@keyframes ordo-sparkle {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--dx, 30px), var(--dy, -30px)) scale(0);
+    opacity: 0;
+  }
+}
+
+/* ── Calendar: snowy landscape + glowing selected date ── */
+html[data-ordo-theme="winter"] .winter-landscape {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 88px;
+  pointer-events: none;
+  opacity: 0.5;
+  z-index: 0;
+}
+html[data-ordo-theme="winter"] .winter-landscape svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+html[data-ordo-theme="winter"] .winter-landscape + * {
+  position: relative;
+}
+html[data-ordo-theme="winter"] .ordo-cal-day-selected {
+  border-color: rgba(93, 189, 255, 0.55);
+  background: rgba(93, 189, 255, 0.14);
+  box-shadow:
+    0 0 20px rgba(93, 189, 255, 0.22),
+    inset 0 0 0 1px rgba(125, 231, 255, 0.18);
+}
+html[data-ordo-theme="winter"] .ordo-cal-day-selected > span:first-child {
+  background: linear-gradient(135deg, #5dbdff, #7de7ff);
+  color: #061220;
+  box-shadow: 0 0 12px rgba(93, 189, 255, 0.8);
+  font-weight: 700;
+}
+
+/* ── Habits: glowing ice crystals ── */
+html[data-ordo-theme="winter"] .habit-crystal {
+  color: #9ef0ff;
+  filter: drop-shadow(0 0 6px rgba(125, 231, 255, 0.85));
+  animation: ordo-crystal-glow 3s ease-in-out infinite;
+  transition: transform 300ms var(--ease-soft), filter 300ms var(--ease-soft);
+}
+@keyframes ordo-crystal-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 4px rgba(125, 231, 255, 0.6));
+  }
+  50% {
+    filter: drop-shadow(0 0 10px rgba(104, 255, 210, 0.95));
+  }
+}
+html[data-ordo-theme="winter"] .habit-row {
+  transition:
+    box-shadow var(--duration-base) var(--ease-soft),
+    border-color var(--duration-base) var(--ease-soft),
+    transform var(--duration-base) var(--ease-soft);
+}
+html[data-ordo-theme="winter"] .habit-row:hover {
+  border-color: rgba(125, 231, 255, 0.35);
+  box-shadow:
+    0 8px 30px rgba(2, 8, 20, 0.4),
+    0 0 44px rgba(93, 189, 255, 0.14);
+}
+html[data-ordo-theme="winter"] .habit-row:hover .habit-crystal {
+  transform: rotate(18deg) scale(1.18);
+  filter: drop-shadow(0 0 10px rgba(125, 231, 255, 0.95));
+}
+html[data-ordo-theme="winter"] .habit-toggle {
+  position: relative;
+}
+html[data-ordo-theme="winter"] .habit-row:hover .habit-toggle::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  transform: translate(-50%, -50%);
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.95) 0 1.1px, transparent 1.7px) -3px -3px / 6px 6px no-repeat,
+    radial-gradient(circle, rgba(255, 255, 255, 0.7) 0 1px, transparent 1.6px) 3px 3px / 6px 6px no-repeat;
+  animation: ordo-sparkle-dots 620ms var(--ease-out) both;
+  pointer-events: none;
+}
+@keyframes ordo-sparkle-dots {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.4);
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.3);
+  }
+}
+
+/* ── End of Day: aurora card + snow globe with glowing pine ── */
+html[data-ordo-theme="winter"] .winter-aurora-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(70% 90% at 8% 0%, rgba(104, 255, 210, 0.12), transparent 60%),
+    radial-gradient(70% 90% at 92% 0%, rgba(139, 125, 255, 0.15), transparent 60%),
+    radial-gradient(55% 70% at 50% -10%, rgba(93, 189, 255, 0.14), transparent 60%);
+}
+html[data-ordo-theme="winter"] .snow-globe {
+  position: relative;
+  width: 92px;
+  height: 92px;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  background:
+    radial-gradient(circle at 32% 26%, rgba(255, 255, 255, 0.18), transparent 42%),
+    radial-gradient(circle at 50% 60%, rgba(93, 189, 255, 0.16), transparent 60%),
+    rgba(8, 23, 45, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow:
+    0 0 34px rgba(93, 189, 255, 0.28),
+    inset 0 0 24px rgba(125, 231, 255, 0.1);
+  overflow: hidden;
+}
+html[data-ordo-theme="winter"] .snow-globe::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 6px 8px, rgba(255, 255, 255, 0.9) 1.3px, transparent 2px),
+    radial-gradient(circle at 14px 18px, rgba(224, 242, 254, 0.6) 1px, transparent 1.7px),
+    radial-gradient(circle at 8px 26px, rgba(255, 255, 255, 0.4) 0.9px, transparent 1.5px);
+  background-size: 46px 46px, 70px 70px, 32px 32px;
+  animation: ordo-snow 5s linear infinite;
+  opacity: 0.9;
+}
+html[data-ordo-theme="winter"] .snow-globe .sg-tree {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  text-align: center;
+}
+html[data-ordo-theme="winter"] .snow-globe .sg-tree-star {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  background: #fff7d6;
+  box-shadow: 0 0 10px rgba(255, 230, 140, 0.95);
+  margin-bottom: 1px;
+}
+html[data-ordo-theme="winter"] .snow-globe .sg-tree-tier {
+  display: block;
+  width: 0;
+  height: 0;
+  margin: -1px auto 0;
+  border-left: 17px solid transparent;
+  border-right: 17px solid transparent;
+  border-bottom: 15px solid #2fe3a8;
+  filter: drop-shadow(0 0 6px rgba(104, 255, 210, 0.75));
+}
+html[data-ordo-theme="winter"] .snow-globe .sg-tree-tier:nth-child(3) {
+  border-left-width: 13px;
+  border-right-width: 13px;
+  border-bottom-width: 13px;
+}
+html[data-ordo-theme="winter"] .snow-globe .sg-tree-trunk {
+  display: block;
+  width: 6px;
+  height: 8px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 2px 2px 0 0;
+}
+html[data-ordo-theme="winter"] .snow-globe .sg-base {
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  transform: translateX(-50%);
+  width: 64px;
+  height: 13px;
+  border-radius: 10px 10px 0 0;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 0 14px rgba(93, 189, 255, 0.2);
+}
+
+/* ── Reduced motion: calm the scene ── */
+@media (prefers-reduced-motion: reduce) {
+  html[data-ordo-theme="winter"]::before,
+  html[data-ordo-theme="winter"] body::before,
+  html[data-ordo-theme="winter"] body::after,
+  html[data-ordo-theme="winter"] .ordo-ice-rotor,
+  html[data-ordo-theme="winter"] .ordo-ice-bar,
+  html[data-ordo-theme="winter"] .ordo-stat-wave svg,
+  html[data-ordo-theme="winter"] .snow-globe::before,
+  html[data-ordo-theme="winter"] .ordo-stat-icon,
+  html[data-ordo-theme="winter"] .habit-crystal {
+    animation: none !important;
+  }
+  html[data-ordo-theme="winter"] .winter-explosion i,
+  html[data-ordo-theme="winter"] .winter-sparkles i {
+    animation-duration: 0.01ms !important;
+  }
+}
+

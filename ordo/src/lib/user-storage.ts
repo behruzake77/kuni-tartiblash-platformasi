@@ -8,6 +8,7 @@ export type OrdoUser = {
   id: string;
   name: string;
   email: string;
+  avatarUrl?: string | null;
   createdAt: string;
 };
 
@@ -31,6 +32,8 @@ export type OrdoPrefs = {
   useBuiltInSync: boolean;
   /** Auto-push after local changes (debounced by sync provider) */
   autoSync: boolean;
+  /** Visual preset selected by the user. */
+  themePreset: "default" | "ocean" | "forest" | "sunset" | "winter" | "spring" | "comic" | "space" | "travel" | "pixel";
 };
 
 const defaultPrefs: OrdoPrefs = {
@@ -44,6 +47,7 @@ const defaultPrefs: OrdoPrefs = {
   workspaceKey: "",
   useBuiltInSync: true,
   autoSync: true,
+  themePreset: "winter",
 };
 
 function canStore() {

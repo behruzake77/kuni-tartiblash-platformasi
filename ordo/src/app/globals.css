@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @import "../styles/tokens.css";
 @import "../styles/uiverse-buttons.css";
+@import "../styles/hero-live.css";
+@import "../styles/input-motion.css";
+@import "../styles/theme-presets.css";
+@import "../styles/premium-motion.css";
+@import "../styles/celebration.css";
 
 /* ============================================================
    TAILWIND v4 THEME BRIDGE
@@ -193,6 +198,50 @@ h3,
   -webkit-backdrop-filter: blur(var(--blur-lg));
   border: 1px solid var(--color-border-strong);
 }
+
+/* ============================================================
+   CARD VISUALS — Theme Engine v2
+   .ordo-card owns all card visuals; each theme preset restyles
+   it by overriding --card-* variables on html[data-ordo-theme].
+   ============================================================ */
+.ordo-card {
+  background: var(--card-bg, var(--color-surface-2));
+  border: var(--card-border-width, 1px) solid var(--card-border-color, var(--color-border));
+  box-shadow: var(--card-shadow, var(--shadow-sm));
+  backdrop-filter: var(--card-blur, none);
+  -webkit-backdrop-filter: var(--card-blur, none);
+  transition:
+    border-color var(--duration-base) var(--ease-soft),
+    box-shadow var(--duration-base) var(--ease-soft),
+    background-color var(--duration-base) var(--ease-soft),
+    background var(--duration-base) var(--ease-soft),
+    transform var(--duration-base) var(--ease-soft),
+    backdrop-filter var(--duration-base) var(--ease-soft);
+}
+
+.ordo-card.ordo-card-hover:hover {
+  border-color: var(--card-border-hover, var(--color-border-strong));
+  box-shadow: var(--card-shadow-hover, var(--shadow-lg));
+  background: var(--card-bg-hover, var(--card-bg, var(--color-surface-2)));
+}
+
+/* Stat card circular icon chip (all themes) + wave (winter only) */
+.ordo-stat-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 25%, transparent);
+}
+.ordo-stat-wave {
+  display: none;
+}
+
+
 
 /* Subtle noise overlay for hero depth */
 .noise-overlay::before {

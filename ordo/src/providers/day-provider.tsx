@@ -36,7 +36,7 @@ type DayContextValue = {
     dayPct: number;
   };
   // tasks
-  addTask: (title: string, opts?: { priority?: boolean; tag?: string }) => void;
+  addTask: (title: string, opts?: { priority?: boolean; tag?: string; time?: string }) => void;
   toggleTask: (id: string) => void;
   removeTask: (id: string) => void;
   setTaskPriority: (id: string, priority: boolean) => void;
@@ -78,7 +78,7 @@ export function DayProvider({ children }: { children: ReactNode }) {
         const task = {
           id: newId("t"),
           title,
-          tag: "Priority",
+          tag: "Muhim",
           done: false,
           priority: true,
           createdAt: new Date().toISOString(),
@@ -142,7 +142,7 @@ export function DayProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const addTask = useCallback(
-    (title: string, opts?: { priority?: boolean; tag?: string }) => {
+    (title: string, opts?: { priority?: boolean; tag?: string; time?: string }) => {
       const clean = title.trim();
       if (!clean) return;
       update((prev) => {
@@ -154,6 +154,7 @@ export function DayProvider({ children }: { children: ReactNode }) {
           tag: opts?.tag?.trim() || "Inbox",
           done: false,
           priority: wantPriority,
+          time: opts?.time || undefined,
           createdAt: new Date().toISOString(),
         };
         pushActivity({
@@ -177,12 +178,13 @@ export function DayProvider({ children }: { children: ReactNode }) {
             title: target.title,
           });
         }
-        return {
-          ...prev,
-          tasks: prev.tasks.map((t) =>
-            t.id === id ? { ...t, done: !t.done } : t
-          ),
-        };
+        const tasks = prev.tasks.map((t) =>
+          t.id === id ? { ...t, done: !t.done } : t
+        );
+        if (tasks.length > 0 && tasks.every((task) => task.done)) {
+          queueMicrotask(() => window.dispatchEvent(new Event("ordo:all-tasks-complete")));
+        }
+        return { ...prev, tasks };
       });
     },
     [update]

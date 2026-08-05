@@ -17,14 +17,11 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "rounded-[var(--radius-lg)] border border-border bg-surface-2",
-      "dark:shadow-none shadow-sm",
-      "transition-[border-color,box-shadow,background-color] duration-[var(--duration-base)] ease-[var(--ease-soft)]",
-      interactive && [
-        "cursor-pointer",
-        "hover:border-border-strong hover:shadow-md",
-        "dark:hover:bg-surface-3",
-      ],
+      // .ordo-card owns all visuals so each theme can restyle cards
+      // (glass / neon / pop-art / pixel) via CSS variables.
+      "ordo-card relative overflow-hidden rounded-[var(--radius-lg)]",
+      interactive &&
+        "ordo-card-hover cursor-pointer will-change-transform hover:-translate-y-0.5",
       className
     )}
     {...props}

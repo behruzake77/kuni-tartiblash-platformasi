@@ -19,7 +19,7 @@ export type SyncStatus =
   | "local-only";
 
 export type SyncProvider = {
-  id: string;
+  id: "local" | "http" | "builtin" | "supabase";
   label: string;
   /** true when remote endpoint is configured */
   isRemote: boolean;

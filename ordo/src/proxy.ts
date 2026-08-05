@@ -2,12 +2,12 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 /**
- * Lightweight edge middleware:
+ * Lightweight edge proxy:
  * - request id for logs
  * - block obvious junk paths
  * - no auth gate (local-first; remote auth wired later via provider)
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const requestId =
     request.headers.get("x-request-id") ||
     `req_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;

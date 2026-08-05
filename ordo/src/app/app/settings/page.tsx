@@ -2,6 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Check } from "lucide-react";
+import { THEMES } from "@/lib/themes";
 import { AppShell } from "@/components/layout/app-shell";
 import {
   Card,
@@ -32,6 +35,8 @@ import { useUser } from "@/providers/user-provider";
 import { useSync } from "@/providers/sync-provider";
 import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
+import { isAdminEmail } from "@/lib/admin";
+import { supabase } from "@/lib/auth/supabase";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -80,6 +85,22 @@ export default function SettingsPage() {
       setWorkspace(email.trim().toLowerCase());
     }
     toast({ title: t("settings.saved"), kind: "success" });
+  }
+
+  async function uploadAvatar(file: File) {
+    if (!supabase || !user) return;
+    if (!file.type.startsWith("image/") || file.size > 2 * 1024 * 1024) {
+      toast({ title: "Avatar yuklanmadi", description: "PNG, JPG yoki WebP va maksimal 2 MB tanlang.", kind: "default" });
+      return;
+    }
+    const ext = file.name.split(".").pop() || "png";
+    const path = `${user.id}/avatar.${ext}`;
+    const { error } = await supabase.storage.from("avatars").upload(path, file, { upsert: true, cacheControl: "3600" });
+    if (error) { toast({ title: "Avatar yuklanmadi", description: error.message, kind: "default" }); return; }
+    const { data } = supabase.storage.from("avatars").getPublicUrl(path);
+    await supabase.auth.updateUser({ data: { avatar_url: data.publicUrl } });
+    updateUser({ avatarUrl: data.publicUrl });
+    toast({ title: "Avatar yangilandi", kind: "success" });
   }
 
   function saveDefaults() {
@@ -216,7 +237,7 @@ export default function SettingsPage() {
         if (data.user?.email) updateUser(data.user);
         toast({ title: t("settings.imported"), kind: "success" });
       } catch {
-        toast({ title: "Import failed", kind: "default" });
+        toast({ title: "Import amalga oshmadi", kind: "default" });
       }
     };
     reader.readAsText(file);
@@ -245,6 +266,7 @@ export default function SettingsPage() {
           {t("settings.title")}
         </h2>
         <p className="mt-1 text-sm text-text-secondary">{t("settings.sub")}</p>
+        {isAdminEmail(user?.email) && <Link href="/app/admin" className="mt-3 inline-flex text-sm font-medium text-primary hover:underline">Admin panelni ochish →</Link>}
       </div>
 
       <div className="mx-auto flex max-w-2xl flex-col gap-4">
@@ -262,6 +284,10 @@ export default function SettingsPage() {
               <span className="font-[family-name:var(--font-mono)]">
                 ({authProviderId})
               </span>
+            </div>
+            <div className="flex items-center gap-4 rounded-[var(--radius-md)] border border-border bg-surface-2 p-3">
+              <span className="grid size-12 shrink-0 place-items-center overflow-hidden rounded-full bg-gradient-brand text-sm font-bold text-white">{user?.avatarUrl ? <span className="size-full bg-cover bg-center" style={{ backgroundImage: `url(${user.avatarUrl})` }} /> : (user?.name || "O").slice(0, 1).toUpperCase()}</span>
+              <label className="cursor-pointer rounded-[var(--radius-sm)] border border-border bg-surface-1 px-3 py-2 text-sm font-medium text-text-primary hover:bg-surface-3">Avatar yuklash<input type="file" accept="image/png,image/jpeg,image/webp" className="hidden" onChange={(event) => { const file = event.target.files?.[0]; if (file) void uploadAvatar(file); }} /></label>
             </div>
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-medium" htmlFor="display-name">
@@ -315,6 +341,74 @@ export default function SettingsPage() {
                 <span className="text-xs opacity-70">{l.label}</span>
               </button>
             ))}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">{t("settings.themeTitle")}</CardTitle>
+            <CardDescription>{t("settings.themeDesc")}</CardDescription>
+          </CardHeader>
+          <CardContent className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+            {THEMES.map((th) => {
+              const selected = prefs.themePreset === th.id;
+              const themeToast =
+                prefs.locale === "uz"
+                  ? "Dizayn yangilandi"
+                  : prefs.locale === "ru"
+                    ? "Тема обновлена"
+                    : "Theme updated";
+              return (
+                <button
+                  key={th.id}
+                  type="button"
+                  onClick={() => {
+                    updatePrefs({ themePreset: th.id });
+                    toast({
+                      title: themeToast,
+                      description: th.label[prefs.locale],
+                      kind: "success",
+                    });
+                  }}
+                  aria-pressed={selected}
+                  className={cn(
+                    "group relative overflow-hidden rounded-[var(--radius-md)] border p-0 text-left transition-all duration-[var(--duration-base)] ease-[var(--ease-soft)]",
+                    selected
+                      ? "border-primary ring-2 ring-primary/25"
+                      : "border-border hover:-translate-y-0.5 hover:border-border-strong hover:shadow-lg"
+                  )}
+                >
+                  <span
+                    className="block h-14 w-full"
+                    style={{ background: th.swatch }}
+                    aria-hidden="true"
+                  >
+                    <span
+                      className="block h-1.5 w-full"
+                      style={{ background: th.strip }}
+                    />
+                  </span>
+                  <span className="block p-2">
+                    <span
+                      className={cn(
+                        "block text-xs font-semibold",
+                        selected ? "text-primary" : "text-text-primary"
+                      )}
+                    >
+                      {th.label[prefs.locale]}
+                    </span>
+                    <span className="mt-0.5 block text-[10px] leading-snug text-text-tertiary">
+                      {th.description[prefs.locale]}
+                    </span>
+                  </span>
+                  {selected && (
+                    <span className="absolute right-1.5 top-1.5 grid size-5 place-items-center rounded-full bg-primary text-white shadow-sm">
+                      <Check className="size-3" strokeWidth={3} />
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </CardContent>
         </Card>
 
@@ -501,14 +595,14 @@ export default function SettingsPage() {
             <CardTitle className="text-base">{t("export.section")}</CardTitle>
             <CardDescription>{t("export.sectionDesc")}</CardDescription>
           </CardHeader>
-          <CardContent className="flex flex-wrap gap-2">
-            <Button variant="secondary" size="sm" onClick={exportMd}>
+          <CardContent className="grid gap-2 sm:flex sm:flex-wrap">
+            <Button variant="secondary" size="md" className="w-full sm:w-auto" onClick={exportMd}>
               {t("export.dayMd")}
             </Button>
-            <Button variant="secondary" size="sm" onClick={exportIcs}>
+            <Button variant="secondary" size="md" className="w-full sm:w-auto" onClick={exportIcs}>
               {t("export.scheduleIcs")}
             </Button>
-            <Button variant="secondary" size="sm" onClick={exportWeek}>
+            <Button variant="secondary" size="md" className="w-full sm:w-auto" onClick={exportWeek}>
               {t("export.weekMd")}
             </Button>
           </CardContent>
@@ -526,7 +620,10 @@ export default function SettingsPage() {
               </label>
               <Input
                 id="day-start"
-                type="time"
+                type="text"
+                inputMode="numeric"
+                pattern="^([01]\d|2[0-3]):[0-5]\d$"
+                placeholder="08:00"
                 value={dayStart}
                 onChange={(e) => setDayStart(e.target.value)}
               />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -35,6 +35,29 @@ export default function FocusPage() {
   const [running, setRunning] = useState(false);
   const sessionStartRemaining = useRef(defaultSec);
   const finishedRef = useRef(false);
+  const isWinter = prefs.themePreset === "winter";
+  const [burstParticles, setBurstParticles] = useState<
+    { id: string; dx: string; dy: string; sz: string; delay: string }[]
+  >([]);
+
+  // Snow explosion whenever the timer reaches zero
+  useEffect(() => {
+    if (!running && remaining === 0 && duration > 0) {
+      setBurstParticles(
+        Array.from({ length: 16 }, (_, i) => {
+          const ang = (Math.PI * 2 * i) / 16 + Math.random() * 0.4;
+          const dist = 46 + Math.random() * 66;
+          return {
+            id: `${Date.now()}-${i}`,
+            dx: `${Math.cos(ang) * dist}px`,
+            dy: `${Math.sin(ang) * dist}px`,
+            sz: `${2.5 + Math.random() * 3}px`,
+            delay: `${(Math.random() * 0.1).toFixed(3)}s`,
+          };
+        })
+      );
+    }
+  }, [running, remaining, duration]);
 
   // Single tick effect — completion handled inside interval (no cascading setState effects)
   useEffect(() => {
@@ -167,35 +190,53 @@ export default function FocusPage() {
             </Badge>
 
             <div
-              className="relative mb-2 font-[family-name:var(--font-mono)] text-6xl font-medium tracking-tight text-text-primary sm:text-7xl"
-              aria-live="polite"
-              aria-atomic="true"
+              className={cn(
+                "ordo-focus-ring relative mb-3 grid aspect-square w-[min(72vw,19rem)] place-items-center rounded-full p-[3px] shadow-[0_0_45px_rgba(124,92,255,.18)]",
+                isWinter && !running && remaining === 0 && "ordo-focus-done"
+              )}
+              style={{ background: `conic-gradient(var(--color-primary) ${progress}%, rgba(255,255,255,.08) 0)` }}
             >
-              {formatTime(remaining)}
+              {isWinter && <span className="ordo-ice-rotor" aria-hidden="true" />}
+              <div className="ordo-focus-inner grid size-full place-items-center rounded-full border border-white/10 bg-[radial-gradient(circle_at_35%_28%,rgba(79,209,255,.13),transparent_38%),rgba(9,9,11,.82)] backdrop-blur">
+                <div className="text-center">
+                  <div className="font-[family-name:var(--font-mono)] text-[clamp(3.25rem,14vw,4.5rem)] font-medium tracking-tight text-text-primary" aria-live="polite" aria-atomic="true">{formatTime(remaining)}</div>
+                  <p className="mt-1 text-sm text-text-tertiary">{running ? t("focus.hintRun") : remaining === 0 ? t("focus.hintDone") : t("focus.hintReady")}</p>
+                </div>
+              </div>
+              {isWinter && burstParticles.length > 0 && (
+                <div className="winter-explosion" aria-hidden="true">
+                  {burstParticles.map((p) => (
+                    <i
+                      key={p.id}
+                      style={
+                        {
+                          "--dx": p.dx,
+                          "--dy": p.dy,
+                          "--sz": p.sz,
+                          "--delay": p.delay,
+                        } as CSSProperties
+                      }
+                    />
+                  ))}
+                </div>
+              )}
             </div>
-            <p className="relative text-sm text-text-tertiary">
-              {running
-                ? t("focus.hintRun")
-                : remaining === 0
-                  ? t("focus.hintDone")
-                  : t("focus.hintReady")}
-            </p>
 
             <div className="relative mt-8 h-2 w-full max-w-sm overflow-hidden rounded-full bg-surface-3">
               <div
-                className="h-full rounded-full bg-gradient-brand transition-[width] duration-1000 linear"
+                className="ordo-ice-bar h-full rounded-full bg-gradient-brand transition-[width] duration-1000 linear"
                 style={{ width: `${progress}%` }}
               />
             </div>
 
-            <div className="relative mt-8 flex flex-wrap items-center justify-center gap-2">
+            <div className="relative mt-8 grid w-full max-w-sm grid-cols-2 gap-2 sm:flex sm:w-auto sm:flex-wrap sm:justify-center">
               {PRESETS.map((p) => (
                 <button
                   key={p.label}
                   type="button"
                   onClick={() => selectPreset(p.seconds)}
                   className={cn(
-                    "h-9 rounded-full border px-4 text-sm font-medium transition-colors",
+                    "h-11 rounded-full border px-4 text-sm font-medium transition-colors sm:h-9",
                     duration === p.seconds
                       ? "border-primary bg-primary-subtle text-primary"
                       : "border-border bg-surface-2 text-text-secondary hover:border-border-strong"
@@ -206,7 +247,7 @@ export default function FocusPage() {
               ))}
             </div>
 
-            <div className="relative mt-8 flex items-center gap-3">
+            <div className="relative mt-8 grid w-full max-w-sm grid-cols-2 gap-3">
               <Button
                 variant="gradient"
                 size="lg"

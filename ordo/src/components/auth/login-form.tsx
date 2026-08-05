@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Mail, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,6 +10,8 @@ import { useUser } from "@/providers/user-provider";
 
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const next = searchParams.get("next")?.startsWith("/app") ? searchParams.get("next")! : "/app";
   const { t, signInAsync, authProviderId } = useUser();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -26,7 +29,7 @@ export function LoginForm() {
         throw new Error("INVALID_CREDENTIALS");
       }
       await signInAsync({ email, password });
-      router.push("/app");
+      router.push(next);
     } catch {
       setError(t("auth.invalid"));
     } finally {
@@ -43,7 +46,7 @@ export function LoginForm() {
         password: "demo-demo",
         name: "Demo Operator",
       });
-      router.push("/app");
+      router.push(next);
     } catch {
       setError(t("auth.invalid"));
     } finally {
@@ -73,6 +76,7 @@ export function LoginForm() {
           required
           placeholder="you@company.com"
           leftIcon={<Mail aria-hidden="true" />}
+          animated
           error={Boolean(error)}
         />
       </div>
@@ -85,9 +89,9 @@ export function LoginForm() {
           >
             {t("auth.password")}
           </label>
-          <a href="#" className="text-xs font-medium text-primary hover:underline">
+          <Link href="/forgot-password" className="text-xs font-medium text-primary hover:underline">
             {t("auth.forgot")}
-          </a>
+          </Link>
         </div>
         <Input
           id="password"
@@ -97,6 +101,7 @@ export function LoginForm() {
           required
           placeholder="••••••••"
           leftIcon={<Lock aria-hidden="true" />}
+          animated
           error={Boolean(error)}
         />
       </div>

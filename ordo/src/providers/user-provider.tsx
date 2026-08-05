@@ -10,6 +10,7 @@ import {
   type ReactNode,
 } from "react";
 import { detectLocale, t as translate, type Locale } from "@/lib/i18n";
+import { applyThemePreset } from "@/lib/themes";
 import {
   clearUser,
   isOnboarded,
@@ -44,8 +45,13 @@ type UserContextValue = {
     password: string;
     name?: string;
   }) => Promise<OrdoUser>;
+  signUpAsync: (opts: {
+    email: string;
+    password: string;
+    name?: string;
+  }) => Promise<OrdoUser>;
   signOut: () => void;
-  updateUser: (patch: Partial<Pick<OrdoUser, "name" | "email">>) => void;
+  updateUser: (patch: Partial<Pick<OrdoUser, "name" | "email" | "avatarUrl">>) => void;
   updatePrefs: (patch: Partial<OrdoPrefs>) => void;
   completeOnboarding: (opts: {
     name: string;
@@ -62,12 +68,14 @@ function authToOrdo(u: {
   id: string;
   name: string;
   email: string;
+  imageUrl?: string | null;
   createdAt: string;
 }): OrdoUser {
   return {
     id: u.id,
     name: u.name,
     email: u.email,
+    avatarUrl: u.imageUrl || null,
     createdAt: u.createdAt,
   };
 }
@@ -88,10 +96,31 @@ export function UserProvider({ children }: { children: ReactNode }) {
       savePrefs(p);
     }
     setPrefs(p);
-    setUser(loadUser());
     setOnboarded(isOnboarded());
-    setReady(true);
+    const provider = resolveAuthProvider();
+    if (provider.isRemote) {
+      void Promise.resolve(provider.getSessionUser()).then((sessionUser) => {
+        if (sessionUser) {
+          const next = authToOrdo(sessionUser);
+          saveUser(next);
+          setUser(next);
+        } else {
+          setUser(null);
+        }
+        setReady(true);
+      }).catch(() => {
+        setUser(null);
+        setReady(true);
+      });
+    } else {
+      setUser(loadUser());
+      setReady(true);
+    }
   }, []);
+
+  useEffect(() => {
+    applyThemePreset(prefs.themePreset);
+  }, [prefs.themePreset]);
 
   const t = useCallback(
     (key: string, vars?: Record<string, string | number>) =>
@@ -103,6 +132,18 @@ export function UserProvider({ children }: { children: ReactNode }) {
     async (opts: { email: string; password: string; name?: string }) => {
       const provider = resolveAuthProvider();
       const authUser = await provider.signIn(opts);
+      const next = authToOrdo(authUser);
+      saveUser(next);
+      setUser(next);
+      return next;
+    },
+    []
+  );
+
+  const signUpAsync = useCallback(
+    async (opts: { email: string; password: string; name?: string }) => {
+      const provider = resolveAuthProvider();
+      const authUser = await provider.signUp(opts);
       const next = authToOrdo(authUser);
       saveUser(next);
       setUser(next);
@@ -164,7 +205,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const updateUser = useCallback(
-    (patch: Partial<Pick<OrdoUser, "name" | "email">>) => {
+    (patch: Partial<Pick<OrdoUser, "name" | "email" | "avatarUrl">>) => {
       setUser((prev) => {
         if (!prev) return prev;
         const next = {
@@ -240,6 +281,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
       t,
       signIn,
       signInAsync,
+      signUpAsync,
       signOut,
       updateUser,
       updatePrefs,
@@ -257,6 +299,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
       t,
       signIn,
       signInAsync,
+      signUpAsync,
       signOut,
       updateUser,
       updatePrefs,

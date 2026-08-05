@@ -38,7 +38,7 @@ export default function AuthLayout({
       </aside>
 
       <div className="flex flex-col bg-bg">
-        <div className="flex items-center justify-between p-6 lg:hidden">
+        <div className="flex min-h-16 items-center justify-between px-4 py-4 sm:px-6 lg:hidden">
           <Logo href="/" size="sm" />
           <Link
             href="/"
@@ -47,7 +47,7 @@ export default function AuthLayout({
             {t("common.back")}
           </Link>
         </div>
-        <div className="flex flex-1 items-center justify-center px-6 py-10">
+        <div className="flex flex-1 items-center justify-center px-4 py-8 sm:px-6 sm:py-10">
           <div className="w-full max-w-[400px]">{children}</div>
         </div>
       </div>

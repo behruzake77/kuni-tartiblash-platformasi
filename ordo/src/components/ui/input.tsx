@@ -10,12 +10,19 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   error?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
+  /** Lightweight feedback pulse on each typed character. */
+  animated?: boolean;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type = "text", error, leftIcon, rightIcon, ...props }, ref) => {
+  ({ className, type = "text", error, leftIcon, rightIcon, animated = false, ...props }, ref) => {
+    const [typing, setTyping] = React.useState(false);
     const hasLeft = Boolean(leftIcon);
     const hasRight = Boolean(rightIcon);
+    const onInput: React.InputEventHandler<HTMLInputElement> = (event) => {
+      if (animated) setTyping(true);
+      props.onInput?.(event);
+    };
 
     if (!hasLeft && !hasRight) {
       return (
@@ -31,17 +38,20 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             error
               ? "border-danger focus-visible:border-danger focus-visible:ring-danger/15"
               : "border-border",
+            typing && "input-typing",
             className
           )}
           ref={ref}
           aria-invalid={error || undefined}
+          onInput={onInput}
+          onAnimationEnd={() => setTyping(false)}
           {...props}
         />
       );
     }
 
     return (
-      <div className={cn("relative flex w-full items-center", className)}>
+      <div className={cn("relative flex w-full items-center", typing && "input-shell-typing", className)}>
         {hasLeft && (
           <span
             className="pointer-events-none absolute left-3 text-text-tertiary [&_svg]:size-4"
@@ -63,10 +73,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             hasRight ? "pr-10" : "pr-3",
             error
               ? "border-danger focus-visible:border-danger focus-visible:ring-danger/15"
-              : "border-border"
+              : "border-border",
+            typing && "input-typing"
           )}
           ref={ref}
           aria-invalid={error || undefined}
+          onInput={onInput}
+          onAnimationEnd={() => setTyping(false)}
           {...props}
         />
         {hasRight && (

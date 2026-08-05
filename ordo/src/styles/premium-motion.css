@@ -1,0 +1,4 @@
+@keyframes task-complete-pop { 0%{transform:scale(.65);opacity:.2} 60%{transform:scale(1.18)} 100%{transform:scale(1);opacity:1} }
+@keyframes sidebar-active-glow { 50%{box-shadow:0 0 12px color-mix(in srgb,var(--color-primary) 55%,transparent)} }
+.task-complete-icon { animation:task-complete-pop 320ms var(--ease-spring) both; }
+@media (prefers-reduced-motion:reduce){.task-complete-icon{animation:none!important}}

@@ -109,10 +109,11 @@ export function ProductPreview() {
                   </div>
                   <button
                     type="button"
-                    className="inline-flex items-center gap-1.5 rounded-[var(--radius-sm)] border border-border bg-surface-3 px-2.5 py-1.5 text-xs font-medium text-text-secondary"
+                    className="inline-flex size-8 items-center justify-center rounded-[var(--radius-sm)] border border-border bg-surface-3 text-xs font-medium text-text-secondary sm:h-auto sm:w-auto sm:gap-1.5 sm:px-2.5 sm:py-1.5"
+                    aria-label="Plan my day"
                   >
                     <Sparkles className="size-3.5 text-secondary" aria-hidden="true" />
-                    Plan my day
+                    <span className="hidden sm:inline">Plan my day</span>
                   </button>
                 </div>
 
@@ -124,7 +125,7 @@ export function ProductPreview() {
                   ].map((m) => (
                     <div
                       key={m.label}
-                      className="rounded-[var(--radius-md)] border border-border bg-surface-2 p-3"
+                      className="rounded-[var(--radius-md)] border border-border bg-surface-2 p-2 sm:p-3"
                     >
                       <p className="text-[10px] font-medium uppercase tracking-wider text-text-tertiary">
                         {m.label}

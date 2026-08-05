@@ -71,7 +71,7 @@ export default function InsightsPage() {
           </h2>
           <p className="mt-1 text-sm text-text-secondary">{t("insights.sub")}</p>
         </div>
-        <Button variant="secondary" size="sm" onClick={exportWeek}>
+        <Button variant="secondary" size="md" className="w-full sm:w-auto" onClick={exportWeek}>
           {t("export.weekMd")}
         </Button>
       </div>
@@ -104,7 +104,7 @@ export default function InsightsPage() {
               : t("insights.stillOpen"),
           },
         ].map((m) => (
-          <Card key={m.label}>
+          <Card key={m.label} interactive>
             <CardContent className="p-5">
               <p className="text-[11px] font-semibold uppercase tracking-[var(--tracking-widest)] text-text-tertiary">
                 {m.label}
@@ -174,7 +174,7 @@ export default function InsightsPage() {
                   className="flex flex-1 flex-col items-center gap-2"
                 >
                   <div
-                    className="w-full rounded-t-[var(--radius-xs)] bg-gradient-brand opacity-90"
+                    className="w-full rounded-t-[var(--radius-xs)] bg-gradient-brand opacity-90 transition-[height,filter] duration-700 ease-out hover:brightness-125"
                     style={{
                       height: `${Math.max(4, (s.focusSec / maxFocus) * 100)}%`,
                     }}
@@ -201,7 +201,7 @@ export default function InsightsPage() {
                   className="flex flex-1 flex-col items-center gap-2"
                 >
                   <div
-                    className="w-full rounded-t-[var(--radius-xs)] bg-secondary/80"
+                    className="w-full rounded-t-[var(--radius-xs)] bg-secondary/80 transition-[height,filter] duration-700 ease-out hover:brightness-125"
                     style={{
                       height: `${Math.max(4, Math.min(100, s.completion))}%`,
                     }}

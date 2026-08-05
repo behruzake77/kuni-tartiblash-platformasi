@@ -68,7 +68,7 @@ export function lastNDays(n: number, from = new Date()): string[] {
   for (let i = n - 1; i >= 0; i--) {
     const d = new Date(from);
     d.setDate(d.getDate() - i);
-    out.push(d.toISOString().slice(0, 10));
+    out.push(todayKey(d));
   }
   return out;
 }

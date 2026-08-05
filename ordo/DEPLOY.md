@@ -85,13 +85,24 @@ npm install @clerk/nextjs
 
 ### Supabase Auth
 
+Supabase email/password Auth is integrated through `@supabase/supabase-js`.
+
+1. Create a Supabase project → **Authentication → Providers → Email** → enable Email.
+2. For the selected optional-verification flow, turn **Confirm email** off. (Turn it on later when transactional email is configured.)
+3. In **Authentication → URL configuration**, add your production domain and local URL to Redirect URLs.
+4. Set the following environment variables locally and in Vercel:
+
 ```bash
-npm install @supabase/supabase-js @supabase/ssr
+NEXT_PUBLIC_ORDO_AUTH=supabase
+NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_ANON_KEY
 ```
 
-1. Create project → enable Email auth.
-2. Set `NEXT_PUBLIC_ORDO_AUTH=supabase` + URL + anon key.
-3. Implement the supabase branch in `src/lib/auth/index.ts`.
+The anon/publishable key is browser-safe; **never** expose a Supabase service-role key. Registration creates a real Supabase user, sign-in restores the remote session, and sign-out clears it.
+
+#### Supabase user data sync (required for multi-device SaaS)
+
+In **Supabase → SQL Editor**, run [`supabase/migrations/20260804_ordo_day_states.sql`](./supabase/migrations/20260804_ordo_day_states.sql). It creates an `ordo_day_states` table and RLS policies so each signed-in user can only read/write their own row. With `NEXT_PUBLIC_ORDO_AUTH=supabase`, ORDO automatically uses this provider for pull, push, and debounced background sync.
 
 ---
 
@@ -180,3 +191,6 @@ Runs `lint`, `test`, `build` on push/PR.
 | Fly.io / Railway | ✅ | ✅ with volume | Good for `.data/` |
 | Node VPS / Docker | ✅ | ✅ | Full control |
 | Cloudflare Pages | ⚠️ | ❌ | Node APIs / `.data` limited |
+
+### Calendar history migration
+Run `supabase/migrations/20260805_ordo_day_history.sql` in Supabase SQL Editor after the base sync migration. It enables the calendar to retain each user's daily plans and completed history.

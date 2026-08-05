@@ -29,7 +29,7 @@ export function AppHeader({
   return (
     <header
       className={cn(
-        "fixed top-0 right-0 z-[var(--z-sticky)] flex h-14 items-center justify-between gap-4 border-b border-border bg-bg/80 px-4 backdrop-blur-[var(--blur-md)] md:px-6",
+        "ordo-header fixed top-0 right-0 z-[var(--z-sticky)] flex h-14 items-center justify-between gap-4 border-b border-border bg-bg/80 px-4 backdrop-blur-[var(--blur-md)] md:px-6",
         "transition-[left] duration-[var(--duration-base)] ease-[var(--ease-soft)]",
         sidebarCollapsed ? "left-0 md:left-14" : "left-0 md:left-60"
       )}
@@ -57,12 +57,8 @@ export function AppHeader({
         <ThemeToggle />
         <NotificationCenter />
 
-        <a
-          href="/app/settings"
-          className="ml-1 inline-flex size-8 items-center justify-center rounded-full bg-gradient-brand text-xs font-semibold text-white"
-          aria-label="Account"
-        >
-          {initials}
+        <a href="/app/settings" className="ml-1 inline-flex size-8 items-center justify-center overflow-hidden rounded-full bg-gradient-brand text-xs font-semibold text-white" aria-label="Profile">
+          {user?.avatarUrl ? <span className="size-full bg-cover bg-center" style={{ backgroundImage: `url(${user.avatarUrl})` }} /> : initials}
         </a>
       </div>
     </header>
