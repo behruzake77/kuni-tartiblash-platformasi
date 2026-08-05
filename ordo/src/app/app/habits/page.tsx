@@ -56,6 +56,15 @@ export default function HabitsPage() {
         </Button>
       </div>
 
+      {state.habits.length > 0 && (
+        <Card className="mb-5 overflow-hidden border-success/20 bg-[radial-gradient(circle_at_85%_20%,rgba(34,197,94,.14),transparent_30%),linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.01))]">
+          <CardContent className="flex items-center justify-between gap-4 p-5">
+            <div><p className="text-xs font-semibold uppercase tracking-[var(--tracking-widest)] text-success">Bugungi odatlar</p><p className="mt-2 text-lg font-semibold text-text-primary">Har kichik belgi katta natija beradi.</p><p className="mt-1 text-sm text-text-secondary">{stats.habitsDone} ta bajarildi · {Math.max(0, stats.habitsTotal - stats.habitsDone)} ta qoldi</p></div>
+            <div className="grid size-20 shrink-0 place-items-center rounded-full p-[4px]" style={{ background: `conic-gradient(var(--color-success) ${(stats.habitsTotal ? stats.habitsDone / stats.habitsTotal * 100 : 0)}%, rgba(255,255,255,.1) 0)` }}><div className="grid size-full place-items-center rounded-full bg-surface-1 text-center"><b className="text-lg text-text-primary">{stats.habitsTotal ? Math.round(stats.habitsDone / stats.habitsTotal * 100) : 0}%</b><span className="text-[9px] text-text-tertiary">BUGUN</span></div></div>
+          </CardContent>
+        </Card>
+      )}
+
       <div className="grid gap-3">
         {state.habits.length === 0 && (
           <Card className="border-dashed">

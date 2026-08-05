@@ -34,6 +34,7 @@ import { useSync } from "@/providers/sync-provider";
 import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 import { isAdminEmail } from "@/lib/admin";
+import { supabase } from "@/lib/auth/supabase";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -82,6 +83,22 @@ export default function SettingsPage() {
       setWorkspace(email.trim().toLowerCase());
     }
     toast({ title: t("settings.saved"), kind: "success" });
+  }
+
+  async function uploadAvatar(file: File) {
+    if (!supabase || !user) return;
+    if (!file.type.startsWith("image/") || file.size > 2 * 1024 * 1024) {
+      toast({ title: "Avatar yuklanmadi", description: "PNG, JPG yoki WebP va maksimal 2 MB tanlang.", kind: "default" });
+      return;
+    }
+    const ext = file.name.split(".").pop() || "png";
+    const path = `${user.id}/avatar.${ext}`;
+    const { error } = await supabase.storage.from("avatars").upload(path, file, { upsert: true, cacheControl: "3600" });
+    if (error) { toast({ title: "Avatar yuklanmadi", description: error.message, kind: "default" }); return; }
+    const { data } = supabase.storage.from("avatars").getPublicUrl(path);
+    await supabase.auth.updateUser({ data: { avatar_url: data.publicUrl } });
+    updateUser({ avatarUrl: data.publicUrl });
+    toast({ title: "Avatar yangilandi", kind: "success" });
   }
 
   function saveDefaults() {
@@ -266,6 +283,10 @@ export default function SettingsPage() {
                 ({authProviderId})
               </span>
             </div>
+            <div className="flex items-center gap-4 rounded-[var(--radius-md)] border border-border bg-surface-2 p-3">
+              <span className="grid size-12 shrink-0 place-items-center overflow-hidden rounded-full bg-gradient-brand text-sm font-bold text-white">{user?.avatarUrl ? <span className="size-full bg-cover bg-center" style={{ backgroundImage: `url(${user.avatarUrl})` }} /> : (user?.name || "O").slice(0, 1).toUpperCase()}</span>
+              <label className="cursor-pointer rounded-[var(--radius-sm)] border border-border bg-surface-1 px-3 py-2 text-sm font-medium text-text-primary hover:bg-surface-3">Avatar yuklash<input type="file" accept="image/png,image/jpeg,image/webp" className="hidden" onChange={(event) => { const file = event.target.files?.[0]; if (file) void uploadAvatar(file); }} /></label>
+            </div>
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-medium" htmlFor="display-name">
                 {t("settings.displayName")}
@@ -318,6 +339,13 @@ export default function SettingsPage() {
                 <span className="text-xs opacity-70">{l.label}</span>
               </button>
             ))}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader><CardTitle className="text-base">Dizayn mavzusi</CardTitle><CardDescription>Ilovaning ranglari va yengil animatsiyasini o‘zingizga moslang.</CardDescription></CardHeader>
+          <CardContent className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            {([['default','Asosiy','from-violet-500 via-indigo-500 to-cyan-400'],['ocean','Ocean','from-sky-500 via-blue-600 to-cyan-300'],['forest','Forest','from-emerald-600 via-green-500 to-lime-300'],['sunset','Sunset','from-orange-500 via-pink-500 to-amber-300'],['winter','Qish','from-sky-500 via-indigo-500 to-white'],['spring','Bahor','from-emerald-500 via-lime-400 to-pink-400'],['comic','Comic Hero','from-red-500 via-blue-600 to-yellow-300']] as const).map(([id,label,gradient]) => <button key={id} type="button" onClick={() => { updatePrefs({ themePreset: id }); toast({ title: "Dizayn yangilandi", description: label, kind: "success" }); }} className={cn("rounded-[var(--radius-md)] border p-2 text-left transition", prefs.themePreset === id ? "border-primary ring-2 ring-primary/20" : "border-border hover:border-border-strong")}><span className={cn("block h-9 rounded-lg bg-gradient-to-r",gradient)} /><span className="mt-2 block text-xs font-medium text-text-primary">{label}</span></button>)}
           </CardContent>
         </Card>
 

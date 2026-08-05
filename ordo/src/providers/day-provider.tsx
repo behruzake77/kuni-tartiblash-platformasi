@@ -178,12 +178,13 @@ export function DayProvider({ children }: { children: ReactNode }) {
             title: target.title,
           });
         }
-        return {
-          ...prev,
-          tasks: prev.tasks.map((t) =>
-            t.id === id ? { ...t, done: !t.done } : t
-          ),
-        };
+        const tasks = prev.tasks.map((t) =>
+          t.id === id ? { ...t, done: !t.done } : t
+        );
+        if (tasks.length > 0 && tasks.every((task) => task.done)) {
+          queueMicrotask(() => window.dispatchEvent(new Event("ordo:all-tasks-complete")));
+        }
+        return { ...prev, tasks };
       });
     },
     [update]

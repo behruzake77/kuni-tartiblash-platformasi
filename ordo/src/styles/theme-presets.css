@@ -1,0 +1,11 @@
+/* User-selectable visual presets. Uses tokens so every app screen stays accessible. */
+html[data-ordo-theme="ocean"] { --color-primary:#0ea5e9; --color-secondary:#2563eb; --color-accent:#22d3ee; --gradient-brand:linear-gradient(135deg,#0284c7,#2563eb 55%,#22d3ee); }
+html[data-ordo-theme="forest"] { --color-primary:#22c55e; --color-secondary:#16a34a; --color-accent:#a3e635; --gradient-brand:linear-gradient(135deg,#15803d,#22c55e 55%,#a3e635); }
+html[data-ordo-theme="sunset"] { --color-primary:#f97316; --color-secondary:#ec4899; --color-accent:#fbbf24; --gradient-brand:linear-gradient(135deg,#f97316,#ec4899 55%,#fbbf24); }
+html[data-ordo-theme="winter"] { --color-primary:#38bdf8; --color-secondary:#6366f1; --color-accent:#e0f2fe; --gradient-brand:linear-gradient(135deg,#0ea5e9,#6366f1 55%,#e0f2fe); }
+html[data-ordo-theme="spring"] { --color-primary:#10b981; --color-secondary:#84cc16; --color-accent:#f472b6; --gradient-brand:linear-gradient(135deg,#10b981,#84cc16 55%,#f472b6); }
+html[data-ordo-theme="comic"] { --color-primary:#ef4444; --color-secondary:#2563eb; --color-accent:#facc15; --gradient-brand:linear-gradient(135deg,#ef4444,#2563eb 55%,#facc15); }
+html[data-ordo-theme="winter"] body::before, html[data-ordo-theme="spring"] body::before { content:""; pointer-events:none; position:fixed; inset:0; z-index:0; opacity:.13; background-image:radial-gradient(circle,#fff 1px,transparent 1.5px),radial-gradient(circle,#bae6fd 1px,transparent 1.5px); background-size:42px 42px,74px 74px; animation:ordo-particles 14s linear infinite; }
+html[data-ordo-theme="spring"] body::before { background-image:radial-gradient(circle,#f9a8d4 2px,transparent 2.5px),radial-gradient(circle,#bbf7d0 1.5px,transparent 2px); }
+@keyframes ordo-particles { to { background-position:42px 74px,74px 42px; } }
+@media (prefers-reduced-motion:reduce){html[data-ordo-theme="winter"] body::before,html[data-ordo-theme="spring"] body::before{animation:none}}

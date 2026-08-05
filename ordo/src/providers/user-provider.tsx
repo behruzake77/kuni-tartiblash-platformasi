@@ -50,7 +50,7 @@ type UserContextValue = {
     name?: string;
   }) => Promise<OrdoUser>;
   signOut: () => void;
-  updateUser: (patch: Partial<Pick<OrdoUser, "name" | "email">>) => void;
+  updateUser: (patch: Partial<Pick<OrdoUser, "name" | "email" | "avatarUrl">>) => void;
   updatePrefs: (patch: Partial<OrdoPrefs>) => void;
   completeOnboarding: (opts: {
     name: string;
@@ -67,12 +67,14 @@ function authToOrdo(u: {
   id: string;
   name: string;
   email: string;
+  imageUrl?: string | null;
   createdAt: string;
 }): OrdoUser {
   return {
     id: u.id,
     name: u.name,
     email: u.email,
+    avatarUrl: u.imageUrl || null,
     createdAt: u.createdAt,
   };
 }
@@ -114,6 +116,10 @@ export function UserProvider({ children }: { children: ReactNode }) {
       setReady(true);
     }
   }, []);
+
+  useEffect(() => {
+    document.documentElement.dataset.ordoTheme = prefs.themePreset;
+  }, [prefs.themePreset]);
 
   const t = useCallback(
     (key: string, vars?: Record<string, string | number>) =>
@@ -198,7 +204,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const updateUser = useCallback(
-    (patch: Partial<Pick<OrdoUser, "name" | "email">>) => {
+    (patch: Partial<Pick<OrdoUser, "name" | "email" | "avatarUrl">>) => {
       setUser((prev) => {
         if (!prev) return prev;
         const next = {

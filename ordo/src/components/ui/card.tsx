@@ -17,13 +17,14 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "rounded-[var(--radius-lg)] border border-border bg-surface-2",
-      "dark:shadow-none shadow-sm",
-      "transition-[border-color,box-shadow,background-color] duration-[var(--duration-base)] ease-[var(--ease-soft)]",
+      "relative overflow-hidden rounded-[var(--radius-lg)] border border-border bg-surface-2",
+      "dark:bg-[linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018))] dark:backdrop-blur-sm",
+      "dark:shadow-[0_10px_32px_rgba(0,0,0,.18)] shadow-sm",
+      "transition-[border-color,box-shadow,background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-soft)]",
       interactive && [
-        "cursor-pointer",
-        "hover:border-border-strong hover:shadow-md",
-        "dark:hover:bg-surface-3",
+        "cursor-pointer will-change-transform",
+        "hover:-translate-y-0.5 hover:border-border-strong hover:shadow-lg",
+        "dark:hover:bg-[linear-gradient(145deg,rgba(124,92,255,.11),rgba(255,255,255,.035))]",
       ],
       className
     )}

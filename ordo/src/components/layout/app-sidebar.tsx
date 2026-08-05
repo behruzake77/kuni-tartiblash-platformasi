@@ -100,7 +100,7 @@ export function AppSidebar({
             >
               {active && (
                 <span
-                  className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full bg-primary"
+                  className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full bg-primary animate-[sidebar-active-glow_2.8s_ease-in-out_infinite]"
                   aria-hidden="true"
                 />
               )}

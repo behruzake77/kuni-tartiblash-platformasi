@@ -3,6 +3,9 @@
 @import "../styles/uiverse-buttons.css";
 @import "../styles/hero-live.css";
 @import "../styles/input-motion.css";
+@import "../styles/theme-presets.css";
+@import "../styles/premium-motion.css";
+@import "../styles/celebration.css";
 
 /* ============================================================
    TAILWIND v4 THEME BRIDGE

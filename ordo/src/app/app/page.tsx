@@ -142,7 +142,7 @@ export default function TodayPage() {
             sub: t("today.checkedIn"),
           },
         ].map((m) => (
-          <Card key={m.label}>
+          <Card key={m.label} interactive>
             <CardContent className="p-5">
               <p className="text-[11px] font-semibold uppercase tracking-[var(--tracking-widest)] text-text-tertiary">
                 {m.label}
@@ -382,7 +382,7 @@ function TaskRow({
         className="flex min-w-0 flex-1 items-start gap-3 px-2 py-2.5 text-left"
       >
         {task.done ? (
-          <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-success" aria-hidden="true" />
+          <CheckCircle2 className="task-complete-icon mt-0.5 size-4 shrink-0 text-success" aria-hidden="true" />
         ) : (
           <Circle className="mt-0.5 size-4 shrink-0 text-text-tertiary" aria-hidden="true" />
         )}

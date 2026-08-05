@@ -29,6 +29,7 @@ export function AppShell({ children, title }: AppShellProps) {
   const { t, prefs } = useUser();
   const [collapsed, setCollapsed] = useState(false);
   const [cmdOpen, setCmdOpen] = useState(false);
+  const [celebrating, setCelebrating] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
   const [taskTitle, setTaskTitle] = useState("");
   const [targetDate, setTargetDate] = useState("");
@@ -86,6 +87,15 @@ export function AppShell({ children, title }: AppShellProps) {
     return () => window.removeEventListener("ordo:add-task", onAdd);
   }, [state.date]);
 
+  useEffect(() => {
+    const celebrate = () => {
+      setCelebrating(true);
+      window.setTimeout(() => setCelebrating(false), 1000);
+    };
+    window.addEventListener("ordo:all-tasks-complete", celebrate);
+    return () => window.removeEventListener("ordo:all-tasks-complete", celebrate);
+  }, []);
+
   // Register service worker once
   useEffect(() => {
     if ("serviceWorker" in navigator) {
@@ -124,6 +134,7 @@ export function AppShell({ children, title }: AppShellProps) {
 
   return (
     <div className="min-h-dvh bg-bg">
+      {celebrating && <div className="ordo-confetti pointer-events-none fixed inset-x-0 bottom-20 z-[var(--z-toast)] mx-auto h-28 w-64" aria-hidden="true">{Array.from({ length: 18 }, (_, index) => <i key={index} style={{ left: `${8 + index * 5}%`, '--x': `${(index % 2 ? 1 : -1) * (20 + (index % 5) * 12)}px`, '--c': ['#7C5CFF','#4FD1FF','#22C55E','#F59E0B'][index % 4], animationDelay: `${index * 18}ms` } as React.CSSProperties} />)}</div>}
       <div className="hidden md:block">
         <AppSidebar
           collapsed={collapsed}

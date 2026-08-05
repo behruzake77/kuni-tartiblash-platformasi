@@ -166,20 +166,14 @@ export default function FocusPage() {
                   : t("focus.ready")}
             </Badge>
 
-            <div
-              className="relative mb-2 font-[family-name:var(--font-mono)] text-[clamp(3.25rem,14vw,4.5rem)] font-medium tracking-tight text-text-primary"
-              aria-live="polite"
-              aria-atomic="true"
-            >
-              {formatTime(remaining)}
+            <div className="relative mb-3 grid aspect-square w-[min(72vw,19rem)] place-items-center rounded-full p-[3px] shadow-[0_0_45px_rgba(124,92,255,.18)]" style={{ background: `conic-gradient(var(--color-primary) ${progress}%, rgba(255,255,255,.08) 0)` }}>
+              <div className="grid size-full place-items-center rounded-full border border-white/10 bg-[radial-gradient(circle_at_35%_28%,rgba(79,209,255,.13),transparent_38%),rgba(9,9,11,.82)] backdrop-blur">
+                <div className="text-center">
+                  <div className="font-[family-name:var(--font-mono)] text-[clamp(3.25rem,14vw,4.5rem)] font-medium tracking-tight text-text-primary" aria-live="polite" aria-atomic="true">{formatTime(remaining)}</div>
+                  <p className="mt-1 text-sm text-text-tertiary">{running ? t("focus.hintRun") : remaining === 0 ? t("focus.hintDone") : t("focus.hintReady")}</p>
+                </div>
+              </div>
             </div>
-            <p className="relative text-sm text-text-tertiary">
-              {running
-                ? t("focus.hintRun")
-                : remaining === 0
-                  ? t("focus.hintDone")
-                  : t("focus.hintReady")}
-            </p>
 
             <div className="relative mt-8 h-2 w-full max-w-sm overflow-hidden rounded-full bg-surface-3">
               <div

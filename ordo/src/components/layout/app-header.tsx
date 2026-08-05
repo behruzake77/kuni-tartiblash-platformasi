@@ -57,12 +57,8 @@ export function AppHeader({
         <ThemeToggle />
         <NotificationCenter />
 
-        <a
-          href="/app/settings"
-          className="ml-1 inline-flex size-8 items-center justify-center rounded-full bg-gradient-brand text-xs font-semibold text-white"
-          aria-label="Account"
-        >
-          {initials}
+        <a href="/app/settings" className="ml-1 inline-flex size-8 items-center justify-center overflow-hidden rounded-full bg-gradient-brand text-xs font-semibold text-white" aria-label="Profile">
+          {user?.avatarUrl ? <span className="size-full bg-cover bg-center" style={{ backgroundImage: `url(${user.avatarUrl})` }} /> : initials}
         </a>
       </div>
     </header>
