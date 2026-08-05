@@ -585,7 +585,7 @@ const uz: Dict = {
   "onboard.sub": "Kun boshqaruvini sozlash — ikki daqiqa.",
   "onboard.step1": "Sizni qanday chaqiraylik?",
   "onboard.step2": "Tilni tanlang",
-  "onboard.step3": "Bugungi birinchi prioritet",
+  "onboard.step3": "Bugun eng muhim ishingiz nima?",
   "onboard.namePh": "Ismingiz",
   "onboard.priorityPh": "masalan: Haftalik rejani tugatish",
   "onboard.next": "Davom etish",
