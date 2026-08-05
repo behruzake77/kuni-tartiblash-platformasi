@@ -83,7 +83,7 @@ export default function RootLayout({
         {/* Restore the saved theme preset before first paint (prevents FOUC). */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var p=JSON.parse(localStorage.getItem("ordo.prefs.v1")||"null");if(p&&p.themePreset){document.documentElement.dataset.ordoTheme=p.themePreset;}}catch(e){}`,
+            __html: `try{var p=JSON.parse(localStorage.getItem("ordo.prefs.v1")||"null");document.documentElement.dataset.ordoTheme=(p&&p.themePreset)?p.themePreset:"winter";}catch(e){document.documentElement.dataset.ordoTheme="winter";}`,
           }}
         />
         <ThemeProvider>

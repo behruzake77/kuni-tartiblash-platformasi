@@ -24,6 +24,7 @@ Local-first day-control app with optional cloud sync.
 - **Theme Engine v2** — 10 ta to‘liq dizayn mavzusi: har biri ranglar,
   animatsion fon sahnasi (qor / yulduzlar / pufakchalar / barglar / piksel…),
   karta uslubi (shisha / neon / pop-art), shrift va radiusni o‘zgartiradi
+- **Winter Aurora** — standart tema: aurora osmoni, qor, tog‘lar, glassmorphism
 - **Activity feed** + **notification inbox**  
 - **Multi-tab sync** (same browser)  
 - **Optional HTTP cloud sync** (`NEXT_PUBLIC_ORDO_SYNC_URL`)  

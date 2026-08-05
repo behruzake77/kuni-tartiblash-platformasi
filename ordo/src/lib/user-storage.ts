@@ -47,7 +47,7 @@ const defaultPrefs: OrdoPrefs = {
   workspaceKey: "",
   useBuiltInSync: true,
   autoSync: true,
-  themePreset: "default",
+  themePreset: "winter",
 };
 
 function canStore() {

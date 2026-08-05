@@ -2,16 +2,19 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import type { CSSProperties } from "react";
 import {
   CheckCircle2,
   Circle,
   Clock,
+  Flag,
   Focus,
   MoreHorizontal,
   Pencil,
   Plus,
   Sparkles,
   Star,
+  Timer,
   Trash2,
 } from "lucide-react";
 import { AppShell } from "@/components/layout/app-shell";
@@ -125,32 +128,69 @@ export default function TodayPage() {
             label: t("today.tasksDone"),
             value: `${stats.tasksDone}/${stats.tasksTotal}`,
             sub: `${stats.tasksPct}% ${t("today.complete")}`,
+            Icon: CheckCircle2,
+            tint: "#68ffd2",
           },
           {
             label: t("today.priorities"),
             value: `${stats.prioritiesDone}/${stats.prioritiesTotal}`,
             sub: t("today.mustFinish"),
+            Icon: Flag,
+            tint: "#8b7dff",
           },
           {
             label: t("today.focusProtected"),
             value: stats.focusLabel,
             sub: t("today.loggedToday"),
+            Icon: Timer,
+            tint: "#5dbdff",
           },
           {
             label: t("today.habits"),
             value: `${stats.habitsDone}/${stats.habitsTotal}`,
             sub: t("today.checkedIn"),
+            Icon: Star,
+            tint: "#7de7ff",
           },
         ].map((m) => (
-          <Card key={m.label} interactive>
-            <CardContent className="p-5">
-              <p className="text-[11px] font-semibold uppercase tracking-[var(--tracking-widest)] text-text-tertiary">
-                {m.label}
-              </p>
-              <p className="mt-2 font-[family-name:var(--font-display)] text-3xl font-bold tracking-tight text-text-primary">
-                {m.value}
-              </p>
-              <p className="mt-1 text-xs text-text-tertiary">{m.sub}</p>
+          <Card key={m.label} interactive className="ordo-stat-card">
+            <CardContent className="relative p-5 pb-10">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="text-[11px] font-semibold uppercase tracking-[var(--tracking-widest)] text-text-tertiary">
+                    {m.label}
+                  </p>
+                  <p className="mt-2 font-[family-name:var(--font-display)] text-3xl font-bold tracking-tight text-text-primary">
+                    {m.value}
+                  </p>
+                  <p className="mt-1 text-xs text-text-tertiary">{m.sub}</p>
+                </div>
+                <span
+                  className="ordo-stat-icon"
+                  style={{ "--tint": m.tint } as CSSProperties}
+                  aria-hidden="true"
+                >
+                  <m.Icon className="size-4" strokeWidth={1.75} />
+                </span>
+              </div>
+              <div
+                className="ordo-stat-wave"
+                style={{ color: m.tint } as CSSProperties}
+                aria-hidden="true"
+              >
+                <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+                  <path
+                    d="M0,30 C150,0 300,60 450,30 C600,0 750,60 900,30 C1050,0 1200,60 1200,30 L1200,60 L0,60 Z"
+                    fill="currentColor"
+                    opacity="0.32"
+                  />
+                  <path
+                    d="M0,44 C180,18 340,64 520,44 C700,18 860,64 1040,44 C1180,28 1280,52 1200,46 L1200,60 L0,60 Z"
+                    fill="currentColor"
+                    opacity="0.16"
+                  />
+                </svg>
+              </div>
             </CardContent>
           </Card>
         ))}

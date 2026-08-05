@@ -86,16 +86,16 @@ export const THEMES: ThemeMeta[] = [
   },
   {
     id: "winter",
-    label: { en: "Winter", uz: "Qish", ru: "Зима" },
+    label: { en: "Winter Aurora", uz: "Qish aurorasi", ru: "Зимнее сияние" },
     description: {
-      en: "Icy glass, falling snow and frosty highlights.",
-      uz: "Muzdek shisha, yog‘ayotgan qor va ayozli akslar.",
-      ru: "Ледяное стекло, падающий снег и морозные блики.",
+      en: "Cinematic night, aurora borealis, snowfall and frosted glass.",
+      uz: "Kino uslubidagi tungi osmon, aurora, qor yog‘ishi va muzdek shisha.",
+      ru: "Кинематографичная ночь, северное сияние, снегопад и ледяное стекло.",
     },
     swatch:
-      "radial-gradient(90% 70% at 20% 20%, rgba(56,189,248,.5), transparent 60%), radial-gradient(85% 70% at 80% 18%, rgba(99,102,241,.45), transparent 60%), linear-gradient(150deg,#0a0f24,#101a3d 60%,#0a0f24)",
-    strip: "linear-gradient(135deg,#0ea5e9,#6366f1 55%,#e0f2fe)",
-    scene: "snow",
+      "radial-gradient(70% 45% at 20% -5%, rgba(104,255,210,.45), transparent 60%), radial-gradient(60% 42% at 55% -6%, rgba(93,189,255,.5), transparent 62%), radial-gradient(55% 40% at 85% -4%, rgba(139,125,255,.5), transparent 60%), linear-gradient(175deg,#061220,#0d1f3c 70%,#0a1a33)",
+    strip: "linear-gradient(135deg,#5dbdff,#8b7dff)",
+    scene: "aurora",
   },
   {
     id: "spring",

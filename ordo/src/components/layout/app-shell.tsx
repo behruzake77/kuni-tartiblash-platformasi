@@ -10,6 +10,7 @@ import { CommandPalette } from "@/components/layout/command-palette";
 import { Dialog } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { WinterFx } from "@/components/app/winter-fx";
 import { useDay } from "@/providers/day-provider";
 import { useToast } from "@/components/ui/toast";
 import { useUser } from "@/providers/user-provider";
@@ -134,6 +135,7 @@ export function AppShell({ children, title }: AppShellProps) {
 
   return (
     <div className="min-h-dvh">
+      <WinterFx />
       {celebrating && <div className="ordo-confetti pointer-events-none fixed inset-x-0 bottom-20 z-[var(--z-toast)] mx-auto h-28 w-64" aria-hidden="true">{Array.from({ length: 18 }, (_, index) => <i key={index} style={{ left: `${8 + index * 5}%`, '--x': `${(index % 2 ? 1 : -1) * (20 + (index % 5) * 12)}px`, '--c': ['#7C5CFF','#4FD1FF','#22C55E','#F59E0B'][index % 4], animationDelay: `${index * 18}ms` } as React.CSSProperties} />)}</div>}
       <div className="hidden md:block">
         <AppSidebar
@@ -161,7 +163,7 @@ export function AppShell({ children, title }: AppShellProps) {
       </main>
 
       <nav
-        className="fixed inset-x-0 bottom-0 z-[var(--z-sticky)] flex min-h-[4.25rem] items-end border-t border-border bg-surface-1/95 px-1 pt-1.5 backdrop-blur md:hidden"
+        className="ordo-mobile-nav fixed inset-x-0 bottom-0 z-[var(--z-sticky)] flex min-h-[4.25rem] items-end border-t border-border bg-surface-1/95 px-1 pt-1.5 backdrop-blur md:hidden"
         style={{ paddingBottom: "max(0.5rem, env(safe-area-inset-bottom))" }}
         aria-label="Mobile navigation"
       >

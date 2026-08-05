@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { CheckCircle2, Circle, Flame, Plus } from "lucide-react";
+import { CheckCircle2, Circle, Flame, Plus, Snowflake } from "lucide-react";
 import { useDay } from "@/providers/day-provider";
 import { useToast } from "@/components/ui/toast";
 import { useUser } from "@/providers/user-provider";
@@ -18,7 +18,8 @@ const DAYS = ["M", "T", "W", "T", "F", "S", "S"];
 export default function HabitsPage() {
   const { state, stats, toggleHabit, addHabit } = useDay();
   const { toast } = useToast();
-  const { t } = useUser();
+  const { t, prefs } = useUser();
+  const isWinter = prefs.themePreset === "winter";
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
 
@@ -77,18 +78,25 @@ export default function HabitsPage() {
           </Card>
         )}
         {state.habits.map((h) => (
-          <Card key={h.id}>
+          <Card key={h.id} className="habit-row">
             <CardContent className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
               <button
                 type="button"
                 onClick={() => toggleHabit(h.id)}
-                className="flex min-w-0 items-start gap-3 text-left"
+                className="habit-toggle flex min-w-0 items-start gap-3 text-left"
               >
                 {h.doneToday ? (
-                  <CheckCircle2
-                    className="mt-0.5 size-5 shrink-0 text-success"
-                    aria-hidden="true"
-                  />
+                  isWinter ? (
+                    <Snowflake
+                      className="habit-crystal mt-0.5 size-5 shrink-0"
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <CheckCircle2
+                      className="mt-0.5 size-5 shrink-0 text-success"
+                      aria-hidden="true"
+                    />
+                  )
                 ) : (
                   <Circle
                     className="mt-0.5 size-5 shrink-0 text-text-tertiary"

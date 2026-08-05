@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -35,6 +35,29 @@ export default function FocusPage() {
   const [running, setRunning] = useState(false);
   const sessionStartRemaining = useRef(defaultSec);
   const finishedRef = useRef(false);
+  const isWinter = prefs.themePreset === "winter";
+  const [burstParticles, setBurstParticles] = useState<
+    { id: string; dx: string; dy: string; sz: string; delay: string }[]
+  >([]);
+
+  // Snow explosion whenever the timer reaches zero
+  useEffect(() => {
+    if (!running && remaining === 0 && duration > 0) {
+      setBurstParticles(
+        Array.from({ length: 16 }, (_, i) => {
+          const ang = (Math.PI * 2 * i) / 16 + Math.random() * 0.4;
+          const dist = 46 + Math.random() * 66;
+          return {
+            id: `${Date.now()}-${i}`,
+            dx: `${Math.cos(ang) * dist}px`,
+            dy: `${Math.sin(ang) * dist}px`,
+            sz: `${2.5 + Math.random() * 3}px`,
+            delay: `${(Math.random() * 0.1).toFixed(3)}s`,
+          };
+        })
+      );
+    }
+  }, [running, remaining, duration]);
 
   // Single tick effect — completion handled inside interval (no cascading setState effects)
   useEffect(() => {
@@ -166,18 +189,42 @@ export default function FocusPage() {
                   : t("focus.ready")}
             </Badge>
 
-            <div className="relative mb-3 grid aspect-square w-[min(72vw,19rem)] place-items-center rounded-full p-[3px] shadow-[0_0_45px_rgba(124,92,255,.18)]" style={{ background: `conic-gradient(var(--color-primary) ${progress}%, rgba(255,255,255,.08) 0)` }}>
-              <div className="grid size-full place-items-center rounded-full border border-white/10 bg-[radial-gradient(circle_at_35%_28%,rgba(79,209,255,.13),transparent_38%),rgba(9,9,11,.82)] backdrop-blur">
+            <div
+              className={cn(
+                "ordo-focus-ring relative mb-3 grid aspect-square w-[min(72vw,19rem)] place-items-center rounded-full p-[3px] shadow-[0_0_45px_rgba(124,92,255,.18)]",
+                isWinter && !running && remaining === 0 && "ordo-focus-done"
+              )}
+              style={{ background: `conic-gradient(var(--color-primary) ${progress}%, rgba(255,255,255,.08) 0)` }}
+            >
+              {isWinter && <span className="ordo-ice-rotor" aria-hidden="true" />}
+              <div className="ordo-focus-inner grid size-full place-items-center rounded-full border border-white/10 bg-[radial-gradient(circle_at_35%_28%,rgba(79,209,255,.13),transparent_38%),rgba(9,9,11,.82)] backdrop-blur">
                 <div className="text-center">
                   <div className="font-[family-name:var(--font-mono)] text-[clamp(3.25rem,14vw,4.5rem)] font-medium tracking-tight text-text-primary" aria-live="polite" aria-atomic="true">{formatTime(remaining)}</div>
                   <p className="mt-1 text-sm text-text-tertiary">{running ? t("focus.hintRun") : remaining === 0 ? t("focus.hintDone") : t("focus.hintReady")}</p>
                 </div>
               </div>
+              {isWinter && burstParticles.length > 0 && (
+                <div className="winter-explosion" aria-hidden="true">
+                  {burstParticles.map((p) => (
+                    <i
+                      key={p.id}
+                      style={
+                        {
+                          "--dx": p.dx,
+                          "--dy": p.dy,
+                          "--sz": p.sz,
+                          "--delay": p.delay,
+                        } as CSSProperties
+                      }
+                    />
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="relative mt-8 h-2 w-full max-w-sm overflow-hidden rounded-full bg-surface-3">
               <div
-                className="h-full rounded-full bg-gradient-brand transition-[width] duration-1000 linear"
+                className="ordo-ice-bar h-full rounded-full bg-gradient-brand transition-[width] duration-1000 linear"
                 style={{ width: `${progress}%` }}
               />
             </div>

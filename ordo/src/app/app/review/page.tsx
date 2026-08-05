@@ -18,7 +18,8 @@ import { useUser } from "@/providers/user-provider";
 export default function ReviewPage() {
   const { state, stats, updateReview, closeDay, addTask } = useDay();
   const { toast } = useToast();
-  const { t } = useUser();
+  const { t, prefs } = useUser();
+  const isWinter = prefs.themePreset === "winter";
   const { review } = state;
   const closed = Boolean(review.closedAt);
 
@@ -82,25 +83,38 @@ export default function ReviewPage() {
       </div>
 
       <div className="mx-auto grid max-w-2xl gap-4">
-        <Card>
+        <Card className={isWinter ? "winter-aurora-card" : undefined}>
           <CardHeader>
             <CardTitle className="text-base">{t("review.glance")}</CardTitle>
             <CardDescription>{t("review.live")}</CardDescription>
           </CardHeader>
-          <CardContent className="flex flex-wrap gap-2">
-            <Badge variant="success">
-              {stats.tasksDone}/{stats.tasksTotal} {t("review.tasks")}
-            </Badge>
-            <Badge variant="primary">
-              {stats.focusLabel} {t("review.focus")}
-            </Badge>
-            <Badge variant="secondary">
-              {stats.habitsDone}/{stats.habitsTotal} {t("review.habits")}
-            </Badge>
-            <Badge variant="outline">
-              {stats.prioritiesTotal - stats.prioritiesDone}{" "}
-              {t("review.prioritiesOpen")}
-            </Badge>
+          <CardContent className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="success">
+                {stats.tasksDone}/{stats.tasksTotal} {t("review.tasks")}
+              </Badge>
+              <Badge variant="primary">
+                {stats.focusLabel} {t("review.focus")}
+              </Badge>
+              <Badge variant="secondary">
+                {stats.habitsDone}/{stats.habitsTotal} {t("review.habits")}
+              </Badge>
+              <Badge variant="outline">
+                {stats.prioritiesTotal - stats.prioritiesDone}{" "}
+                {t("review.prioritiesOpen")}
+              </Badge>
+            </div>
+            {isWinter && (
+              <div className="snow-globe" aria-hidden="true">
+                <div className="sg-tree">
+                  <span className="sg-tree-star" />
+                  <span className="sg-tree-tier" />
+                  <span className="sg-tree-tier" />
+                  <span className="sg-tree-trunk" />
+                </div>
+                <div className="sg-base" />
+              </div>
+            )}
           </CardContent>
         </Card>
 

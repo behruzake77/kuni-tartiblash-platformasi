@@ -29,7 +29,7 @@ export function AppHeader({
   return (
     <header
       className={cn(
-        "fixed top-0 right-0 z-[var(--z-sticky)] flex h-14 items-center justify-between gap-4 border-b border-border bg-bg/80 px-4 backdrop-blur-[var(--blur-md)] md:px-6",
+        "ordo-header fixed top-0 right-0 z-[var(--z-sticky)] flex h-14 items-center justify-between gap-4 border-b border-border bg-bg/80 px-4 backdrop-blur-[var(--blur-md)] md:px-6",
         "transition-[left] duration-[var(--duration-base)] ease-[var(--ease-soft)]",
         sidebarCollapsed ? "left-0 md:left-14" : "left-0 md:left-60"
       )}

@@ -225,6 +225,23 @@ h3,
   background: var(--card-bg-hover, var(--card-bg, var(--color-surface-2)));
 }
 
+/* Stat card circular icon chip (all themes) + wave (winter only) */
+.ordo-stat-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 25%, transparent);
+}
+.ordo-stat-wave {
+  display: none;
+}
+
+
 
 /* Subtle noise overlay for hero depth */
 .noise-overlay::before {
