@@ -356,7 +356,7 @@ const uz: Dict = {
   "today.mustFinish": "bugun tugatish kerak",
   "today.loggedToday": "bugun yozildi",
   "today.checkedIn": "belgilandi",
-  "today.topPriorities": "Asosiy prioritetlar",
+  "today.topPriorities": "Bugungi muhim ishlar",
   "today.max3": "3 tagacha",
   "today.rest": "Qolgan ishlar",
   "today.open": "ochiq",

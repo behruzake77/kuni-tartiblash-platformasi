@@ -8,6 +8,7 @@ import {
   Clock,
   Focus,
   MoreHorizontal,
+  Pencil,
   Plus,
   Sparkles,
   Star,
@@ -59,6 +60,7 @@ export default function TodayPage() {
     toggleTask,
     removeTask,
     setTaskPriority,
+    updateTaskTitle,
     toggleHabit,
   } = useDay();
   const { toast } = useToast();
@@ -202,6 +204,10 @@ export default function TodayPage() {
                       toast({ title: t("task.removed"), kind: "default" });
                     }}
                     onStar={() => setTaskPriority(task.id, false)}
+                    onEdit={() => {
+                      const next = window.prompt("Vazifa nomini tahrirlang", task.title);
+                      if (next) updateTaskTitle(task.id, next);
+                    }}
                   />
                 ))
               )}
@@ -225,9 +231,13 @@ export default function TodayPage() {
                     removeTask(task.id);
                     toast({ title: t("task.removed"), kind: "default" });
                   }}
-                  onStar={() => {
-                    setTaskPriority(task.id, true);
-                    toast({
+                    onEdit={() => {
+                      const next = window.prompt("Vazifa nomini tahrirlang", task.title);
+                      if (next) updateTaskTitle(task.id, next);
+                    }}
+                    onStar={() => {
+                      setTaskPriority(task.id, true);
+                      toast({
                       title: t("task.promoted"),
                       description: task.title,
                       kind: "success",
@@ -355,12 +365,14 @@ function TaskRow({
   onToggle,
   onRemove,
   onStar,
+  onEdit,
 }: {
   task: Task;
   index?: number;
   onToggle: () => void;
   onRemove: () => void;
   onStar: () => void;
+  onEdit: () => void;
 }) {
   return (
     <div className="group flex items-start gap-1 rounded-[var(--radius-sm)] hover:bg-surface-3/60">
@@ -392,6 +404,14 @@ function TaskRow({
         </div>
       </button>
       <div className="flex items-center gap-0.5 pr-1 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100 sm:focus-within:opacity-100">
+        <button
+          type="button"
+          onClick={onEdit}
+          className="inline-flex size-10 items-center justify-center rounded-[var(--radius-sm)] text-text-tertiary hover:bg-surface-2 hover:text-primary"
+          aria-label="Tahrirlash"
+        >
+          <Pencil className="size-3.5" />
+        </button>
         <button
           type="button"
           onClick={onStar}

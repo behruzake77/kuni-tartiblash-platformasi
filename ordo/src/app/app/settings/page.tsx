@@ -529,7 +529,10 @@ export default function SettingsPage() {
               </label>
               <Input
                 id="day-start"
-                type="time"
+                type="text"
+                inputMode="numeric"
+                pattern="^([01]\d|2[0-3]):[0-5]\d$"
+                placeholder="08:00"
                 value={dayStart}
                 onChange={(e) => setDayStart(e.target.value)}
               />

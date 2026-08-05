@@ -197,7 +197,7 @@ export function AppShell({ children, title }: AppShellProps) {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div><label htmlFor="task-tag" className="mb-1.5 block text-sm font-medium text-text-primary">Kategoriya</label><select id="task-tag" value={taskTag} onChange={(e) => setTaskTag(e.target.value)} className="h-10 w-full rounded-[var(--radius-sm)] border border-border bg-surface-3 px-3 text-sm text-text-primary"><option>Shaxsiy</option><option>Ish</option><option>O‘qish</option><option>Sog‘liq</option><option>Boshqa</option></select></div>
-            <div><label htmlFor="task-time" className="mb-1.5 block text-sm font-medium text-text-primary">Vaqt (ixtiyoriy)</label><Input id="task-time" type="time" value={taskTime} onChange={(e) => setTaskTime(e.target.value)} /></div>
+            <div><label htmlFor="task-time" className="mb-1.5 block text-sm font-medium text-text-primary">Vaqt (ixtiyoriy)</label><Input id="task-time" type="text" inputMode="numeric" pattern="^([01]\d|2[0-3]):[0-5]\d$" value={taskTime} onChange={(e) => setTaskTime(e.target.value)} placeholder="14:30" /></div>
           </div>
           <label className="flex items-center gap-2 text-sm text-text-secondary">
             <input

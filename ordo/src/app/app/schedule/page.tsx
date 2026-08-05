@@ -175,7 +175,10 @@ export default function SchedulePage() {
               </label>
               <Input
                 id="time"
-                type="time"
+                type="text"
+                inputMode="numeric"
+                pattern="^([01]\d|2[0-3]):[0-5]\d$"
+                placeholder="14:30"
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
                 required
