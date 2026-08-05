@@ -21,6 +21,14 @@ const kindVariant = {
   break: "outline",
 } as const;
 
+const kindLabel = {
+  focus: "Fokus",
+  meet: "Uchrashuv",
+  admin: "Boshqa ish",
+  review: "Kun yakuni",
+  break: "Tanaffus",
+} as const;
+
 export default function SchedulePage() {
   const { t } = useUser();
   const { state, addBlock, removeBlock, reorderSchedule } = useDay();
@@ -135,7 +143,7 @@ export default function SchedulePage() {
                     </p>
                   )}
                 </div>
-                <Badge variant={kindVariant[event.kind]}>{event.kind}</Badge>
+                <Badge variant={kindVariant[event.kind]}>{kindLabel[event.kind]}</Badge>
                 <button
                   type="button"
                   onClick={() => {
@@ -183,11 +191,11 @@ export default function SchedulePage() {
                 onChange={(e) => setKind(e.target.value as typeof kind)}
                 className="flex h-10 w-full rounded-[var(--radius-sm)] border border-border bg-surface-3 px-3 text-sm text-text-primary outline-none focus-visible:border-primary focus-visible:ring-[3px] focus-visible:ring-primary/15"
               >
-                <option value="focus">Focus</option>
-                <option value="meet">Meet</option>
-                <option value="admin">Admin</option>
-                <option value="break">Break</option>
-                <option value="review">Review</option>
+                <option value="focus">Fokus</option>
+                <option value="meet">Uchrashuv</option>
+                <option value="admin">Boshqa ish</option>
+                <option value="break">Tanaffus</option>
+                <option value="review">Kun yakuni</option>
               </select>
             </div>
           </div>

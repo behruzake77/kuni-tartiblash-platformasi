@@ -73,7 +73,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="uz"
       className={GeistSans.variable}
       suppressHydrationWarning
     >

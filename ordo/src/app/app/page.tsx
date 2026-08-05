@@ -30,6 +30,14 @@ function greetingKey() {
   return "greet.evening";
 }
 
+const scheduleKindLabel: Record<string, string> = {
+  focus: "Fokus",
+  meet: "Uchrashuv",
+  admin: "Boshqa ish",
+  review: "Kun yakuni",
+  break: "Tanaffus",
+};
+
 function formatToday(locale: string) {
   const loc = locale === "uz" ? "uz-UZ" : locale === "ru" ? "ru-RU" : "en-US";
   return new Intl.DateTimeFormat(loc, {
@@ -271,7 +279,7 @@ export default function TodayPage() {
                       }
                       className="mt-1"
                     >
-                      {b.kind}
+                      {scheduleKindLabel[b.kind] || b.kind}
                     </Badge>
                   </div>
                 </div>

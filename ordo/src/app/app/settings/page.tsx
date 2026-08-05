@@ -218,7 +218,7 @@ export default function SettingsPage() {
         if (data.user?.email) updateUser(data.user);
         toast({ title: t("settings.imported"), kind: "success" });
       } catch {
-        toast({ title: "Import failed", kind: "default" });
+        toast({ title: "Import amalga oshmadi", kind: "default" });
       }
     };
     reader.readAsText(file);

@@ -78,7 +78,7 @@ export function DayProvider({ children }: { children: ReactNode }) {
         const task = {
           id: newId("t"),
           title,
-          tag: "Priority",
+          tag: "Muhim",
           done: false,
           priority: true,
           createdAt: new Date().toISOString(),

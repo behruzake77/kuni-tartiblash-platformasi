@@ -31,7 +31,7 @@ export default function ReviewPage() {
           task.priority
       );
       if (!exists) {
-        addTask(review.tomorrow.trim(), { priority: true, tag: "Tomorrow" });
+        addTask(review.tomorrow.trim(), { priority: true, tag: "Ertangi reja" });
       }
     }
     toast({

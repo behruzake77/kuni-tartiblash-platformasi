@@ -951,8 +951,6 @@ export function detectLocale(): Locale {
   } catch {
     /* ignore */
   }
-  const nav = (typeof navigator !== "undefined" && navigator.language) || "en";
-  if (nav.toLowerCase().startsWith("uz")) return "uz";
-  if (nav.toLowerCase().startsWith("ru")) return "ru";
-  return "en";
+  // Ordo's primary audience is Uzbek; users can still choose EN/RU in Settings.
+  return "uz";
 }
