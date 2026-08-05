@@ -33,7 +33,7 @@ export type OrdoPrefs = {
   /** Auto-push after local changes (debounced by sync provider) */
   autoSync: boolean;
   /** Visual preset selected by the user. */
-  themePreset: "default" | "ocean" | "forest" | "sunset" | "winter" | "spring" | "comic";
+  themePreset: "default" | "ocean" | "forest" | "sunset" | "winter" | "spring" | "comic" | "space" | "travel" | "pixel";
 };
 
 const defaultPrefs: OrdoPrefs = {
