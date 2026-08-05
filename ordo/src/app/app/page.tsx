@@ -40,12 +40,14 @@ const scheduleKindLabel: Record<string, string> = {
 };
 
 function formatToday(locale: string) {
-  const loc = locale === "uz" ? "uz-UZ" : locale === "ru" ? "ru-RU" : "en-US";
-  return new Intl.DateTimeFormat(loc, {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-  }).format(new Date());
+  const date = new Date();
+  if (locale === "uz") {
+    const weekdays = ["yakshanba", "dushanba", "seshanba", "chorshanba", "payshanba", "juma", "shanba"];
+    const months = ["yanvar", "fevral", "mart", "aprel", "may", "iyun", "iyul", "avgust", "sentabr", "oktabr", "noyabr", "dekabr"];
+    return `${weekdays[date.getDay()]}, ${date.getDate()}-${months[date.getMonth()]}`;
+  }
+  const loc = locale === "ru" ? "ru-RU" : "en-US";
+  return new Intl.DateTimeFormat(loc, { weekday: "long", month: "long", day: "numeric" }).format(date);
 }
 
 export default function TodayPage() {
