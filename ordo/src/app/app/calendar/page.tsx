@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { TimeInput } from "@/components/ui/time-input";
 import { useToast } from "@/components/ui/toast";
 import { supabase } from "@/lib/auth/supabase";
 import { addPlannedTask, removePlannedTask, updatePlannedTask } from "@/lib/planned-tasks";
@@ -114,10 +115,35 @@ export default function CalendarPage() {
     <Card><CardHeader className="flex-row items-center justify-between space-y-0"><CardTitle className="text-base">{selected === today ? "Bugun" : selected}</CardTitle><Button variant="ghost" size="icon-sm" onClick={() => setAddOpen(true)} aria-label="Vazifa qo‘shish"><Plus className="size-4" /></Button></CardHeader><CardContent className="space-y-4">{selectedDay ? <><div className="grid grid-cols-3 gap-2"><div className="rounded-xl bg-surface-2 p-2 text-center"><ListTodo className="mx-auto size-4 text-primary" /><b className="mt-1 block text-sm">{done}/{total}</b><span className="text-[10px] text-text-tertiary">vazifa</span></div><div className="rounded-xl bg-surface-2 p-2 text-center"><CheckCircle2 className="mx-auto size-4 text-success" /><b className="mt-1 block text-sm">{habitsDone}/{selectedDay.habits.length}</b><span className="text-[10px] text-text-tertiary">odat</span></div><div className="rounded-xl bg-surface-2 p-2 text-center"><Clock3 className="mx-auto size-4 text-accent" /><b className="mt-1 block text-sm">{Math.round(selectedDay.focusSecondsToday / 60)}m</b><span className="text-[10px] text-text-tertiary">fokus</span></div></div><div className="space-y-1">{selectedDay.tasks.slice(0, 6).map((task) => <div key={task.id} className="group flex items-center gap-2 rounded-lg px-1 py-1.5 text-sm hover:bg-surface-2"><button type="button" className="shrink-0 text-text-tertiary" onClick={() => void mutateTask(task.id, "toggle", !task.done)} aria-label="Bajarildi deb belgilash">{task.done ? <CheckCircle2 className="size-4 text-success" /> : <Circle className="size-4" />}</button><span className="min-w-0 flex-1"><span className={`block truncate ${task.done ? "text-text-tertiary line-through" : "text-text-primary"}`}>{task.title}</span><small className="block text-[10px] text-text-tertiary">{task.time ? `${task.time} · ` : ""}{task.tag}</small></span><button type="button" className="grid size-8 place-items-center rounded-md text-text-tertiary hover:bg-surface-3 hover:text-primary" onClick={() => { const next = window.prompt("Vazifa nomini tahrirlang", task.title); if (next?.trim()) void mutateTask(task.id, "edit", next.trim()); }} aria-label="Tahrirlash"><Pencil className="size-3.5" /></button><button type="button" className="grid size-8 place-items-center rounded-md text-text-tertiary hover:bg-surface-3 hover:text-warning" onClick={() => void mutateTask(task.id, "priority", !task.priority)} aria-label="Muhim qilish"><Star className={`size-3.5 ${task.priority ? "fill-warning text-warning" : ""}`} /></button><button type="button" className="grid size-8 place-items-center rounded-md text-text-tertiary hover:bg-surface-3 hover:text-danger" onClick={() => void mutateTask(task.id, "remove")} aria-label="O‘chirish"><Trash2 className="size-3.5" /></button></div>)}</div>{selectedDay.review?.closedAt && <Badge variant="success">Kun yakunlangan</Badge>}</> : <p className="py-8 text-center text-sm text-text-tertiary">Bu kunga hali reja yoki tarix yo‘q.</p>}</CardContent></Card></div>
     <Dialog open={addOpen} onOpenChange={setAddOpen} title="Rejaga vazifa qo‘shish" description={`${selected} kuni uchun yangi vazifa yarating.`}>
       <form onSubmit={addForSelectedDay} className="space-y-4">
+        <div className="rounded-[var(--radius-sm)] border border-border bg-surface-2 p-2.5">
+          <p className="mb-1.5 text-xs font-medium text-text-secondary">Shablondan tanlash:</p>
+          <div className="flex flex-wrap gap-1.5">
+            {[
+              { title: "Mijoz bilan uchrashuv", time: "11:00", category: "Ish" },
+              { title: "Jamoa yig‘ilishi", time: "10:00", category: "Ish" },
+              { title: "Kunlik reja tuzish", time: "09:00", category: "Shaxsiy" },
+              { title: "Chuqur fokus bloki", time: "14:00", category: "Ish" },
+            ].map((p) => (
+              <button
+                key={p.title}
+                type="button"
+                onClick={() => {
+                  setTitle(p.title);
+                  setTime(p.time);
+                  setCategory(p.category);
+                }}
+                className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface-3 px-2.5 py-1 text-xs font-medium text-text-primary transition-colors hover:border-primary hover:bg-primary-subtle/40"
+              >
+                <span className="font-[family-name:var(--font-mono)] text-text-tertiary">{p.time}</span>
+                <span>{p.title}</span>
+              </button>
+            ))}
+          </div>
+        </div>
         <Input value={title} onChange={(event) => setTitle(event.target.value)} placeholder="Masalan: Mijoz bilan uchrashuvga tayyorlanish" autoFocus />
         <div className="grid grid-cols-2 gap-3">
           <div><label className="mb-1.5 block text-sm font-medium text-text-primary" htmlFor="calendar-category">Kategoriya</label><select id="calendar-category" value={category} onChange={(event) => setCategory(event.target.value)} className="h-10 w-full rounded-[var(--radius-sm)] border border-border bg-surface-3 px-3 text-sm text-text-primary"><option>Shaxsiy</option><option>Ish</option><option>O‘qish</option><option>Sog‘liq</option><option>Boshqa</option></select></div>
-          <div><label className="mb-1.5 block text-sm font-medium text-text-primary" htmlFor="calendar-time">Vaqt</label><Input id="calendar-time" type="text" inputMode="numeric" pattern="^([01]\d|2[0-3]):[0-5]\d$" value={time} onChange={(event) => setTime(event.target.value)} placeholder="14:30" /></div>
+          <div><label className="mb-1.5 block text-sm font-medium text-text-primary" htmlFor="calendar-time">Vaqt</label><TimeInput id="calendar-time" value={time} onChange={(val) => setTime(val)} presets={["09:00", "10:00", "11:00", "14:00", "15:00", "16:00", "18:00"]} placeholder="14:30" /></div>
         </div>
         <label className="flex min-h-11 items-center gap-2 text-sm text-text-secondary"><input type="checkbox" checked={priority} onChange={(event) => setPriority(event.target.checked)} className="size-4 accent-[var(--color-primary)]" />Bu kunning muhim vazifasi</label>
         <div className="grid grid-cols-2 gap-2"><Button type="button" variant="ghost" onClick={() => setAddOpen(false)}>Bekor qilish</Button><Button type="submit" variant="gradient" loading={saving}>Vazifa qo‘shish</Button></div>

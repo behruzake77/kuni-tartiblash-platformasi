@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { TimeInput } from "@/components/ui/time-input";
 import { LOCALES, type Locale } from "@/lib/i18n";
 import { createDefaultDay, formatFocus, todayKey } from "@/lib/day-defaults";
 import { saveDayState } from "@/lib/storage";
@@ -618,14 +619,12 @@ export default function SettingsPage() {
               <label className="text-sm font-medium" htmlFor="day-start">
                 {t("settings.dayStart")}
               </label>
-              <Input
+              <TimeInput
                 id="day-start"
-                type="text"
-                inputMode="numeric"
-                pattern="^([01]\d|2[0-3]):[0-5]\d$"
-                placeholder="08:00"
                 value={dayStart}
-                onChange={(e) => setDayStart(e.target.value)}
+                onChange={(val) => setDayStart(val)}
+                presets={["06:00", "07:00", "08:00", "09:00", "10:00"]}
+                placeholder="08:00"
               />
             </div>
             <div className="flex flex-col gap-1.5">
