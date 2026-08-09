@@ -46,6 +46,7 @@ export function AppShell({ children, title }: AppShellProps) {
 
   useReminders({
     schedule: state.schedule,
+    tasks: state.tasks,
     prefs,
     enabled: true,
     labels: {
