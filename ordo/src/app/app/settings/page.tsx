@@ -88,19 +88,26 @@ export default function SettingsPage() {
   }
 
   async function uploadAvatar(file: File) {
-    if (!supabase || !user) return;
+    if (!user) return;
     if (!file.type.startsWith("image/") || file.size > 2 * 1024 * 1024) {
       toast({ title: "Avatar yuklanmadi", description: "PNG, JPG yoki WebP va maksimal 2 MB tanlang.", kind: "default" });
       return;
     }
-    const ext = file.name.split(".").pop() || "png";
-    const path = `${user.id}/avatar.${ext}`;
-    const { error } = await supabase.storage.from("avatars").upload(path, file, { upsert: true, cacheControl: "3600" });
-    if (error) { toast({ title: "Avatar yuklanmadi", description: error.message, kind: "default" }); return; }
-    const { data } = supabase.storage.from("avatars").getPublicUrl(path);
-    await supabase.auth.updateUser({ data: { avatar_url: data.publicUrl } });
-    updateUser({ avatarUrl: data.publicUrl });
-    toast({ title: "Avatar yangilandi", kind: "success" });
+
+    try {
+      // Read file as base64 data URL — works locally without any cloud storage
+      const dataUrl = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = () => reject(new Error("Faylni o'qib bo'lmadi"));
+        reader.readAsDataURL(file);
+      });
+
+      updateUser({ avatarUrl: dataUrl });
+      toast({ title: "Avatar yangilandi", kind: "success" });
+    } catch (err) {
+      toast({ title: "Avatar yuklanmadi", description: String(err), kind: "default" });
+    }
   }
 
   function saveDefaults() {
