@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { CheckSquare, Focus, Moon, Plus, Sun, Zap } from "lucide-react";
+import { CheckSquare, Clock, Focus, Moon, Plus, Sun, Zap } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { AppHeader } from "@/components/layout/app-header";
@@ -10,6 +10,7 @@ import { CommandPalette } from "@/components/layout/command-palette";
 import { Dialog } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { TimePicker } from "@/components/ui/time-picker";
 import { WinterFx } from "@/components/app/winter-fx";
 import { useDay } from "@/providers/day-provider";
 import { useToast } from "@/components/ui/toast";
@@ -36,6 +37,7 @@ export function AppShell({ children, title }: AppShellProps) {
   const [targetDate, setTargetDate] = useState("");
   const [taskTag, setTaskTag] = useState("Shaxsiy");
   const [taskTime, setTaskTime] = useState("");
+  const [showTaskTime, setShowTaskTime] = useState(false);
   const [asPriority, setAsPriority] = useState(false);
   const { addTask, toggleTask, stats, state } = useDay();
   const { toast } = useToast();
@@ -210,8 +212,15 @@ export function AppShell({ children, title }: AppShellProps) {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div><label htmlFor="task-tag" className="mb-1.5 block text-sm font-medium text-text-primary">Kategoriya</label><select id="task-tag" value={taskTag} onChange={(e) => setTaskTag(e.target.value)} className="h-10 w-full rounded-[var(--radius-sm)] border border-border bg-surface-3 px-3 text-sm text-text-primary"><option>Shaxsiy</option><option>Ish</option><option>O‘qish</option><option>Sog‘liq</option><option>Boshqa</option></select></div>
-            <div><label htmlFor="task-time" className="mb-1.5 block text-sm font-medium text-text-primary">Vaqt (ixtiyoriy)</label><Input id="task-time" type="text" inputMode="numeric" pattern="^([01]\d|2[0-3]):[0-5]\d$" value={taskTime} onChange={(e) => setTaskTime(e.target.value)} placeholder="14:30" /></div>
+            <div className="flex items-end">
+              <button type="button" onClick={() => setShowTaskTime(!showTaskTime)} className={cn("inline-flex items-center gap-1.5 rounded-[var(--radius-full)] px-3 py-2.5 text-xs font-medium transition-all", showTaskTime || taskTime ? "bg-primary/15 text-primary border border-primary/30" : "bg-surface-3 text-text-tertiary border border-transparent hover:text-text-secondary")}>
+                <Clock className="size-3" />{taskTime || "Vaqt belgilash"}
+              </button>
+            </div>
           </div>
+          {(showTaskTime || taskTime) && (
+            <TimePicker value={taskTime || "12:00"} onChange={setTaskTime} />
+          )}
           <label className="flex items-center gap-2 text-sm text-text-secondary">
             <input
               type="checkbox"

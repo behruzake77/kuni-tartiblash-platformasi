@@ -1,6 +1,6 @@
 /* Ordo service worker — offline shell cache.
- * Navigation is network-first so deploys never leave users on an old app shell. */
-const CACHE = "ordo-shell-v20260805";
+ * Navigation & JS chunks are network-first so deploys never leave users on old code. */
+const CACHE = "ordo-shell-v20260810";
 const ASSETS = ["/", "/manifest.webmanifest", "/icons/icon-192.png", "/icons/icon-512.png"];
 
 self.addEventListener("install", (event) => {
@@ -15,9 +15,12 @@ self.addEventListener("fetch", (event) => {
   const req = event.request;
   if (req.method !== "GET") return;
   const sameOrigin = req.url.startsWith(self.location.origin);
-  // HTML/app routes must always ask the server first so fresh translations and UI deploy immediately.
-  if (req.mode === "navigate") {
-    event.respondWith(fetch(req).then((res) => res).catch(() => caches.match(req).then((cached) => cached || caches.match("/"))));
+  // HTML and JS/CSS routes always ask the server first so deploys are instant.
+  if (req.mode === "navigate" || req.destination === "script" || req.destination === "style") {
+    event.respondWith(fetch(req).then((res) => {
+      if (sameOrigin && res.ok) caches.open(CACHE).then((cache) => cache.put(req, res.clone()));
+      return res;
+    }).catch(() => caches.match(req).then((cached) => cached || caches.match("/"))));
     return;
   }
   event.respondWith(caches.match(req).then((cached) => cached || fetch(req).then((res) => {

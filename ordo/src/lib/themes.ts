@@ -17,7 +17,15 @@ export type ThemeId =
   | "comic"
   | "space"
   | "travel"
-  | "pixel";
+  | "pixel"
+  | "live-nebula"
+  | "live-aurora"
+  | "live-ocean"
+  | "live-cyber"
+  | "live-birds"
+  | "live-globe"
+  | "live-clouds"
+  | "live-rings";
 
 export type ThemeMeta = {
   id: ThemeId;
@@ -161,6 +169,110 @@ export const THEMES: ThemeMeta[] = [
       "linear-gradient(rgba(163,230,53,.18) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,.18) 1px, transparent 1px), linear-gradient(155deg,#0d0918,#16102b 60%,#0d0918)",
     strip: "linear-gradient(135deg,#a3e635,#8b5cf6 55%,#facc15)",
     scene: "grid",
+  },
+  {
+    id: "live-nebula",
+    label: { en: "Live Nebula", uz: "Jonli Nebula", ru: "Живая туманность" },
+    description: {
+      en: "Real-time 3D nebula — deep space colors, animated particles, mouse-reactive.",
+      uz: "Real vaqtda 3D nebula — chuqur kosmos ranglari, animatsiyalangan zarrachalar.",
+      ru: "Реалтайм 3D туманность — глубокий космос, анимированные частицы.",
+    },
+    swatch:
+      "radial-gradient(90% 70% at 20% 25%, rgba(147,51,234,.55), transparent 62%), radial-gradient(85% 70% at 82% 18%, rgba(79,70,229,.5), transparent 60%), radial-gradient(60% 50% at 60% 80%, rgba(103,232,249,.25), transparent 65%), linear-gradient(155deg,#0a0618,#150b2e 60%,#0a0618)",
+    strip: "linear-gradient(135deg,#7e22ce,#4f46e5 55%,#67e8f9)",
+    scene: "live",
+  },
+  {
+    id: "live-aurora",
+    label: { en: "Live Aurora", uz: "Jonli Aurora", ru: "Живое сияние" },
+    description: {
+      en: "Real-time 3D aurora borealis over snowy mountains — cinematic, parallax.",
+      uz: "Real vaqtda 3D aurora — qorli tog'lar ustida kino effekti.",
+      ru: "Реалтайм 3D северное сияние над заснеженными горами.",
+    },
+    swatch:
+      "radial-gradient(70% 45% at 20% -5%, rgba(104,255,210,.45), transparent 60%), radial-gradient(60% 42% at 55% -6%, rgba(93,189,255,.5), transparent 62%), radial-gradient(55% 40% at 85% -4%, rgba(139,125,255,.5), transparent 60%), linear-gradient(175deg,#061220,#0d1f3c 70%,#0a1a33)",
+    strip: "linear-gradient(135deg,#5dbdff,#8b7dff)",
+    scene: "live",
+  },
+  {
+    id: "live-ocean",
+    label: { en: "Live Ocean", uz: "Jonli Okean", ru: "Живой океан" },
+    description: {
+      en: "Real-time 3D moonlit ocean — waves, reflections, night sky.",
+      uz: "Real vaqtda 3D okean — to'lqinlar, aks ettirish, tungi osmon.",
+      ru: "Реалтайм 3D лунный океан — волны, отражения, ночное небо.",
+    },
+    swatch:
+      "radial-gradient(95% 75% at 20% 25%, rgba(34,211,238,.5), transparent 62%), radial-gradient(85% 70% at 85% 20%, rgba(37,99,235,.5), transparent 60%), linear-gradient(155deg,#04121d,#06283d 60%,#04121d)",
+    strip: "linear-gradient(135deg,#0891b2,#2563eb 55%,#22d3ee)",
+    scene: "live",
+  },
+  {
+    id: "live-cyber",
+    label: { en: "Live Cyberpunk", uz: "Jonli Cyberpunk", ru: "Живой киберпанк" },
+    description: {
+      en: "Real-time 3D cyberpunk city — neon beams, grid, particles, skyline.",
+      uz: "Real vaqtda 3D cyberpunk shahar — neon nurlar, panjara, zarrachalar.",
+      ru: "Реалтайм 3D киберпанк-город — неоновые лучи, сетка, частицы.",
+    },
+    swatch:
+      "radial-gradient(90% 70% at 20% 25%, rgba(236,72,153,.5), transparent 62%), radial-gradient(80% 65% at 80% 18%, rgba(59,130,246,.5), transparent 60%), linear-gradient(155deg,#0a0015,#1a0030 60%,#0a0015)",
+    strip: "linear-gradient(135deg,#ec4899,#3b82f6 55%,#06b6d4)",
+    scene: "live",
+  },
+  {
+    id: "live-birds",
+    label: { en: "Live Birds", uz: "Jonli Qushlar", ru: "Живые птицы" },
+    description: {
+      en: "3D animated birds flocking through space — organic, soothing.",
+      uz: "3D animatsiyalangan qushlar — kosmosda parvoz, tinchlantiruvchi.",
+      ru: "3D анимированные птицы — стая в космосе, успокаивающий.",
+    },
+    swatch:
+      "radial-gradient(90% 70% at 20% 25%, rgba(93,189,255,.5), transparent 62%), radial-gradient(85% 70% at 80% 18%, rgba(139,125,255,.5), transparent 60%), linear-gradient(155deg,#061220,#0d1f3c 60%,#061220)",
+    strip: "linear-gradient(135deg,#5dbdff,#8b7dff 55%,#68ffd2)",
+    scene: "live",
+  },
+  {
+    id: "live-globe",
+    label: { en: "Live Globe", uz: "Jonli Globus", ru: "Живой глобус" },
+    description: {
+      en: "3D wireframe globe — orbiting connections, futuristic.",
+      uz: "3D simli globus — orbitada ulanishlar, futuristik.",
+      ru: "3D каркасный глобус — орбитальные связи, футуристичный.",
+    },
+    swatch:
+      "radial-gradient(95% 75% at 20% 25%, rgba(93,189,255,.55), transparent 62%), radial-gradient(85% 70% at 82% 18%, rgba(139,125,255,.5), transparent 60%), linear-gradient(155deg,#061220,#0d1f3c 60%,#061220)",
+    strip: "linear-gradient(135deg,#5dbdff,#8b7dff)",
+    scene: "live",
+  },
+  {
+    id: "live-clouds",
+    label: { en: "Live Clouds", uz: "Jonli Bulutlar", ru: "Живые облака" },
+    description: {
+      en: "3D volumetric clouds — dreamy sky, soft light.",
+      uz: "3D hajmli bulutlar — tush osmoni, yumshoq nur.",
+      ru: "3D объёмные облака — мечтательное небо, мягкий свет.",
+    },
+    swatch:
+      "radial-gradient(90% 70% at 20% 25%, rgba(30,144,224,.5), transparent 62%), radial-gradient(80% 65% at 80% 18%, rgba(104,255,210,.35), transparent 60%), linear-gradient(155deg,#061220,#0a2233 60%,#061220)",
+    strip: "linear-gradient(135deg,#1e90e0,#68ffd2 55%,#8b7dff)",
+    scene: "live",
+  },
+  {
+    id: "live-rings",
+    label: { en: "Live Rings", uz: "Jonli Halqalar", ru: "Живые кольца" },
+    description: {
+      en: "3D expanding rings — hypnotic, minimal, modern.",
+      uz: "3D kengayuvchi halqalar — gipnotik, minimal, zamonaviy.",
+      ru: "3D расширяющиеся кольца — гипнотические, минималистичные.",
+    },
+    swatch:
+      "radial-gradient(90% 70% at 50% 50%, rgba(93,189,255,.45), transparent 62%), radial-gradient(85% 70% at 50% 50%, rgba(139,125,255,.3), transparent 60%), linear-gradient(155deg,#061220,#0d1f3c 60%,#061220)",
+    strip: "linear-gradient(135deg,#5dbdff,#8b7dff 55%,#68ffd2)",
+    scene: "live",
   },
 ];
 
