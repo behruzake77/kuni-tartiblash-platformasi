@@ -1912,3 +1912,12 @@ html[data-ordo-theme^="live-"] .ordo-mobile-nav {
 @media (prefers-reduced-motion: reduce) {
   .ordo-live-wallpaper { display: none !important; }
 }
+
+/* Live wallpaper: make body/html transparent so WebGL canvas shows through */
+html[data-ordo-theme^="live-"],
+html[data-ordo-theme^="live-"] body {
+  background-color: transparent !important;
+}
+html[data-ordo-theme^="live-"] .min-h-dvh {
+  background-color: transparent !important;
+}
