@@ -5,6 +5,7 @@ import "@fontsource/jetbrains-mono";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { UserProvider } from "@/providers/user-provider";
 import { getSiteUrl } from "@/lib/site";
+import { LiveWallpaperBridge } from "@/components/app/live-wallpaper-bridge";
 import "./globals.css";
 
 const siteUrl = getSiteUrl();
@@ -88,6 +89,7 @@ export default function RootLayout({
         />
         <ThemeProvider>
           <UserProvider>
+            <LiveWallpaperBridge />
             <a
               href="#main"
               className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[9999] focus:rounded-[var(--radius-sm)] focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-white"
