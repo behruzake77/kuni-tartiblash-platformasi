@@ -21,7 +21,11 @@ export type ThemeId =
   | "live-nebula"
   | "live-aurora"
   | "live-ocean"
-  | "live-cyber";
+  | "live-cyber"
+  | "live-birds"
+  | "live-globe"
+  | "live-clouds"
+  | "live-rings";
 
 export type ThemeMeta = {
   id: ThemeId;
@@ -216,6 +220,58 @@ export const THEMES: ThemeMeta[] = [
     swatch:
       "radial-gradient(90% 70% at 20% 25%, rgba(236,72,153,.5), transparent 62%), radial-gradient(80% 65% at 80% 18%, rgba(59,130,246,.5), transparent 60%), linear-gradient(155deg,#0a0015,#1a0030 60%,#0a0015)",
     strip: "linear-gradient(135deg,#ec4899,#3b82f6 55%,#06b6d4)",
+    scene: "live",
+  },
+  {
+    id: "live-birds",
+    label: { en: "Live Birds", uz: "Jonli Qushlar", ru: "Живые птицы" },
+    description: {
+      en: "3D animated birds flocking through space — organic, soothing.",
+      uz: "3D animatsiyalangan qushlar — kosmosda parvoz, tinchlantiruvchi.",
+      ru: "3D анимированные птицы — стая в космосе, успокаивающий.",
+    },
+    swatch:
+      "radial-gradient(90% 70% at 20% 25%, rgba(93,189,255,.5), transparent 62%), radial-gradient(85% 70% at 80% 18%, rgba(139,125,255,.5), transparent 60%), linear-gradient(155deg,#061220,#0d1f3c 60%,#061220)",
+    strip: "linear-gradient(135deg,#5dbdff,#8b7dff 55%,#68ffd2)",
+    scene: "live",
+  },
+  {
+    id: "live-globe",
+    label: { en: "Live Globe", uz: "Jonli Globus", ru: "Живой глобус" },
+    description: {
+      en: "3D wireframe globe — orbiting connections, futuristic.",
+      uz: "3D simli globus — orbitada ulanishlar, futuristik.",
+      ru: "3D каркасный глобус — орбитальные связи, футуристичный.",
+    },
+    swatch:
+      "radial-gradient(95% 75% at 20% 25%, rgba(93,189,255,.55), transparent 62%), radial-gradient(85% 70% at 82% 18%, rgba(139,125,255,.5), transparent 60%), linear-gradient(155deg,#061220,#0d1f3c 60%,#061220)",
+    strip: "linear-gradient(135deg,#5dbdff,#8b7dff)",
+    scene: "live",
+  },
+  {
+    id: "live-clouds",
+    label: { en: "Live Clouds", uz: "Jonli Bulutlar", ru: "Живые облака" },
+    description: {
+      en: "3D volumetric clouds — dreamy sky, soft light.",
+      uz: "3D hajmli bulutlar — tush osmoni, yumshoq nur.",
+      ru: "3D объёмные облака — мечтательное небо, мягкий свет.",
+    },
+    swatch:
+      "radial-gradient(90% 70% at 20% 25%, rgba(30,144,224,.5), transparent 62%), radial-gradient(80% 65% at 80% 18%, rgba(104,255,210,.35), transparent 60%), linear-gradient(155deg,#061220,#0a2233 60%,#061220)",
+    strip: "linear-gradient(135deg,#1e90e0,#68ffd2 55%,#8b7dff)",
+    scene: "live",
+  },
+  {
+    id: "live-rings",
+    label: { en: "Live Rings", uz: "Jonli Halqalar", ru: "Живые кольца" },
+    description: {
+      en: "3D expanding rings — hypnotic, minimal, modern.",
+      uz: "3D kengayuvchi halqalar — gipnotik, minimal, zamonaviy.",
+      ru: "3D расширяющиеся кольца — гипнотические, минималистичные.",
+    },
+    swatch:
+      "radial-gradient(90% 70% at 50% 50%, rgba(93,189,255,.45), transparent 62%), radial-gradient(85% 70% at 50% 50%, rgba(139,125,255,.3), transparent 60%), linear-gradient(155deg,#061220,#0d1f3c 60%,#061220)",
+    strip: "linear-gradient(135deg,#5dbdff,#8b7dff 55%,#68ffd2)",
     scene: "live",
   },
 ];

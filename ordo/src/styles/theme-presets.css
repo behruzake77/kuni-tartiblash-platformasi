@@ -1921,3 +1921,39 @@ html[data-ordo-theme^="live-"] body {
 html[data-ordo-theme^="live-"] .min-h-dvh {
   background-color: transparent !important;
 }
+
+/* Live Birds — cyan + violet */
+html[data-ordo-theme="live-birds"].dark {
+  --color-primary: #5dbdff; --color-primary-hover: #7de7ff; --color-primary-active: #4aa8f0;
+  --color-primary-subtle: rgba(93, 189, 255, 0.13);
+  --color-secondary: #8b7dff; --color-accent: #68ffd2;
+  --gradient-brand: linear-gradient(135deg, #5dbdff, #8b7dff 55%, #68ffd2);
+  --shadow-glow: 0 0 60px rgba(93, 189, 255, 0.2);
+}
+
+/* Live Globe — blue + purple */
+html[data-ordo-theme="live-globe"].dark {
+  --color-primary: #60a5fa; --color-primary-hover: #93c5fd; --color-primary-active: #3b82f6;
+  --color-primary-subtle: rgba(96, 165, 250, 0.13);
+  --color-secondary: #a78bfa; --color-accent: #67e8f9;
+  --gradient-brand: linear-gradient(135deg, #3b82f6, #a78bfa 55%, #67e8f9);
+  --shadow-glow: 0 0 60px rgba(96, 165, 250, 0.2);
+}
+
+/* Live Clouds — sky blue + mint */
+html[data-ordo-theme="live-clouds"].dark {
+  --color-primary: #38bdf8; --color-primary-hover: #7dd3fc; --color-primary-active: #0ea5e9;
+  --color-primary-subtle: rgba(56, 189, 248, 0.13);
+  --color-secondary: #6ee7b7; --color-accent: #a78bfa;
+  --gradient-brand: linear-gradient(135deg, #0ea5e9, #6ee7b7 55%, #a78bfa);
+  --shadow-glow: 0 0 60px rgba(56, 189, 248, 0.2);
+}
+
+/* Live Rings — blue + purple minimal */
+html[data-ordo-theme="live-rings"].dark {
+  --color-primary: #818cf8; --color-primary-hover: #a5b4fc; --color-primary-active: #6366f1;
+  --color-primary-subtle: rgba(129, 140, 248, 0.13);
+  --color-secondary: #c084fc; --color-accent: #5dbdff;
+  --gradient-brand: linear-gradient(135deg, #6366f1, #c084fc 55%, #5dbdff);
+  --shadow-glow: 0 0 60px rgba(129, 140, 248, 0.2);
+}

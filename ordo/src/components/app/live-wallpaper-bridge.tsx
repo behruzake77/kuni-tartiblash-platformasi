@@ -1,25 +1,29 @@
 "use client";
 
 import { useUser } from "@/providers/user-provider";
-import { LiveWallpaper } from "./live-wallpaper";
+import { VantaWallpaper } from "./vanta-wallpaper";
 import type { ThemeId } from "@/lib/themes";
 
-const THEME_TO_PRESET: Record<string, "nebula" | "aurora-mountains" | "ocean" | "cyberpunk"> = {
-  "live-nebula": "nebula",
-  "live-aurora": "aurora-mountains",
-  "live-ocean": "ocean",
-  "live-cyber": "cyberpunk",
+const THEME_TO_EFFECT: Record<string, "fog" | "waves" | "birds" | "clouds" | "globe" | "net" | "rings" | "topology" | "cells" | "dots" | "halo" | "trunk" | "ripple"> = {
+  "live-nebula": "fog",
+  "live-aurora": "topology",
+  "live-ocean": "waves",
+  "live-cyber": "net",
+  "live-birds": "birds",
+  "live-globe": "globe",
+  "live-clouds": "clouds",
+  "live-rings": "rings",
 };
 
 export function LiveWallpaperBridge() {
   const { prefs } = useUser();
-  const preset = THEME_TO_PRESET[prefs.themePreset as ThemeId];
+  const effect = THEME_TO_EFFECT[prefs.themePreset as ThemeId];
 
-  if (!preset) return null;
+  if (!effect) return null;
 
   return (
-    <LiveWallpaper
-      preset={preset}
+    <VantaWallpaper
+      effect={effect}
       className="ordo-live-wallpaper"
     />
   );

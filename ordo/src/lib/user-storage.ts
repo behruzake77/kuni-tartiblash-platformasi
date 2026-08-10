@@ -33,7 +33,7 @@ export type OrdoPrefs = {
   /** Auto-push after local changes (debounced by sync provider) */
   autoSync: boolean;
   /** Visual preset selected by the user. */
-  themePreset: "default" | "ocean" | "forest" | "sunset" | "winter" | "spring" | "comic" | "space" | "travel" | "pixel" | "live-nebula" | "live-aurora" | "live-ocean" | "live-cyber";
+  themePreset: "default" | "ocean" | "forest" | "sunset" | "winter" | "spring" | "comic" | "space" | "travel" | "pixel" | "live-nebula" | "live-aurora" | "live-ocean" | "live-cyber" | "live-birds" | "live-globe" | "live-clouds" | "live-rings";
 };
 
 const defaultPrefs: OrdoPrefs = {
